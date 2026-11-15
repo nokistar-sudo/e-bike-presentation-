@@ -45,8 +45,6 @@ button {
   font: inherit;
 }
 
-/* NAVIGATION */
-
 .site-header {
   width: 100%;
   min-height: 76px;
@@ -89,8 +87,6 @@ button {
   color: var(--accent);
 }
 
-/* ALLGEMEINES */
-
 .section {
   width: min(90%, var(--max-width));
   margin: 0 auto;
@@ -122,8 +118,6 @@ button {
   max-width: 650px;
 }
 
-/* BUTTONS */
-
 .button {
   display: inline-flex;
   align-items: center;
@@ -144,8 +138,6 @@ button {
 .button span {
   font-size: 1.15rem;
 }
-
-/* TITELBEREICH */
 
 .hero {
   min-height: 680px;
@@ -218,8 +210,6 @@ button {
   z-index: 2;
 }
 
-/* EINLEITUNG */
-
 .intro-grid {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
@@ -243,8 +233,6 @@ button {
   border-radius: 9px;
   border: 1px solid var(--border);
 }
-
-/* GALERIE */
 
 .gallery-section {
   padding-top: 35px;
@@ -295,8 +283,6 @@ button {
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
 }
 
-/* TECHNISCHE DATEN */
-
 .specs-section {
   border-top: 1px solid var(--border);
 }
@@ -343,8 +329,6 @@ button {
   margin-top: 4px;
 }
 
-/* DETAILFOTOS */
-
 .details-section {
   padding-top: 30px;
 }
@@ -385,8 +369,6 @@ button {
   color: var(--muted);
 }
 
-/* VORTEILE */
-
 .benefits-section {
   border-top: 1px solid var(--border);
 }
@@ -417,8 +399,6 @@ button {
 .benefit p {
   color: var(--muted);
 }
-
-/* KAUF */
 
 .purchase-section {
   width: 100%;
@@ -467,8 +447,6 @@ button {
 .text-link:hover {
   color: #a4d6cd;
 }
-
-/* PREIS */
 
 .price-card {
   max-width: 650px;
@@ -528,8 +506,6 @@ button {
   color: var(--muted);
 }
 
-/* VERANTWORTUNG */
-
 .responsibility-section {
   border-top: 1px solid var(--border);
 }
@@ -560,8 +536,6 @@ button {
   font-size: 0.9rem;
 }
 
-/* ABSCHLUSS */
-
 .closing-section {
   text-align: center;
   max-width: 850px;
@@ -588,8 +562,6 @@ button {
   margin-bottom: 30px !important;
 }
 
-/* FOOTER */
-
 .footer {
   min-height: 110px;
   padding: 25px 5%;
@@ -605,8 +577,6 @@ button {
 .footer > a:last-child {
   color: var(--accent);
 }
-
-/* BILDVERGRÖSSERUNG */
 
 .lightbox {
   width: min(94vw, 1100px);
@@ -642,8 +612,6 @@ button {
   line-height: 1;
   cursor: pointer;
 }
-
-/* RESPONSIVE DESIGN */
 
 @media (max-width: 850px) {
   .site-header {
