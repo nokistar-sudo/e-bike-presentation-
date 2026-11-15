@@ -4,362 +4,412 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111719">
-  <meta name="description" content="Meine Präsentation zum Specialized Turbo Levo Hardtail Comp.">
+  <meta name="theme-color" content="#171b1d">
+  <meta name="description" content="Eine Präsentation des Specialized Turbo Levo Hardtail Comp – warum dieses E-Bike eine sinnvolle Anschaffung sein könnte.">
   <title>Mein Wunsch-E-Bike | Specialized Turbo Levo</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 
 <body>
-
-  <!-- NAVIGATION -->
-  <header class="header">
+  <header class="site-header">
     <a class="logo" href="#start">E-BIKE<span>.</span></a>
-
-    <nav class="nav">
-      <a href="#bike">Das Bike</a>
-      <a href="#details">Technik</a>
-      <a href="#vorteile">Vorteile</a>
-      <a href="#finanzierung">Finanzierung</a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#bike">Das Fahrrad</a>
+      <a href="#details">Ausstattung</a>
+      <a href="#kauf">Der Kauf</a>
+      <a href="#fazit">Mein Fazit</a>
     </nav>
-
-    <a class="header-button" href="#finanzierung">Mein Vorschlag</a>
   </header>
 
-
   <main>
-
-    <!-- STARTBEREICH MIT ERSTEM BILD -->
+    <!-- TITELBEREICH -->
     <section class="hero" id="start">
+      <div class="hero-image">
+        <img src="bilder/bike-titel.jpg"
+             alt="Specialized Turbo Levo Hardtail Comp – schräg von der Seite">
+      </div>
 
       <div class="hero-content">
-        <p class="eyebrow">MEIN WUNSCHBIKE · SPECIALIZED</p>
-
-        <h1>
-          Mehr Freiheit.<br>
-          Mehr Möglichkeiten.
-        </h1>
-
+        <p class="eyebrow">MEIN WUNSCH-E-BIKE</p>
+        <h1>Mehr Freiheit.<br><span>Mehr Möglichkeiten.</span></h1>
         <p class="hero-description">
-          Warum das Specialized Turbo Levo Hardtail Comp
-          eine sinnvolle Anschaffung für mich wäre.
+          Warum ich mir dieses E-Mountainbike wünsche und weshalb
+          ich glaube, dass es eine gute und durchdachte Anschaffung ist.
         </p>
-
-        <div class="hero-price">
-          <span>Aktueller Kaufpreis</span>
-          <strong>1.349 €</strong>
-        </div>
-
-        <a class="primary-button" href="#bike">
-          Das Fahrrad entdecken <span>↓</span>
-        </a>
+        <a class="button" href="#bike">Das Fahrrad kennenlernen <span>↓</span></a>
       </div>
 
-      <div class="hero-image">
-        <img
-          src="bilder/bike-seite.jpg"
-          alt="Specialized Turbo Levo Hardtail Comp in der Seitenansicht">
-
-        <div class="image-caption">
-          SPECIALIZED TURBO LEVO HARDTAIL COMP · MODELLJAHR 2020
-        </div>
+      <div class="hero-bottom">
+        <span>SPECIALIZED TURBO LEVO HARDTAIL COMP</span>
+        <span>MODELLJAHR 2020</span>
       </div>
-
     </section>
 
-
-    <!-- DAS FAHRRAD -->
-    <section class="section bike-section" id="bike">
-
+    <!-- EINLEITUNG -->
+    <section class="intro section" id="bike">
       <div class="section-heading">
-        <p class="eyebrow">01 / DAS FAHRRAD</p>
-        <h2>Ein Bike für viele Gelegenheiten.</h2>
-        <p>
-          Ich möchte das Fahrrad nicht nur für sportliche Touren,
-          sondern auch im Alltag nutzen.
-        </p>
+        <p class="eyebrow">DAS FAHRRAD</p>
+        <h2>Ein E-Bike, das zu mir passt.</h2>
       </div>
 
-      <div class="bike-layout">
-
-        <div class="bike-photo">
-          <img
-            src="bilder/bike-schraeg.jpg"
-            alt="Specialized Turbo Levo aus einer schrägen Perspektive">
+      <div class="intro-grid">
+        <div class="intro-text">
+          <p>
+            Es geht um das <strong>Specialized Turbo Levo Hardtail Comp
+            aus dem Modelljahr 2020</strong>. Ein sportliches E-Mountainbike,
+            das mich im Alltag und in meiner Freizeit begleiten könnte.
+          </p>
+          <p>
+            Ich möchte damit nicht nur Fahrrad fahren, sondern flexibler
+            unterwegs sein, neue Strecken entdecken und mehr Zeit draußen
+            verbringen.
+          </p>
+          <p>
+            Mir ist wichtig, nicht einfach irgendein Fahrrad zu kaufen.
+            Ich habe mich deshalb mit dem Modell, der Ausstattung und
+            dem Angebot beschäftigt.
+          </p>
         </div>
 
-        <div class="bike-copy">
-          <p class="eyebrow">SPECIALIZED · MODELLJAHR 2020</p>
-
-          <h3>Turbo Levo<br>Hardtail Comp</h3>
-
-          <p>
-            Ein sportliches E-Mountainbike mit kräftigem Motor,
-            breiten Reifen und einer Federgabel.
-          </p>
-
-          <p>
-            Das Fahrrad wird gebraucht über Upway angeboten.
-            Es ist für mich interessant, weil ich es sowohl
-            in meiner Freizeit als auch im Alltag nutzen könnte.
-          </p>
-
-          <a
-            class="text-link"
-            href="https://upway.de/products/specialized-turbo-levo-hardtail-comp-rk7bl3"
-            target="_blank"
-            rel="noopener">
-            Originalangebot bei Upway ansehen ↗
-          </a>
+        <div class="intro-image">
+          <img src="bilder/bike-vorne.jpg"
+               alt="Das E-Bike schräg von vorne">
         </div>
-
       </div>
     </section>
 
+    <!-- BILDERGALERIE -->
+    <section class="gallery-section section">
+      <div class="section-heading">
+        <p class="eyebrow">EIN GENAUERER BLICK</p>
+        <h2>Das Fahrrad aus verschiedenen Perspektiven.</h2>
+        <p class="section-subtitle">
+          Ein paar Eindrücke vom Fahrrad und seiner Ausstattung.
+        </p>
+      </div>
+
+      <div class="gallery">
+        <button class="gallery-item gallery-large" type="button"
+                data-full="bilder/bike-vorne.jpg"
+                aria-label="Bild vergrößern: Fahrrad von vorne">
+          <img src="bilder/bike-vorne.jpg" alt="Fahrrad schräg von vorne">
+          <span>Von vorne</span>
+        </button>
+
+        <button class="gallery-item" type="button"
+                data-full="bilder/bike-hinten.jpg"
+                aria-label="Bild vergrößern: Fahrrad von hinten">
+          <img src="bilder/bike-hinten.jpg" alt="Fahrrad schräg von hinten">
+          <span>Von hinten</span>
+        </button>
+      </div>
+    </section>
 
     <!-- TECHNISCHE DATEN -->
-    <section class="section details-section" id="details">
-
+    <section class="specs-section section" id="details">
       <div class="section-heading">
-        <p class="eyebrow">02 / DIE TECHNIK</p>
-        <h2>Was steckt im Bike?</h2>
-        <p>
-          Einige wichtige technische Angaben aus dem Angebot.
+        <p class="eyebrow">DIE AUSSTATTUNG</p>
+        <h2>Was steckt im Fahrrad?</h2>
+        <p class="section-subtitle">
+          Die wichtigsten technischen Daten des angebotenen Modells.
+          Die Angaben sollten vor dem Kauf noch einmal mit dem aktuellen
+          Inserat abgeglichen werden.
         </p>
       </div>
 
       <div class="spec-grid">
-
         <article class="spec-card">
-          <span class="spec-number">01</span>
-          <p>Motor</p>
-          <h3>90 Nm</h3>
-          <small>Specialized Motor</small>
+          <div class="spec-icon">⚡</div>
+          <h3>Motor</h3>
+          <p>Specialized 1.3</p>
+          <span>Elektrische Unterstützung</span>
         </article>
 
         <article class="spec-card">
-          <span class="spec-number">02</span>
-          <p>Akku</p>
-          <h3>504 Wh</h3>
-          <small>Integrierter Akku</small>
+          <div class="spec-icon">🔋</div>
+          <h3>Akku</h3>
+          <p>504 Wh</p>
+          <span>Integrierter Akku</span>
         </article>
 
         <article class="spec-card">
-          <span class="spec-number">03</span>
-          <p>Modelljahr</p>
-          <h3>2020</h3>
-          <small>Specialized Turbo Levo</small>
+          <div class="spec-icon">🚵</div>
+          <h3>Federung</h3>
+          <p>RockShox Recon</p>
+          <span>100 mm Federweg</span>
         </article>
 
         <article class="spec-card">
-          <span class="spec-number">04</span>
-          <p>Kilometerstand</p>
-          <h3>1.209 km</h3>
-          <small>Angabe aus dem Angebot</small>
+          <div class="spec-icon">⚙</div>
+          <h3>Schaltung</h3>
+          <p>Shimano Deore</p>
+          <span>10 Gänge</span>
         </article>
 
         <article class="spec-card">
-          <span class="spec-number">05</span>
-          <p>Rahmengröße</p>
-          <h3>XL</h3>
-          <small>Angabe aus dem Angebot</small>
+          <div class="spec-icon">◉</div>
+          <h3>Laufräder</h3>
+          <p>29 Zoll</p>
+          <span>Für unterschiedliche Strecken</span>
         </article>
 
         <article class="spec-card">
-          <span class="spec-number">06</span>
-          <p>Kaufpreis</p>
-          <h3>1.349 €</h3>
-          <small>Gebrauchtes Fahrrad</small>
+          <div class="spec-icon">↗</div>
+          <h3>Rahmengröße</h3>
+          <p>XL</p>
+          <span>Passform vor Kauf prüfen</span>
         </article>
-
       </div>
     </section>
 
-
-    <!-- VORTEILE -->
-    <section class="section benefits-section" id="vorteile">
-
+    <!-- DETAILFOTOS -->
+    <section class="details-section section">
       <div class="section-heading">
-        <p class="eyebrow">03 / MEINE GRÜNDE</p>
-        <h2>Warum ich es haben möchte.</h2>
-        <p>
-          Das Fahrrad wäre für verschiedene Bereiche meines
-          Lebens eine praktische Ergänzung.
-        </p>
+        <p class="eyebrow">DIE DETAILS</p>
+        <h2>Auch auf die Einzelheiten kommt es an.</h2>
+      </div>
+
+      <div class="detail-grid">
+        <article class="detail-card">
+          <button class="detail-image" type="button"
+                  data-full="bilder/akku.jpg"
+                  aria-label="Akku vergrößern">
+            <img src="bilder/akku.jpg" alt="Akku des E-Bikes">
+          </button>
+          <div class="detail-copy">
+            <p class="eyebrow">ENERGIE</p>
+            <h3>Der Akku</h3>
+            <p>
+              Der Akku versorgt den Motor mit Energie und ermöglicht
+              elektrische Unterstützung beim Fahren.
+            </p>
+          </div>
+        </article>
+
+        <article class="detail-card">
+          <button class="detail-image" type="button"
+                  data-full="bilder/motor.jpg"
+                  aria-label="Motor vergrößern">
+            <img src="bilder/motor.jpg" alt="Motor des E-Bikes">
+          </button>
+          <div class="detail-copy">
+            <p class="eyebrow">ANTRIEB</p>
+            <h3>Der Motor</h3>
+            <p>
+              Der Elektromotor unterstützt beim Treten und kann besonders
+              an Steigungen und auf längeren Strecken hilfreich sein.
+            </p>
+          </div>
+        </article>
+
+        <article class="detail-card">
+          <button class="detail-image" type="button"
+                  data-full="bilder/bremse.jpg"
+                  aria-label="Bremse vergrößern">
+            <img src="bilder/bremse.jpg" alt="Bremse des E-Bikes">
+          </button>
+          <div class="detail-copy">
+            <p class="eyebrow">SICHERHEIT</p>
+            <h3>Die Bremsen</h3>
+            <p>
+              Zuverlässige Bremsen sind wichtig, um das Fahrrad
+              kontrolliert und sicher abbremsen zu können.
+            </p>
+          </div>
+        </article>
+
+        <article class="detail-card">
+          <button class="detail-image" type="button"
+                  data-full="bilder/lenker.jpg"
+                  aria-label="Lenker vergrößern">
+            <img src="bilder/lenker.jpg" alt="Lenker des E-Bikes">
+          </button>
+          <div class="detail-copy">
+            <p class="eyebrow">BEDIENUNG</p>
+            <h3>Der Lenker</h3>
+            <p>
+              Hier befinden sich die Bedienelemente. Eine gute
+              Kontrolle und eine angenehme Sitzposition sind wichtig.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- WARUM DAS E-BIKE -->
+    <section class="benefits-section section">
+      <div class="section-heading">
+        <p class="eyebrow">WARUM ICH ES MÖCHTE</p>
+        <h2>Mehr als nur ein Fahrrad.</h2>
       </div>
 
       <div class="benefit-grid">
-
-        <article class="benefit-card">
-          <span class="benefit-icon">↗</span>
-          <h3>Freizeit</h3>
+        <article class="benefit">
+          <span class="benefit-number">01</span>
+          <h3>Für die Freizeit</h3>
           <p>
-            Ich kann längere Touren unternehmen, neue Strecken
-            entdecken und mehr Zeit draußen verbringen.
+            Ich kann Ausflüge machen, neue Wege erkunden und mehr
+            Zeit an der frischen Luft verbringen.
           </p>
         </article>
 
-        <article class="benefit-card">
-          <span class="benefit-icon">⌖</span>
-          <h3>Alltag</h3>
+        <article class="benefit">
+          <span class="benefit-number">02</span>
+          <h3>Für den Alltag</h3>
           <p>
-            Ich kann das Fahrrad auch für alltägliche Wege
-            nutzen und bin dadurch flexibler unterwegs.
+            Das Fahrrad kann mir helfen, alltägliche Wege selbstständig
+            und flexibel zurückzulegen.
           </p>
         </article>
 
-        <article class="benefit-card">
-          <span class="benefit-icon">＋</span>
-          <h3>Bewegung</h3>
+        <article class="benefit">
+          <span class="benefit-number">03</span>
+          <h3>Für die Zukunft</h3>
           <p>
-            Trotz Motorunterstützung muss ich selbst treten.
-            Das Fahrrad verbindet Bewegung mit Unterstützung.
+            Ich könnte es über einen längeren Zeitraum nutzen und
+            damit regelmäßig unterwegs sein.
           </p>
         </article>
-
       </div>
     </section>
 
-
-    <!-- KAUF UND SICHERHEIT -->
-    <section class="section trust-section">
-
-      <div class="trust-copy">
-        <p class="eyebrow">04 / DER KAUF</p>
-
-        <h2>Geprüft statt einfach blind gekauft.</h2>
+    <!-- KAUF UND VERTRAUEN -->
+    <section class="purchase-section section" id="kauf">
+      <div class="purchase-content">
+        <div class="section-heading">
+          <p class="eyebrow">DER KAUF</p>
+          <h2>Ein gebrauchtes E-Bike – bewusst ausgewählt.</h2>
+        </div>
 
         <p>
-          Das Fahrrad wird gebraucht bei Upway gekauft.
-          Laut Upway wird jedes Fahrrad vor dem Verkauf
-          geprüft und aufbereitet.
+          Das Fahrrad wird über <strong>Upway</strong> angeboten.
+          Upway ist auf gebrauchte und wiederaufbereitete E-Bikes
+          spezialisiert.
         </p>
 
-        <ul class="check-list">
-          <li>50-Punkte-Inspektion laut Upway</li>
-          <li>Ein Jahr Garantie laut Anbieter</li>
-          <li>14 Tage Rückgaberecht laut Anbieter</li>
-          <li>Gebrauchsspuren werden angegeben</li>
-        </ul>
-
-        <p class="small-note">
-          Wichtig: Es handelt sich um ein gebrauchtes Fahrrad.
-          Vor dem Kauf sollten der genaue Zustand und die
-          Garantiebedingungen gemeinsam geprüft werden.
+        <p>
+          Laut den allgemeinen Angaben von Upway werden Fahrräder
+          geprüft und aufbereitet. Für das konkrete Fahrrad sollten
+          wir vor dem Kauf den Zustandsbericht, die Garantiebedingungen
+          und die Rückgabebedingungen genau lesen.
         </p>
 
-        <a
-          class="text-link"
-          href="https://upway.de/products/specialized-turbo-levo-hardtail-comp-rk7bl3"
-          target="_blank"
-          rel="noopener">
-          Angebot und Bedingungen prüfen ↗
+        <div class="trust-points">
+          <div><span>✓</span> Angaben zum Zustand vor dem Kauf prüfen</div>
+          <div><span>✓</span> Prüfbericht und Garantie ansehen</div>
+          <div><span>✓</span> Rückgabebedingungen beachten</div>
+          <div><span>✓</span> Gebrauchsspuren realistisch einschätzen</div>
+        </div>
+
+        <a class="text-link"
+           href="https://upway.de/products/specialized-turbo-levo-hardtail-comp-rk7bl3"
+           target="_blank" rel="noopener noreferrer">
+          Originalangebot bei Upway ansehen ↗
         </a>
       </div>
-
-      <div class="trust-number">
-        <strong>50</strong>
-        <span>Prüfpunkte<br>laut Upway</span>
-      </div>
-
     </section>
 
-
-    <!-- FINANZIERUNG -->
-    <section class="section finance-section" id="finanzierung">
-
+    <!-- PREIS -->
+    <section class="price-section section">
       <div class="section-heading">
-        <p class="eyebrow">05 / DIE FINANZIERUNG</p>
-        <h2>Mein finanzieller Vorschlag.</h2>
-        <p>
-          Ich möchte selbst möglichst viel zum Kauf beitragen.
-        </p>
+        <p class="eyebrow">DIE KOSTEN</p>
+        <h2>Was kostet das Fahrrad?</h2>
       </div>
 
-      <div class="finance-box">
-
-        <div>
-          <span class="finance-label">Fahrradpreis</span>
+      <div class="price-card">
+        <div class="price-row">
+          <span>Preis des E-Bikes</span>
           <strong>1.349 €</strong>
         </div>
-
-        <div>
-          <span class="finance-label">Lieferung laut Angebot</span>
+        <div class="price-row">
+          <span>Versandkosten (laut bisheriger Angabe)</span>
           <strong>49 €</strong>
         </div>
-
-        <div class="finance-total">
-          <span class="finance-label">Gesamtpreis</span>
+        <div class="price-total">
+          <span>Gesamtpreis</span>
           <strong>1.398 €</strong>
         </div>
-
-        <p>
-          Ich würde mein gesamtes aktuell verfügbares Geld
-          sowie mein Weihnachts- und Geburtstagsgeld beisteuern.
-          Wie viel mir dann noch fehlt, können wir gemeinsam
-          ausrechnen.
+        <p class="price-note">
+          Bitte vor dem Kauf den aktuellen Preis und die Versandkosten
+          direkt im Upway-Angebot kontrollieren.
         </p>
+      </div>
 
+      <div class="contribution">
+        <p class="eyebrow">MEIN EIGENER BEITRAG</p>
+        <h3>Ich möchte selbst Verantwortung übernehmen.</h3>
+        <p>
+          Ich bin bereit, mein aktuell verfügbares Geld sowie mein
+          Weihnachts- und Geburtstagsgeld dafür einzusetzen.
+          Mir ist wichtig, selbst etwas zu dieser Anschaffung beizutragen
+          und nicht einfach alles bezahlen zu lassen.
+        </p>
       </div>
     </section>
-
 
     <!-- VERANTWORTUNG -->
-    <section class="section responsibility-section">
-
-      <p class="eyebrow">06 / MEINE VERANTWORTUNG</p>
-
-      <h2>
-        Mir ist bewusst, dass ein Fahrrad
-        auch Verantwortung bedeutet.
-      </h2>
-
-      <div class="responsibility-list">
-        <p>✓ Ich werde sorgfältig mit dem Fahrrad umgehen.</p>
-        <p>✓ Ich achte auf regelmäßige Pflege und Wartung.</p>
-        <p>✓ Ich werde es sicher und vernünftig nutzen.</p>
-        <p>✓ Ich möchte mich an den Kosten beteiligen.</p>
+    <section class="responsibility-section section">
+      <div class="section-heading">
+        <p class="eyebrow">VERANTWORTUNG</p>
+        <h2>Mir ist bewusst, dass ein E-Bike Verantwortung bedeutet.</h2>
       </div>
 
+      <div class="responsibility-grid">
+        <div>
+          <span class="responsibility-icon">🔧</span>
+          <h3>Pflege</h3>
+          <p>Ich möchte das Fahrrad regelmäßig reinigen und pflegen.</p>
+        </div>
+        <div>
+          <span class="responsibility-icon">🛡</span>
+          <h3>Sicherheit</h3>
+          <p>Ich achte auf einen Helm, Beleuchtung und einen sicheren Fahrstil.</p>
+        </div>
+        <div>
+          <span class="responsibility-icon">🔒</span>
+          <h3>Diebstahlschutz</h3>
+          <p>Ich werde auf eine sichere Abstellmöglichkeit und ein gutes Schloss achten.</p>
+        </div>
+        <div>
+          <span class="responsibility-icon">💶</span>
+          <h3>Laufende Kosten</h3>
+          <p>Mir ist klar, dass Wartung und mögliche Reparaturen zusätzlich Geld kosten können.</p>
+        </div>
+      </div>
     </section>
-
 
     <!-- ABSCHLUSS -->
-    <section class="closing-section">
-
-      <p class="eyebrow">MEIN WUNSCH · MEIN VORSCHLAG</p>
-
-      <h2>Was meint ihr?</h2>
-
+    <section class="closing-section section" id="fazit">
+      <p class="eyebrow">MEIN WUNSCH</p>
+      <h2>Eine Anschaffung, die ich wirklich nutzen möchte.</h2>
       <p>
-        Ich würde mich sehr freuen, wenn wir gemeinsam
-        über diesen Wunsch sprechen könnten.
+        Ich wünsche mir dieses E-Bike nicht einfach, weil es gut aussieht.
+        Ich möchte es im Alltag und in meiner Freizeit regelmäßig nutzen,
+        selbst Geld dazugeben und verantwortungsvoll damit umgehen.
       </p>
-
-      <a
-        class="primary-button"
-        href="https://upway.de/products/specialized-turbo-levo-hardtail-comp-rk7bl3"
-        target="_blank"
-        rel="noopener">
-        Fahrrad bei Upway ansehen ↗
+      <p class="closing-question">
+        Deshalb würde ich mich freuen, wenn wir gemeinsam überlegen,
+        ob dieser Kauf möglich und sinnvoll ist.
+      </p>
+      <a class="button" href="https://upway.de/products/specialized-turbo-levo-hardtail-comp-rk7bl3"
+         target="_blank" rel="noopener noreferrer">
+        Fahrrad bei Upway ansehen <span>↗</span>
       </a>
-
     </section>
-
   </main>
 
-
-  <!-- FUSSZEILE -->
   <footer class="footer">
-    <span>MEINE E-BIKE-PRÄSENTATION</span>
-    <span>Specialized Turbo Levo Hardtail Comp · 2020</span>
+    <a class="logo" href="#start">E-BIKE<span>.</span></a>
+    <p>Eine persönliche Präsentation meines Wunsch-E-Bikes.</p>
+    <a href="#start">Zurück nach oben ↑</a>
   </footer>
 
+  <!-- BILDVERGRÖSSERUNG -->
+  <dialog class="lightbox" id="lightbox" aria-label="Bildansicht">
+    <button class="lightbox-close" type="button"
+            aria-label="Bildansicht schließen">×</button>
+    <img id="lightbox-image" src="" alt="Vergrößerte Ansicht">
+  </dialog>
 </body>
 </html>
