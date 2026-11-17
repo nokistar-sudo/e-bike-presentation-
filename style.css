@@ -901,3 +901,11 @@ button {
 @media(max-width:760px){.scene-location-grid{grid-template-columns:repeat(3,1fr)}.scene-control-row{grid-template-columns:1fr;gap:20px}.scene-bike-illustration{width:95%;bottom:8%}}
 @media(max-width:480px){.scene-stage{height:330px}.scene-bike-illustration{width:112%;bottom:8%}.scene-caption{left:12px;bottom:12px;font-size:.58rem}.scene-choice{min-height:62px}.scene-choice b{font-size:.65rem}.scene-footer{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.scene-cloud-bank span,.scene-weather-layer:before,.scene-weather-layer:after{animation:none!important}.scene-photo{transition:none!important}}
+
+/* INDIVIDUAL WEATHER PARTICLES */
+.scene-weather-layer:before,.scene-weather-layer:after{display:none!important}
+.weather-particle{position:absolute;top:-12%;left:var(--left);pointer-events:none;will-change:transform}
+.weather-particle.rain-drop{width:1.3px;height:var(--length);border-radius:2px;background:linear-gradient(180deg,transparent,rgba(220,240,248,.92));filter:drop-shadow(0 0 1px rgba(220,240,248,.4));animation:real-rain var(--duration) linear var(--delay) infinite;opacity:var(--opacity)}
+@keyframes real-rain{to{transform:translate3d(var(--drift),125vh,0)}}
+.weather-particle.snowflake{width:var(--size);height:var(--size);border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 0 5px rgba(255,255,255,.48);animation:real-snow var(--duration) linear var(--delay) infinite;opacity:var(--opacity)}
+@keyframes real-snow{0%{transform:translate3d(0,-5vh,0)}35%{transform:translate3d(calc(var(--drift)*.55),38vh,0)}70%{transform:translate3d(calc(var(--drift)*-.3),82vh,0)}100%{transform:translate3d(var(--drift),125vh,0)}}
