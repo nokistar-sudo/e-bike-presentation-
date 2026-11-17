@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#171b1d">
   <meta name="description" content="Eine Präsentation des Specialized Turbo Levo Hardtail Comp – warum dieses E-Bike eine sinnvolle Anschaffung sein könnte.">
   <title>Mein Wunsch-E-Bike | Specialized Turbo Levo</title>
-  <link rel="stylesheet" href="style.css?v=scene-studio-2">
-  <script src="script.js?v=scene-studio-2" defer></script>
+  <link rel="stylesheet" href="style.css?v=scene-studio-3">
+  <script src="script.js?v=scene-studio-3" defer></script>
 </head>
 
 <body>
@@ -105,24 +105,48 @@
             <img class="scene-photo" data-scene-photo="night" data-sky="cloudy" src="https://images.pexels.com/photos/6922907/pexels-photo-6922907.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
           </div>
           <div class="scene-photo-grade"></div>
+          <div class="scene-sunlight" aria-hidden="true"></div>
           <div class="scene-cloud-bank"><span></span><span></span><span></span></div>
           <div class="scene-rain-reflections"></div>
           <div class="scene-weather-layer" id="scene-weather-layer" aria-hidden="true"></div>
           <div class="scene-bike-illustration" aria-hidden="true">
-            <svg viewBox="0 0 900 430" role="presentation">
-              <defs><linearGradient id="bikeFrame" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#e34b45"/><stop offset="1" stop-color="#9e2429"/></linearGradient></defs>
-              <g class="bike-wheels"><circle cx="220" cy="300" r="94"/><circle cx="680" cy="300" r="94"/></g>
-              <g class="bike-spokes"><circle cx="220" cy="300" r="82"/><circle cx="680" cy="300" r="82"/><path d="M220 206V394M126 300H314M153 233L287 367M287 233L153 367M680 206V394M586 300H774M613 233L747 367M747 233L613 367"/></g>
-              <g class="bike-frame-lines"><path d="M220 300L395 300L355 166L220 300M355 166L525 166L680 300L395 300L525 166M525 166L558 300" /></g>
-              <path class="bike-fork" d="M525 166L558 300L680 300"/>
-              <path class="bike-seat" d="M355 166L340 132M315 132H376"/>
-              <path class="bike-handle" d="M525 166L548 130L595 130M548 130L562 112"/>
-              <path class="bike-motor" d="M370 274Q395 252 429 272L445 305Q422 331 388 316Z"/>
-              <path class="bike-battery" d="M370 183L430 178L456 260L395 274Z"/>
-              <path class="bike-crank" d="M395 300L440 330M395 300L352 329"/>
-              <path class="bike-pedal" d="M440 330H465M352 329H329"/>
+            <svg viewBox="0 0 1000 540" role="presentation">
+              <defs>
+                <linearGradient id="levoFrame" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aeb9b8"/><stop offset=".42" stop-color="#52656b"/><stop offset="1" stop-color="#26373d"/></linearGradient>
+                <linearGradient id="levoFork" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#d0d5d3"/><stop offset=".48" stop-color="#536168"/><stop offset="1" stop-color="#1a2429"/></linearGradient>
+                <linearGradient id="levoTyre" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#242b2e"/><stop offset=".5" stop-color="#080d10"/><stop offset="1" stop-color="#30383b"/></linearGradient>
+                <filter id="bikeShadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="8"/></filter>
+              </defs>
+              <ellipse cx="510" cy="475" rx="405" ry="22" fill="#000" opacity=".34" filter="url(#bikeShadow)"/>
+              <g class="levo-wheel">
+                <circle cx="250" cy="350" r="142"/><circle cx="250" cy="350" r="132" class="levo-rim"/>
+                <circle cx="250" cy="350" r="118" class="levo-spoke-ring"/>
+                <circle cx="750" cy="350" r="142"/><circle cx="750" cy="350" r="132" class="levo-rim"/>
+                <circle cx="750" cy="350" r="118" class="levo-spoke-ring"/>
+              </g>
+              <g class="levo-spokes">
+                <path d="M250 218V482M118 350H382M157 257L343 443M343 257L157 443M196 231L304 469M304 231L196 469M750 218V482M618 350H882M657 257L843 443M843 257L657 443M696 231L804 469M804 231L696 469"/>
+              </g>
+              <g class="levo-brakes">
+                <circle cx="250" cy="350" r="48"/><circle cx="750" cy="350" r="48"/>
+                <circle cx="250" cy="350" r="8"/><circle cx="750" cy="350" r="8"/>
+              </g>
+              <g class="levo-frame">
+                <path d="M250 350L470 350L414 178L250 350M414 178L650 190L750 350L470 350L650 190M650 190L681 350"/>
+                <path d="M414 178L395 143L357 143M650 190L673 142L742 142"/>
+              </g>
+              <path class="levo-fork" d="M650 190L681 350L750 350"/>
+              <path class="levo-seat" d="M414 178L398 116L365 116M350 116H425"/>
+              <path class="levo-handle" d="M673 142L700 126L750 126M700 126L711 108"/>
+              <path class="levo-battery" d="M443 193L533 190L565 319L485 337Z"/>
+              <path class="levo-motor" d="M448 325Q470 298 512 315L532 355Q511 389 470 376L445 353Z"/>
+              <path class="levo-crank" d="M470 350L510 390M470 350L428 386"/>
+              <path class="levo-pedal" d="M510 390H545M428 386H396"/>
+              <path class="levo-chain" d="M250 350L470 350L250 350M470 350L250 350"/>
+              <path class="levo-detail" d="M404 184L470 350M533 190L650 190M681 350L750 350"/>
+              <g class="levo-decals"><path d="M470 215L516 207M490 245L540 235"/><path d="M590 180L626 181"/></g>
             </svg>
-          </div>
+          </div>    </div>
           <div class="scene-vignette"></div>
           <div class="scene-caption"><span class="scene-live-dot"></span><span id="scene-caption">DORFSTRASSE · KLAR · TAG</span><span class="scene-live-label">LIVE SZENE</span></div>
         </div>
