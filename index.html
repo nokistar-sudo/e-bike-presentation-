@@ -16,6 +16,7 @@
     <a class="logo" href="#start">E-BIKE<span>.</span></a>
     <nav aria-label="Hauptnavigation">
       <a href="#bike">Das Fahrrad</a>
+      <a href="#scene-studio">Live-Szenen</a>
       <a href="#details">Ausstattung</a>
       <a href="#range">Reichweite</a>
       <a href="#cockpit">Cockpit</a>
@@ -79,6 +80,60 @@
       </div>
     </section>
 
+
+
+    <section class="scene-studio section" id="scene-studio">
+      <div class="section-heading">
+        <p class="eyebrow">LIVE SCENE STUDIO</p>
+        <h2>Das Levo in seiner Umgebung.</h2>
+        <p class="section-subtitle">Wechsle den Ort, die Tageszeit und das Wetter. Die Umgebung verändert sich direkt – mit bewegten Wolken, Regen, Schnee und Lichtstimmung.</p>
+      </div>
+      <div class="scene-console">
+        <div class="scene-stage scene-village" id="scene-stage" data-weather="clear" data-time="day">
+          <div class="scene-sky"></div><div class="scene-sun"></div><div class="scene-cloud cloud-one"></div><div class="scene-cloud cloud-two"></div>
+          <div class="scene-backdrop"><div class="scene-far-hills"></div><div class="scene-buildings"></div><div class="scene-trees"></div></div>
+          <div class="scene-ground"></div>
+          <div class="scene-bike-frame"><img src="bilder/bike-titel.jpeg" alt="Specialized Turbo Levo in der ausgewählten Umgebung"></div>
+          <div class="scene-weather-layer" id="scene-weather-layer" aria-hidden="true"></div>
+          <div class="scene-vignette"></div>
+          <div class="scene-caption"><span class="scene-live-dot"></span><span id="scene-caption">DORFSTRASSE · TAG</span><span class="scene-live-label">ANIMIERT</span></div>
+        </div>
+        <div class="scene-controls">
+          <div class="scene-control-group">
+            <div class="scene-control-heading"><span>01 / UMGEBUNG</span><small>WÄHLE DEINEN ORT</small></div>
+            <div class="scene-location-grid">
+              <button class="scene-choice active" data-scene="village" type="button"><span>⌂</span><b>Dorfstraße</b></button>
+              <button class="scene-choice" data-scene="forest" type="button"><span>♧</span><b>Waldweg</b></button>
+              <button class="scene-choice" data-scene="urban" type="button"><span>▤</span><b>Stadtviertel</b></button>
+              <button class="scene-choice" data-scene="winter" type="button"><span>❄</span><b>Winter</b></button>
+              <button class="scene-choice" data-scene="lake" type="button"><span>≈</span><b>Am See</b></button>
+              <button class="scene-choice" data-scene="night" type="button"><span>☾</span><b>Stadt bei Nacht</b></button>
+            </div>
+          </div>
+          <div class="scene-control-row">
+            <div class="scene-control-group">
+              <div class="scene-control-heading"><span>02 / WETTER</span><small>LIVE-EFFEKT</small></div>
+              <div class="scene-segment" id="scene-weather">
+                <button class="active" data-weather="clear" type="button">☀ Klar</button>
+                <button data-weather="cloudy" type="button">☁ Wolkig</button>
+                <button data-weather="rain" type="button">雨 Regen</button>
+                <button data-weather="snow" type="button">❄ Schnee</button>
+                <button data-weather="fog" type="button">〰 Nebel</button>
+              </div>
+            </div>
+            <div class="scene-control-group">
+              <div class="scene-control-heading"><span>03 / TAGESZEIT</span><small>LICHTSTIMMUNG</small></div>
+              <div class="scene-segment" id="scene-time">
+                <button class="active" data-time="day" type="button">Tag</button>
+                <button data-time="sunset" type="button">Abend</button>
+                <button data-time="night" type="button">Nacht</button>
+              </div>
+            </div>
+          </div>
+          <div class="scene-footer"><span><i></i> SZENE WIRD LIVE ANIMIERT</span><small>Demo-Visualisierung · keine echte Wettervorhersage</small></div>
+        </div>
+      </div>
+    </section>
 
     <section class="interactive-tools section" id="range">
       <div class="section-heading">
