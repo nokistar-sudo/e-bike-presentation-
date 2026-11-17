@@ -740,3 +740,30 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* INTERAKTIVER 3D-SHOWROOM */
+.showroom-section { border-top: 1px solid var(--border); }
+.showroom-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(270px, .8fr); gap: 24px; align-items: stretch; }
+.showroom-stage { min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: radial-gradient(ellipse at 50% 43%, #354247 0%, #20292c 48%, #14191b 100%); }
+.showroom-topline, .showroom-controls { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 19px; color:#aebbb9; font-size:.68rem; font-weight:800; letter-spacing:1.3px; }
+.showroom-topline i { display:inline-block; width:7px; height:7px; margin-right:8px; border-radius:50%; background:#8bd2bf; box-shadow:0 0 12px #8bd2bf; }
+#bike-3d-view { width:100%; height:470px; position:relative; cursor:grab; touch-action:pan-y; }
+#bike-3d-view:active { cursor:grabbing; }
+#bike-3d-view canvas { display:block; width:100%; height:100%; outline:none; }
+.showroom-hint { padding:9px 18px; color:#9ba9a7; text-align:center; font-size:.76rem; border-top:1px solid rgba(255,255,255,.06); }
+.showroom-hint b { color:var(--accent); padding:0 5px; }
+.showroom-controls { border-top:1px solid rgba(255,255,255,.06); letter-spacing:.4px; }
+.showroom-controls button { border:1px solid rgba(255,255,255,.16); border-radius:5px; padding:8px 12px; color:#e8efed; background:rgba(255,255,255,.05); cursor:pointer; }
+.showroom-controls button:hover { border-color:var(--accent); color:var(--accent); }
+.showroom-info { padding:28px; border:1px solid var(--border); border-radius:12px; background:linear-gradient(145deg,#242d30,#1a2022); }
+.showroom-info h3 { font-size:1.8rem; line-height:1.15; margin-bottom:13px; }
+.showroom-info > p:not(.eyebrow):not(.model-disclaimer) { min-height:105px; color:var(--muted); font-size:.94rem; }
+.part-buttons { display:grid; gap:8px; margin-top:18px; }
+.part-button { display:flex; align-items:center; gap:13px; width:100%; padding:13px 12px; border:1px solid var(--border); border-radius:6px; background:rgba(255,255,255,.025); color:var(--text); text-align:left; cursor:pointer; transition:.2s ease; }
+.part-button span { color:var(--accent); font-size:.72rem; font-weight:800; }
+.part-button b { margin-left:auto; color:#7f918e; }
+.part-button:hover, .part-button.active { border-color:var(--accent-dark); background:rgba(117,184,174,.1); }
+.part-button.active b { color:var(--accent); }
+.model-disclaimer { margin-top:22px; padding-top:16px; border-top:1px solid var(--border); color:#84918f; font-size:.72rem; line-height:1.55; }
+@media (max-width:900px) { .showroom-layout { grid-template-columns:1fr; } .showroom-info > p:not(.eyebrow):not(.model-disclaimer) { min-height:0; } }
+@media (max-width:560px) { #bike-3d-view { height:340px; } .showroom-info { padding:21px; } .showroom-topline,.showroom-controls { padding:13px; font-size:.59rem; } .showroom-hint { font-size:.67rem; } }
