@@ -183,9 +183,19 @@ cockpitRender();
 
   function renderPhoto() {
     const scene = stage.dataset.scene;
-    const sky = stage.dataset.weather === "clear" ? "clear" : "cloudy";
+    const weather = stage.dataset.weather;
+    let key;
+    if (scene === "winter") key = "winter-snow";
+    else if (scene === "night") key = "night-night";
+    else if (weather === "rain" && scene === "village") key = "village-rain";
+    else if (weather === "fog" && scene === "forest") key = "forest-fog";
+    else if (weather === "snow") key = "winter-snow";
+    else {
+      const sky = weather === "clear" ? "clear" : "cloudy";
+      key = scene + "-" + sky;
+    }
     photos.forEach(photo => {
-      const active = photo.dataset.scenePhoto === scene && photo.dataset.sky === sky;
+      const active = photo.dataset.scenePhoto + "-" + photo.dataset.sky === key;
       photo.classList.toggle("active", active);
       photo.setAttribute("aria-hidden", String(!active));
     });
