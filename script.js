@@ -122,7 +122,7 @@ function cockpitTick() {
   cockpitSpeed += (targetSpeed - cockpitSpeed) * 0.18;
   cockpitDistance += cockpitSpeed / 3600;
   const terrainLoad = 1 + 0.12 * (0.5 + 0.5 * Math.sin(cockpitElapsed / 8));
-  const usedWh = mode.consumption * terrainLoad / 3600;
+  const usedWh = mode.consumption * Math.max(cockpitSpeed, 5) * terrainLoad / 3600;
   cockpitBatteryLevel = Math.max(0, cockpitBatteryLevel - usedWh / 5);
   if (cockpitBatteryLevel <= 0) {
     cockpitBatteryLevel = 0;
