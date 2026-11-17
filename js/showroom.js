@@ -7,7 +7,7 @@ async function startShowroom() {
     const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-  camera.position.set(3.35, 2.25, 5.8);
+  camera.position.set(0.15, 2.15, 5.35);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -149,13 +149,13 @@ async function startShowroom() {
   const grid=new THREE.GridHelper(8,32,0x506366,0x344246); grid.position.y=-.025; scene.add(grid);
 
   // Make the bike fill the stage, with the side view as the starting angle.
-  bike.rotation.y = -.12;
+  bike.rotation.y = 0;
   const controls=new OrbitControls(camera,renderer.domElement);
   controls.target.set(0,.92,0);
   controls.enableDamping=true; controls.dampingFactor=.06;
   controls.minDistance=3.5; controls.maxDistance=9;
   controls.minPolarAngle=.45; controls.maxPolarAngle=1.48;
-  controls.autoRotate=true; controls.autoRotateSpeed=.65;
+  controls.autoRotate=false; controls.autoRotateSpeed=.65;
 
   const parts = {
     frame: {title:'Der Rahmen',description:'Der blau-graue Aluminiumrahmen verbindet die wichtigsten Bauteile. Die Konstruktion ist als Hardtail ohne hinteren Dämpfer dargestellt.'},
@@ -176,7 +176,7 @@ async function startShowroom() {
     });
   });
   document.getElementById('view-reset')?.addEventListener('click',()=>{
-    controls.reset(); camera.position.set(3.35,2.25,5.8); controls.target.set(0,.92,0); controls.autoRotate=true;
+    controls.reset(); camera.position.set(0.15,2.15,5.35); controls.target.set(0,.92,0); controls.autoRotate=false;
   });
 
   function resize(){
