@@ -60,33 +60,109 @@ function updateRangeEstimate() {
 [weightInput, assistInput, routeInput].forEach((el) => el?.addEventListener("input", updateRangeEstimate));
 updateRangeEstimate();
 
-// DIGITAL COCKPIT DEMO
+// DIGITAL COCKPIT: VIRTUELLE PROBEFAHRT
 const cockpitBattery = document.querySelector("#cockpit-battery");
 const cockpitMode = document.querySelector("#cockpit-mode");
-const cockpitSpeed = document.querySelector("#cockpit-speed");
-function updateCockpit() {
-  if (!cockpitBattery || !cockpitMode || !cockpitSpeed) return;
-  const battery = Number(cockpitBattery.value);
-  const speed = Number(cockpitSpeed.value);
-  const mode = cockpitMode.value;
-  const batteryText = document.querySelector("#cockpit-battery-value");
-  const batteryControlText = document.querySelector("#cockpit-battery-control-value");
-  const whText = document.querySelector("#cockpit-wh-value");
-  const speedText = document.querySelector("#cockpit-speed-value");
-  const speedControlText = document.querySelector("#cockpit-speed-control-value");
-  const modeText = document.querySelector("#cockpit-mode-value");
-  const supportText = document.querySelector("#cockpit-support-value");
-  if (batteryText) batteryText.textContent = battery + "%";
-  if (batteryControlText) batteryControlText.textContent = battery + "%";
-  if (whText) whText.textContent = Math.round(500 * battery / 100) + " Wh";
-  if (speedText) speedText.textContent = speed;
-  if (speedControlText) speedControlText.textContent = speed + " km/h";
-  if (modeText) modeText.textContent = mode.toUpperCase();
-  if (supportText) supportText.textContent = ({ eco: "Niedrig", trail: "Mittel", turbo: "Hoch" })[mode];
-  document.querySelectorAll(".battery-bars i").forEach((bar, index) => {
-    bar.classList.toggle("empty", battery < (index + 1) * 20);
-  });
+const cockpitStart = document.querySelector("#cockpit-start");
+const cockpitReset = document.querySelector("#cockpit-reset");
+let cockpitRunning = false;
+let cockpitSpeed = 0;
+let cockpitDistance = 0;
+let cockpitElapsed = 0;
+let cockpitBatteryLevel = Number(cockpitBattery?.value || 78);
+let cockpitTimer = null;
+
+const cockpitModes = {
+  eco:   { label: "Niedrig", consumption: 6.5, topSpeed: 18, acceleration: 1.0 },
+  trail: { label: "Mittel",  consumption: 10,  topSpeed: 25, acceleration: 1.5 },
+  turbo: { label: "Hoch",    consumption: 15,  topSpeed: 32, acceleration: 2.1 }
+};
+
+function cockpitFormatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
 }
-[cockpitBattery, cockpitMode, cockpitSpeed].forEach((el) => el?.addEventListener("input", updateCockpit));
-cockpitMode?.addEventListener("change", updateCockpit);
-updateCockpit();
+
+function cockpitRender() {
+  const mode = cockpitModes[cockpitMode?.value || "trail"];
+  const remainingWh = Math.round(500 * cockpitBatteryLevel / 100);
+  const remainingRange = Math.max(0, Math.floor(remainingWh / mode.consumption));
+  const values = {
+    "#cockpit-speed-value": Math.round(cockpitSpeed),
+    "#cockpit-mode-value": (cockpitMode?.value || "trail").toUpperCase(),
+    "#cockpit-battery-value": Math.round(cockpitBatteryLevel) + "%",
+    "#cockpit-battery-control-value": Math.round(cockpitBatteryLevel) + "%",
+    "#cockpit-wh-value": remainingWh + " Wh",
+    "#cockpit-range-value": remainingRange + " km",
+    "#cockpit-distance-value": cockpitDistance.toFixed(1).replace(".", ",") + " km",
+    "#cockpit-time-value": cockpitFormatTime(cockpitElapsed),
+    "#cockpit-support-value": mode.label
+  };
+  Object.entries(values).forEach(([selector, value]) => {
+    const element = document.querySelector(selector);
+    if (element) element.textContent = value;
+  });
+  document.querySelectorAll(".battery-bars i").forEach((bar, index) => {
+    bar.classList.toggle("empty", cockpitBatteryLevel < (index + 1) * 20);
+  });
+  const status = document.querySelector("#cockpit-status");
+  const light = document.querySelector("#cockpit-status-light");
+  if (status) status.textContent = cockpitRunning ? "SIMULATION LÄUFT" : cockpitElapsed > 0 ? "PAUSIERT" : "BEREIT";
+  if (light) light.classList.toggle("is-running", cockpitRunning);
+  if (cockpitStart) cockpitStart.textContent = cockpitRunning ? "Ⅱ Pause" : cockpitElapsed > 0 ? "▶ Weiterfahren" : "▶ Probefahrt starten";
+  if (cockpitBattery) cockpitBattery.disabled = cockpitRunning || cockpitElapsed > 0;
+  if (cockpitMode) cockpitMode.disabled = cockpitRunning;
+}
+
+function cockpitTick() {
+  const mode = cockpitModes[cockpitMode.value];
+  cockpitElapsed += 1;
+  const targetSpeed = mode.topSpeed * (0.72 + 0.18 * Math.sin(cockpitElapsed / 5));
+  cockpitSpeed += (targetSpeed - cockpitSpeed) * 0.18;
+  cockpitDistance += cockpitSpeed / 3600;
+  const terrainLoad = 1 + 0.12 * (0.5 + 0.5 * Math.sin(cockpitElapsed / 8));
+  const usedWh = mode.consumption * terrainLoad / 3600;
+  cockpitBatteryLevel = Math.max(0, cockpitBatteryLevel - usedWh / 5);
+  if (cockpitBatteryLevel <= 0) {
+    cockpitBatteryLevel = 0;
+    cockpitStop();
+  }
+  cockpitRender();
+}
+
+function cockpitStop() {
+  cockpitRunning = false;
+  if (cockpitTimer) window.clearInterval(cockpitTimer);
+  cockpitTimer = null;
+  cockpitRender();
+}
+
+function cockpitToggle() {
+  if (cockpitRunning) {
+    cockpitStop();
+    return;
+  }
+  if (cockpitBatteryLevel <= 0) return;
+  cockpitRunning = true;
+  cockpitRender();
+  cockpitTimer = window.setInterval(cockpitTick, 1000);
+}
+
+function cockpitResetAll() {
+  cockpitStop();
+  cockpitSpeed = 0;
+  cockpitDistance = 0;
+  cockpitElapsed = 0;
+  cockpitBatteryLevel = Number(cockpitBattery?.value || 78);
+  cockpitRender();
+}
+
+cockpitBattery?.addEventListener("input", () => {
+  cockpitBatteryLevel = Number(cockpitBattery.value);
+  cockpitRender();
+});
+cockpitMode?.addEventListener("change", cockpitRender);
+cockpitStart?.addEventListener("click", cockpitToggle);
+cockpitReset?.addEventListener("click", cockpitResetAll);
+cockpitRender();
