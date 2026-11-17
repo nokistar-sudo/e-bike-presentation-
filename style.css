@@ -976,3 +976,6 @@ button {
 @media(prefers-reduced-motion:reduce){.scene-cloud-bank span,.weather-particle{animation:none!important}.scene-photo{transition:none!important}}
 
 .levo-wheel circle:nth-of-type(1),.levo-wheel circle:nth-of-type(4){fill:url(#levoTyre);stroke:#080d10;stroke-width:18}
+
+/* Die Szenenfotos enthalten das Fahrrad bereits – keine zusätzliche SVG-Illustration darüberlegen. */
+.scene-bike-illustration{display:none!important}
