@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#171b1d">
   <meta name="description" content="Eine Präsentation des Specialized Turbo Levo Hardtail Comp – warum dieses E-Bike eine sinnvolle Anschaffung sein könnte.">
   <title>Mein Wunsch-E-Bike | Specialized Turbo Levo</title>
-  <link rel="stylesheet" href="style.css?v=scene-studio-1">
+  <link rel="stylesheet" href="style.css?v=scene-studio-2">
   <script src="script.js?v=scene-studio-1" defer></script>
 </head>
 
@@ -86,17 +86,45 @@
       <div class="section-heading">
         <p class="eyebrow">LIVE SCENE STUDIO</p>
         <h2>Das Levo in seiner Umgebung.</h2>
-        <p class="section-subtitle">Wechsle den Ort, die Tageszeit und das Wetter. Die Umgebung verändert sich direkt – mit bewegten Wolken, Regen, Schnee und Lichtstimmung.</p>
+        <p class="section-subtitle">Sechs echte Fotoumgebungen – jeweils mit klarer und bedeckter Variante. Wetter und Tageszeit werden mit bewegten Effekten darübergelegt.</p>
       </div>
       <div class="scene-console">
-        <div class="scene-stage scene-village" id="scene-stage" data-weather="clear" data-time="day">
-          <div class="scene-sky"></div><div class="scene-sun"></div><div class="scene-cloud cloud-one"></div><div class="scene-cloud cloud-two"></div>
-          <div class="scene-backdrop"><div class="scene-far-hills"></div><div class="scene-buildings"></div><div class="scene-trees"></div></div>
-          <div class="scene-ground"></div>
-          <div class="scene-bike-frame"><img src="bilder/bike-titel.jpeg" alt="Specialized Turbo Levo in der ausgewählten Umgebung"></div>
+        <div class="scene-stage" id="scene-stage" data-scene="village" data-weather="clear" data-time="day">
+          <div class="scene-photo-layer" id="scene-photo-layer" aria-hidden="true">
+            <img class="scene-photo active" data-scene-photo="village" data-sky="clear" src="https://images.pexels.com/photos/31614764/pexels-photo-31614764.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="village" data-sky="cloudy" src="https://images.pexels.com/photos/27303681/pexels-photo-27303681.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="forest" data-sky="clear" src="https://images.pexels.com/photos/18332777/pexels-photo-18332777.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="forest" data-sky="cloudy" src="https://images.pexels.com/photos/8119602/pexels-photo-8119602.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="urban" data-sky="clear" src="https://images.pexels.com/photos/29170014/pexels-photo-29170014.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="urban" data-sky="cloudy" src="https://images.pexels.com/photos/20608912/pexels-photo-20608912.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="winter" data-sky="clear" src="https://images.pexels.com/photos/15547005/pexels-photo-15547005.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="winter" data-sky="cloudy" src="https://images.pexels.com/photos/8374790/pexels-photo-8374790.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="lake" data-sky="clear" src="https://images.pexels.com/photos/36155054/pexels-photo-36155054.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="lake" data-sky="cloudy" src="https://images.pexels.com/photos/7846434/pexels-photo-7846434.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="night" data-sky="clear" src="https://images.pexels.com/photos/1676989/pexels-photo-1676989.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+            <img class="scene-photo" data-scene-photo="night" data-sky="cloudy" src="https://images.pexels.com/photos/6922907/pexels-photo-6922907.jpeg?auto=compress&cs=tinysrgb&w=2000" alt="">
+          </div>
+          <div class="scene-photo-grade"></div>
+          <div class="scene-cloud-bank"><span></span><span></span><span></span></div>
+          <div class="scene-rain-reflections"></div>
           <div class="scene-weather-layer" id="scene-weather-layer" aria-hidden="true"></div>
+          <div class="scene-bike-illustration" aria-hidden="true">
+            <svg viewBox="0 0 900 430" role="presentation">
+              <defs><linearGradient id="bikeFrame" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#e34b45"/><stop offset="1" stop-color="#9e2429"/></linearGradient></defs>
+              <g class="bike-wheels"><circle cx="220" cy="300" r="94"/><circle cx="680" cy="300" r="94"/></g>
+              <g class="bike-spokes"><circle cx="220" cy="300" r="82"/><circle cx="680" cy="300" r="82"/><path d="M220 206V394M126 300H314M153 233L287 367M287 233L153 367M680 206V394M586 300H774M613 233L747 367M747 233L613 367"/></g>
+              <g class="bike-frame-lines"><path d="M220 300L395 300L355 166L220 300M355 166L525 166L680 300L395 300L525 166M525 166L558 300" /></g>
+              <path class="bike-fork" d="M525 166L558 300L680 300"/>
+              <path class="bike-seat" d="M355 166L340 132M315 132H376"/>
+              <path class="bike-handle" d="M525 166L548 130L595 130M548 130L562 112"/>
+              <path class="bike-motor" d="M370 274Q395 252 429 272L445 305Q422 331 388 316Z"/>
+              <path class="bike-battery" d="M370 183L430 178L456 260L395 274Z"/>
+              <path class="bike-crank" d="M395 300L440 330M395 300L352 329"/>
+              <path class="bike-pedal" d="M440 330H465M352 329H329"/>
+            </svg>
+          </div>
           <div class="scene-vignette"></div>
-          <div class="scene-caption"><span class="scene-live-dot"></span><span id="scene-caption">DORFSTRASSE · TAG</span><span class="scene-live-label">ANIMIERT</span></div>
+          <div class="scene-caption"><span class="scene-live-dot"></span><span id="scene-caption">DORFSTRASSE · KLAR · TAG</span><span class="scene-live-label">LIVE SZENE</span></div>
         </div>
         <div class="scene-controls">
           <div class="scene-control-group">
@@ -130,7 +158,7 @@
               </div>
             </div>
           </div>
-          <div class="scene-footer"><span><i></i> SZENE WIRD LIVE ANIMIERT</span><small>Demo-Visualisierung · keine echte Wettervorhersage</small></div>
+          <div class="scene-footer"><span><i></i> FOTOREALISTISCHE SZENE · ANIMIERTE WETTEREFFEKTE</span><small>Bildhintergründe: Pexels · Wetterdarstellung ist eine Simulation</small></div>
         </div>
       </div>
     </section>
