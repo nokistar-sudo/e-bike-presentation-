@@ -67,10 +67,10 @@ async function startShowroom() {
 
   function makeWheel(x) {
     const g = new THREE.Group(); g.position.set(x, .72, 0); wheelGroup.add(g);
-    const tire = new THREE.Mesh(new THREE.TorusGeometry(.61, .075, 14, 72), rubber);
+    const tire = new THREE.Mesh(new THREE.TorusGeometry(.61, .057, 16, 88), rubber);
     g.add(tire);
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(.535, .018, 8, 64), metal); g.add(rim);
-    const inner = new THREE.Mesh(new THREE.TorusGeometry(.49, .008, 6, 64), frameDark); g.add(inner);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(.548, .014, 10, 72), metal); g.add(rim);
+    const inner = new THREE.Mesh(new THREE.TorusGeometry(.515, .006, 8, 64), frameDark); g.add(inner);
     for (let i=0;i<28;i++) {
       const angle=i*Math.PI*2/28;
       const z=(i%2===0?.045:-.045);
@@ -80,10 +80,10 @@ async function startShowroom() {
     const disc=new THREE.Mesh(new THREE.TorusGeometry(.24,.012,6,48),metal); disc.position.z=.085; g.add(disc);
     for(let i=0;i<12;i++){const a=i*Math.PI/6; tube(g,[Math.cos(a)*.11,Math.sin(a)*.11,.087],[Math.cos(a)*.23,Math.sin(a)*.23,.087],.009,metal,6);}
     // Tread blocks around the tyre
-    for(let i=0;i<42;i++){
-      const a=i*Math.PI*2/42;
-      const block=new THREE.Mesh(new THREE.BoxGeometry(.075,.035,.15),frameDark);
-      block.position.set(Math.cos(a)*.68,Math.sin(a)*.68,0);
+    for(let i=0;i<48;i++){
+      const a=i*Math.PI*2/48;
+      const block=new THREE.Mesh(new THREE.BoxGeometry(.045,.018,.105),black);
+      block.position.set(Math.cos(a)*.663,Math.sin(a)*.663,0);
       block.rotation.z=a; g.add(block);
     }
     return g;
@@ -99,29 +99,39 @@ async function startShowroom() {
   tube(bike,headBottom,bb,.067,frameMat);
   tube(bike,headBottom,front,.045,frameDark);
   tube(bike,[.71,1.18,.06],front,.045,frameMat);
-  // Fork legs and crown
-  tube(bike,[.67,1.2,.095],front,.047,frameDark);
-  tube(bike,[.67,1.2,-.095],front,.047,frameDark);
-  tube(bike,[.69,1.23,.095],[.78,1.56,.095],.027,gold);
-  tube(bike,[.69,1.23,-.095],[.78,1.56,-.095],.027,gold);
-  tube(bike,[.78,1.56,-.12],[.78,1.56,.12],.065,black);
+  // Suspension fork: lower legs, stanchions and crown
+  tube(bike,[.68,1.22,.105],front,.055,frameDark);
+  tube(bike,[.68,1.22,-.105],front,.055,frameDark);
+  tube(bike,[.735,1.49,.105],[.68,1.22,.105],.027,gold);
+  tube(bike,[.735,1.49,-.105],[.68,1.22,-.105],.027,gold);
+  tube(bike,[.735,1.49,-.14],[.735,1.49,.14],.065,black);
   // Seat post, saddle and handlebar
   tube(bike,seat,[-.88,1.82,0],.035,metal);
-  const saddle=new THREE.Mesh(new THREE.BoxGeometry(.43,.075,.18),black);
-  saddle.position.set(-.91,1.85,0); saddle.rotation.z=-.08; bike.add(saddle);
-  tube(bike,[.78,1.56,0],[.91,1.76,0],.035,frameDark);
-  tube(bike,[.68,1.77,-.39],[.68,1.77,.39],.025,black);
-  for(const z of [-.43,.43]) { const grip=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.16,16),black); grip.rotation.x=Math.PI/2; grip.position.set(.68,1.77,z); bike.add(grip); }
-  // Battery casing integrated along down tube
-  const battery=new THREE.Mesh(new THREE.BoxGeometry(.23,.78,.19),frameDark);
-  battery.position.set(.17,1.02,.015); battery.rotation.z=.39; bike.add(battery);
-  const batteryStripe=new THREE.Mesh(new THREE.BoxGeometry(.012,.56,.195),accent);
-  batteryStripe.position.set(.17,1.02,.113); batteryStripe.rotation.z=.39; bike.add(batteryStripe);
-  // Motor housing and crankset
-  const motor=new THREE.Mesh(new THREE.CylinderGeometry(.23,.23,.24,40),black);
-  motor.rotation.x=Math.PI/2; motor.position.set(-.34,.65,0); bike.add(motor);
-  const motorCap=new THREE.Mesh(new THREE.CylinderGeometry(.15,.15,.255,40),frameMat);
-  motorCap.rotation.x=Math.PI/2; motorCap.position.set(-.34,.65,.02); bike.add(motorCap);
+  const saddle=new THREE.Mesh(new THREE.CapsuleGeometry(.075,.29,6,12),black);
+  saddle.rotation.z=Math.PI/2-.08; saddle.position.set(-.91,1.85,0); bike.add(saddle);
+  tube(bike,[.78,1.56,0],[.88,1.72,0],.032,frameDark);
+  tube(bike,[.88,1.72,-.43],[.88,1.72,.43],.026,black);
+  for(const z of [-.47,.47]) {
+    const grip=new THREE.Mesh(new THREE.CylinderGeometry(.032,.032,.13,20),black);
+    grip.rotation.x=Math.PI/2; grip.position.set(.88,1.72,z); bike.add(grip);
+  }
+  for(const z of [-.24,.24]) {
+    const brakeLever = new THREE.Mesh(new THREE.BoxGeometry(.11,.018,.025),metal);
+    brakeLever.position.set(.81,1.69,z); brakeLever.rotation.z=-.25; bike.add(brakeLever);
+  }
+  // Slim, integrated battery following the down tube
+  const batteryMat = new THREE.MeshStandardMaterial({ color: 0x34434a, metalness: .48, roughness: .42 });
+  const battery = new THREE.Mesh(new THREE.CapsuleGeometry(.075,.48,8,16), batteryMat);
+  battery.position.set(.155,.925,.012); battery.rotation.z=.47; bike.add(battery);
+  const batterySeam = new THREE.Mesh(new THREE.BoxGeometry(.012,.48,.006),accent);
+  batterySeam.position.set(.155,.925,.086); batterySeam.rotation.z=.47; bike.add(batterySeam);
+  // Compact motor housing integrated around the bottom bracket
+  const motor = new THREE.Mesh(new THREE.CylinderGeometry(.185,.185,.19,48), frameDark);
+  motor.rotation.x=Math.PI/2; motor.position.set(-.36,.66,0); bike.add(motor);
+  const motorCover = new THREE.Mesh(new THREE.CylinderGeometry(.135,.135,.205,48), metal);
+  motorCover.rotation.x=Math.PI/2; motorCover.position.set(-.36,.66,.012); bike.add(motorCover);
+  const motorInset = new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,.212,48), black);
+  motorInset.rotation.x=Math.PI/2; motorInset.position.set(-.36,.66,.02); bike.add(motorInset);
   const crank=new THREE.Mesh(new THREE.TorusGeometry(.19,.018,8,40),metal);
   crank.position.set(-.36,.66,.16); bike.add(crank);
   tube(bike,[-.36,.66,.17],[-.65,.59,.17],.025,metal);
@@ -129,14 +139,21 @@ async function startShowroom() {
   const pedal1=new THREE.Mesh(new THREE.BoxGeometry(.2,.045,.1),black); pedal1.position.set(-.68,.59,.17); bike.add(pedal1);
   const pedal2=new THREE.Mesh(new THREE.BoxGeometry(.2,.045,.1),black); pedal2.position.set(-.04,.73,.17); bike.add(pedal2);
   // Chainring, chain and rear cassette
-  const chainring=new THREE.Mesh(new THREE.TorusGeometry(.14,.012,6,40),gold); chainring.position.set(-.36,.66,.22); bike.add(chainring);
-  tube(bike,[-.36,.66,.22],[-1.34,.72,.12],.009,metal,6);
-  tube(bike,[-.36,.66,.22],[-1.34,.72,.12],.009,metal,6);
-  const cassette=new THREE.Mesh(new THREE.TorusGeometry(.105,.012,6,32),metal); cassette.position.set(-1.34,.72,.13); bike.add(cassette);
-  // Brake calipers and small model decals
-  sphere(bike,[1.18,.94,.12],[.11,.08,.09],red);
-  sphere(bike,[-1.18,.94,.12],[.11,.08,.09],red);
-  const logo=new THREE.Mesh(new THREE.BoxGeometry(.24,.035,.012),accent); logo.position.set(-.28,1.12,.075); logo.rotation.z=.4; bike.add(logo);
+  const chainring=new THREE.Mesh(new THREE.TorusGeometry(.14,.012,6,48),metal); chainring.position.set(-.36,.66,.22); bike.add(chainring);
+  tube(bike,[-.36,.66,.22],[-1.34,.72,.12],.006,metal,6);
+  tube(bike,[-.36,.66,-.12],[-1.34,.72,-.12],.006,metal,6);
+  const cassette=new THREE.Mesh(new THREE.TorusGeometry(.105,.009,6,40),metal); cassette.position.set(-1.34,.72,.13); bike.add(cassette);
+  const rearDerailleur = new THREE.Mesh(new THREE.BoxGeometry(.09,.18,.08),black);
+  rearDerailleur.position.set(-1.25,.55,.14); rearDerailleur.rotation.z=-.25; bike.add(rearDerailleur);
+  // Small, dark brake calipers mounted beside the rotors
+  const caliperMat = new THREE.MeshStandardMaterial({ color: 0x252c30, metalness: .55, roughness: .38 });
+  for (const x of [-1.34,1.34]) {
+    const caliper = new THREE.Mesh(new THREE.BoxGeometry(.105,.075,.075),caliperMat);
+    caliper.position.set(x+.19,.91,.105);
+    caliper.rotation.z=-.48;
+    bike.add(caliper);
+  }
+  const logo=new THREE.Mesh(new THREE.BoxGeometry(.22,.022,.008),accent); logo.position.set(-.28,1.12,.075); logo.rotation.z=.4; bike.add(logo);
   // Cable lines on cockpit/front triangle
   tube(bike,[.67,1.76,.1],[.42,1.43,.12],.008,black,6);
   tube(bike,[.42,1.43,.12],[.75,1.12,.12],.008,black,6);
