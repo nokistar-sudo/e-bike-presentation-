@@ -184,23 +184,32 @@ cockpitRender();
   function renderPhoto() {
     const scene = stage.dataset.scene;
     const weather = stage.dataset.weather;
-    let key;
-    if (scene === "winter") key = "winter-snow";
-    else if (scene === "night") key = "night-night";
-    else if (weather === "rain" && scene === "village") key = "village-rain";
-    else if (weather === "fog" && scene === "forest") key = "forest-fog";
-    else if (weather === "snow") key = "winter-snow";
-    else {
-      const sky = weather === "clear" ? "clear" : "cloudy";
-      key = scene + "-" + sky;
+
+    // Jede Umgebungs-Schaltfläche behält ihren Ort. Nur dort, wo es
+    // ein passendes Originalfoto gibt, wird auf die Wettervariante gewechselt.
+    const photoMap = {
+      village: { clear: "village-clear", cloudy: "village-cloudy", rain: "village-rain" },
+      forest:  { clear: "forest-clear", cloudy: "forest-cloudy", fog: "forest-fog" },
+      urban:   { clear: "urban-clear", cloudy: "urban-cloudy" },
+      lake:    { clear: "lake-clear", cloudy: "lake-cloudy" },
+      winter:  { all: "winter-snow" },
+      night:   { all: "night-night" }
+    };
+
+    const options = photoMap[scene] || photoMap.village;
+    let key = options.all;
+    if (!key) {
+      if (weather === "rain" && options.rain) key = options.rain;
+      else if (weather === "fog" && options.fog) key = options.fog;
+      else key = options[weather] || options.cloudy || options.clear;
     }
+
     photos.forEach(photo => {
       const active = photo.dataset.scenePhoto + "-" + photo.dataset.sky === key;
       photo.classList.toggle("active", active);
       photo.setAttribute("aria-hidden", String(!active));
     });
   }
-
   function renderCaption() {
     caption.textContent = sceneNames[stage.dataset.scene] + " · " + weatherNames[stage.dataset.weather] + " · " + timeNames[stage.dataset.time];
   }
