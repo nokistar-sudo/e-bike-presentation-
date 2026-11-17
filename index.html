@@ -110,33 +110,38 @@
     <section class="interactive-tools section" id="cockpit">
       <div class="section-heading">
         <p class="eyebrow">DIGITAL COCKPIT</p>
-        <h2>Ein Blick auf die Technik.</h2>
-        <p class="section-subtitle">Ein interaktives Demo-Display: Ändere Akkustand, Fahrmodus und Geschwindigkeit und beobachte, wie sich die Anzeige verändert.</p>
+        <h2>Starte eine virtuelle Probefahrt.</h2>
+        <p class="section-subtitle">Bediene das Demo-Cockpit wie ein kleines Borddisplay: Starte die Simulation, wechsle den Fahrmodus und beobachte, wie Akku, Strecke und Restreichweite reagieren.</p>
       </div>
       <div class="cockpit-shell">
-        <div class="cockpit-top"><span><i></i> SPECIALIZED · TURBO LEVO</span><span>DISPLAY DEMO</span></div>
+        <div class="cockpit-top"><span><i id="cockpit-status-light"></i> SPECIALIZED · TURBO LEVO</span><span id="cockpit-status">BEREIT</span></div>
         <div class="cockpit-screen">
           <div class="cockpit-main">
-            <div class="cockpit-speed"><strong id="cockpit-speed-value">18</strong><span>km/h</span></div>
+            <div class="cockpit-speed"><strong id="cockpit-speed-value">0</strong><span>km/h</span></div>
             <div class="cockpit-mode"><small>FAHRMODUS</small><strong id="cockpit-mode-value">TRAIL</strong></div>
           </div>
           <div class="cockpit-stats">
             <div><small>AKKUSTAND</small><strong id="cockpit-battery-value">78%</strong><div class="battery-bars"><i></i><i></i><i></i><i></i><i></i></div></div>
             <div><small>RESTKAPAZITÄT</small><strong id="cockpit-wh-value">390 Wh</strong></div>
+            <div><small>RESTREICHWEITE</small><strong id="cockpit-range-value">— km</strong></div>
+            <div><small>GEFAHRENE STRECKE</small><strong id="cockpit-distance-value">0,0 km</strong></div>
+            <div><small>FAHRZEIT</small><strong id="cockpit-time-value">00:00</strong></div>
             <div><small>MOTORUNTERSTÜTZUNG</small><strong id="cockpit-support-value">Mittel</strong></div>
           </div>
           <div class="cockpit-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </div>
         <div class="cockpit-controls">
-          <label for="cockpit-battery">Akkustand <output id="cockpit-battery-control-value">78%</output></label>
-          <input id="cockpit-battery" type="range" min="0" max="100" value="78">
+          <label for="cockpit-battery">Start-Akkustand <output id="cockpit-battery-control-value">78%</output></label>
+          <input id="cockpit-battery" type="range" min="5" max="100" value="78">
           <label for="cockpit-mode">Fahrmodus</label>
           <select id="cockpit-mode"><option value="eco">Eco</option><option value="trail" selected>Trail</option><option value="turbo">Turbo</option></select>
-          <label for="cockpit-speed">Demo-Geschwindigkeit <output id="cockpit-speed-control-value">18 km/h</output></label>
-          <input id="cockpit-speed" type="range" min="0" max="45" value="18">
+          <div class="cockpit-actions">
+            <button class="cockpit-action primary" id="cockpit-start" type="button">▶ Probefahrt starten</button>
+            <button class="cockpit-action" id="cockpit-reset" type="button">↺ Zurücksetzen</button>
+          </div>
         </div>
       </div>
-      <p class="cockpit-note">Hinweis: Das Cockpit ist eine selbst gestaltete Simulation und nicht mit dem echten Fahrrad verbunden. Die Anzeige dient nur zur Veranschaulichung.</p>
+      <p class="cockpit-note">Interaktive Simulation zu Demonstrationszwecken. Die Werte sind modelliert und stammen nicht von einem echten Fahrrad oder Sensor.</p>
     </section>
 
     <section class="gallery-section section">
