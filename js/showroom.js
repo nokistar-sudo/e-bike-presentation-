@@ -1,9 +1,10 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/controls/OrbitControls.js';
-
 const container = document.getElementById('bike-3d-view');
 
-if (container) {
+async function startShowroom() {
+  if (!container) return;
+  try {
+    const THREE = await import('https://esm.sh/three@0.170.0');
+    const { OrbitControls } = await import('https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
   camera.position.set(3.35, 2.25, 5.8);
@@ -186,3 +187,11 @@ if (container) {
   function animate(){ requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
   animate();
 }
+
+  } catch (error) {
+    console.error('Der 3D-Showroom konnte nicht geladen werden:', error);
+    container.innerHTML = '<div class="showroom-load-error"><strong>3D-Ansicht gerade nicht verfügbar</strong><span>Bitte lade die Seite neu. Falls das Problem bleibt, blockiert möglicherweise der Browser den externen 3D-Import.</span></div>';
+  }
+}
+
+startShowroom();
