@@ -78,52 +78,63 @@
     </section>
 
 
-    <section class="showroom-section section" id="showroom">
+    <section class="interactive-tools section" id="range">
       <div class="section-heading">
-        <p class="eyebrow">ORIGINALAUFNAHMEN VON SPECIALIZED</p>
-        <h2>Das Turbo Levo – genau wie es aussieht.</h2>
-        <p class="section-subtitle">Statt eines ungenauen 3D-Nachbaus siehst du hier originale Produktaufnahmen des 2020er Turbo Levo Hardtail Comp in Cast Battleship / Mojave. Klicke auf ein Bild, um es groß anzusehen.</p>
+        <p class="eyebrow">RANGE SIMULATOR</p>
+        <h2>Wie weit komme ich mit einer Akkuladung?</h2>
+        <p class="section-subtitle">Passe die Bedingungen an und erhalte eine grobe Orientierung. Die tatsächliche Reichweite hängt unter anderem von Temperatur, Strecke, Reifendruck, Fahrstil und Akkuzustand ab.</p>
       </div>
-
-      <div class="real-bike-showcase">
-        <button class="real-bike-hero" type="button" data-full="https://assets.specialized.com/i/specialized/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_HERO?%24scom-pdp-gallery-image%24=&amp;fmt=webp" aria-label="Originalansicht des Specialized Turbo Levo vergrößern">
-          <img src="https://resources.specialized.com/image/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_HERO?bg=f1f1f1&amp;crop=focalpoint&amp;fit=fill&amp;h=1125&amp;w=2000" alt="Specialized Turbo Levo Hardtail Comp 2020 in Cast Battleship und Mojave, Seitenansicht">
-          <span class="real-bike-label"><i></i> ORIGINAL-PRODUKTAUFNAHME <b>2020</b></span>
-          <span class="real-bike-zoom">Bild vergrößern ↗</span>
-        </button>
-        <div class="real-bike-side">
-          <div class="real-bike-copy">
-            <p class="eyebrow">CAST BATTLESHIP / MOJAVE</p>
-            <h3>Die echte Rahmenform.</h3>
-            <p>Der geschwungene Aluminiumrahmen, der integrierte Akku und der kompakte Motor sind auf den Herstellerbildern klar zu erkennen.</p>
-          </div>
-          <div class="real-bike-facts">
-            <div><span>Rahmen</span><strong>M5 Aluminium</strong></div>
-            <div><span>Motor</span><strong>Specialized 1.3</strong></div>
-            <div><span>Akku</span><strong>M1-500 · 500 Wh</strong></div>
-          </div>
+      <div class="range-layout">
+        <div class="tool-panel range-controls">
+          <label class="range-field" for="rider-weight"><span>Fahrergewicht</span><strong><output id="weight-value">65</output> kg</strong></label>
+          <input id="rider-weight" type="range" min="40" max="120" value="65" step="1">
+          <div class="range-scale"><span>40 kg</span><span>120 kg</span></div>
+          <label class="range-field" for="assist-level"><span>Unterstützung</span></label>
+          <select id="assist-level"><option value="eco">Eco – sparsam</option><option value="trail" selected>Trail – ausgewogen</option><option value="turbo">Turbo – kräftig</option></select>
+          <label class="range-field" for="route-type"><span>Strecke</span></label>
+          <select id="route-type"><option value="flat">Überwiegend flach</option><option value="mixed" selected>Gemischt</option><option value="hills">Viele Steigungen</option></select>
+        </div>
+        <div class="range-result">
+          <p class="eyebrow">GESCHÄTZTE REICHWEITE</p>
+          <div class="range-number"><strong id="range-output">—</strong><span>km</span></div>
+          <div class="range-meter"><span id="range-meter-fill"></span></div>
+          <p id="range-explanation">Wähle deine Bedingungen aus, um die Schätzung zu sehen.</p>
+          <div class="range-battery"><span>Akku</span><strong>500 Wh</strong></div>
+          <small>Unverbindliche Modellrechnung, keine Herstellerangabe und keine Garantie für eine bestimmte Reichweite.</small>
         </div>
       </div>
+    </section>
 
-      <div class="real-bike-details">
-        <button class="real-detail-card" type="button" data-full="https://assets.specialized.com/i/specialized/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-2?%24scom-pdp-gallery-image%24=&amp;fmt=webp">
-          <img src="https://resources.specialized.com/image/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-2?bg=f1f1f1&amp;crop=focalpoint&amp;fit=fill&amp;h=1125&amp;w=2000" alt="Detailaufnahme des Rahmens und integrierten Akkus">
-          <span><small>01 / RAHMEN</small><strong>Rahmen & Akku</strong><b>Vergrößern ↗</b></span>
-        </button>
-        <button class="real-detail-card" type="button" data-full="https://assets.specialized.com/i/specialized/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-3?%24scom-pdp-gallery-image%24=&amp;fmt=webp">
-          <img src="https://resources.specialized.com/image/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-3?bg=f1f1f1&amp;crop=focalpoint&amp;fit=fill&amp;h=1125&amp;w=2000" alt="Detailaufnahme des Cockpits und Steuerrohrs">
-          <span><small>02 / COCKPIT</small><strong>Lenker & Steuerrohr</strong><b>Vergrößern ↗</b></span>
-        </button>
-        <button class="real-detail-card" type="button" data-full="https://assets.specialized.com/i/specialized/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-4?%24scom-pdp-gallery-image%24=&amp;fmt=webp">
-          <img src="https://resources.specialized.com/image/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-4?bg=f1f1f1&amp;crop=focalpoint&amp;fit=fill&amp;h=1125&amp;w=2000" alt="Detailaufnahme von Akku, Motor und Federgabel">
-          <span><small>03 / ANTRIEB</small><strong>Motor & Integration</strong><b>Vergrößern ↗</b></span>
-        </button>
-        <button class="real-detail-card" type="button" data-full="https://assets.specialized.com/i/specialized/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-5?%24scom-pdp-gallery-image%24=&amp;fmt=webp">
-          <img src="https://resources.specialized.com/image/95119-50_LEVO-HT_COMP-29_CSTBTLSHP-MJV_DETAIL-5?bg=f1f1f1&amp;crop=focalpoint&amp;fit=fill&amp;h=1125&amp;w=2000" alt="Detailaufnahme von Motor, Kurbel, Kette und Schaltung">
-          <span><small>04 / ANTRIEB</small><strong>Kurbel & Schaltung</strong><b>Vergrößern ↗</b></span>
-        </button>
+    <section class="interactive-tools section" id="cockpit">
+      <div class="section-heading">
+        <p class="eyebrow">DIGITAL COCKPIT</p>
+        <h2>Ein Blick auf die Technik.</h2>
+        <p class="section-subtitle">Ein interaktives Demo-Display: Ändere Akkustand, Fahrmodus und Geschwindigkeit und beobachte, wie sich die Anzeige verändert.</p>
       </div>
-      <p class="image-source-note">Bildmaterial: Specialized, 2020 Turbo Levo Hardtail Comp – <a href="https://www.specialized.com/de/de/turbo-levo-hardtail-comp/p/170506" target="_blank" rel="noopener noreferrer">offizielle Produktseite</a>. Die Fotos zeigen die Hersteller-Farbvariante Cast Battleship / Mojave.</p>
+      <div class="cockpit-shell">
+        <div class="cockpit-top"><span><i></i> SPECIALIZED · TURBO LEVO</span><span>DISPLAY DEMO</span></div>
+        <div class="cockpit-screen">
+          <div class="cockpit-main">
+            <div class="cockpit-speed"><strong id="cockpit-speed-value">18</strong><span>km/h</span></div>
+            <div class="cockpit-mode"><small>FAHRMODUS</small><strong id="cockpit-mode-value">TRAIL</strong></div>
+          </div>
+          <div class="cockpit-stats">
+            <div><small>AKKUSTAND</small><strong id="cockpit-battery-value">78%</strong><div class="battery-bars"><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div><small>RESTKAPAZITÄT</small><strong id="cockpit-wh-value">390 Wh</strong></div>
+            <div><small>MOTORUNTERSTÜTZUNG</small><strong id="cockpit-support-value">Mittel</strong></div>
+          </div>
+          <div class="cockpit-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="cockpit-controls">
+          <label for="cockpit-battery">Akkustand <output id="cockpit-battery-control-value">78%</output></label>
+          <input id="cockpit-battery" type="range" min="0" max="100" value="78">
+          <label for="cockpit-mode">Fahrmodus</label>
+          <select id="cockpit-mode"><option value="eco">Eco</option><option value="trail" selected>Trail</option><option value="turbo">Turbo</option></select>
+          <label for="cockpit-speed">Demo-Geschwindigkeit <output id="cockpit-speed-control-value">18 km/h</output></label>
+          <input id="cockpit-speed" type="range" min="0" max="45" value="18">
+        </div>
+      </div>
+      <p class="cockpit-note">Hinweis: Das Cockpit ist eine selbst gestaltete Simulation und nicht mit dem echten Fahrrad verbunden. Die Anzeige dient nur zur Veranschaulichung.</p>
     </section>
 
     <section class="gallery-section section">
