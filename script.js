@@ -166,3 +166,31 @@ cockpitMode?.addEventListener("change", cockpitRender);
 cockpitStart?.addEventListener("click", cockpitToggle);
 cockpitReset?.addEventListener("click", cockpitResetAll);
 cockpitRender();
+
+
+// LIVE SCENE STUDIO – Umgebung, Wetter und Tageszeit
+(() => {
+  const stage = document.querySelector("#scene-stage");
+  const weatherLayer = document.querySelector("#scene-weather-layer");
+  const caption = document.querySelector("#scene-caption");
+  if (!stage || !weatherLayer || !caption) return;
+  const sceneNames = {village:"DORFSTRASSE",forest:"WALDWEG",urban:"STADTVIERTEL",winter:"WINTERLANDSCHAFT",lake:"AM SEE",night:"STADT BEI NACHT"};
+  const weatherNames = {clear:"KLAR",cloudy:"WOLKIG",rain:"REGEN",snow:"SCHNEE",fog:"NEBEL"};
+  const timeNames = {day:"TAG",sunset:"ABEND",night:"NACHT"};
+  function select(group, value) {
+    if (group === "scene") {
+      stage.dataset.scene = value;
+      document.querySelectorAll("[data-scene]").forEach(b => b.classList.toggle("active", b.dataset.scene === value));
+    } else {
+      stage.dataset[group] = value;
+      document.querySelectorAll("#scene-" + group + " [data-" + group + "]").forEach(b => b.classList.toggle("active", b.dataset[group] === value));
+    }
+    if (group === "weather") {
+      weatherLayer.className = "scene-weather-layer" + (value === "clear" || value === "cloudy" ? "" : " " + value);
+    }
+    caption.textContent = sceneNames[stage.dataset.scene] + " · " + weatherNames[stage.dataset.weather] + " · " + timeNames[stage.dataset.time];
+  }
+  document.querySelectorAll(".scene-choice").forEach(b => b.addEventListener("click", () => select("scene", b.dataset.scene)));
+  document.querySelectorAll("#scene-weather button").forEach(b => b.addEventListener("click", () => select("weather", b.dataset.weather)));
+  document.querySelectorAll("#scene-time button").forEach(b => b.addEventListener("click", () => select("time", b.dataset.time)));
+})();
