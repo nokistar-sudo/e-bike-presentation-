@@ -979,3 +979,32 @@ button {
 
 /* Die Szenenfotos enthalten das Fahrrad bereits – keine zusätzliche SVG-Illustration darüberlegen. */
 .scene-bike-illustration{display:none!important}
+
+
+/* NATURAL WEATHER PASS — softer particles, slower movement and atmospheric depth */
+.scene-cloud-bank span{
+  background:radial-gradient(ellipse at 50% 52%,rgba(221,230,232,.34),rgba(190,204,209,.16) 48%,transparent 76%);
+  filter:blur(30px);
+}
+.scene-stage[data-weather="cloudy"] .scene-cloud-bank{opacity:.62}
+.scene-stage[data-weather="rain"] .scene-cloud-bank{opacity:.84}
+.scene-stage[data-weather="snow"] .scene-cloud-bank{opacity:.76}
+.weather-particle.rain-drop{
+  width:1px;
+  background:linear-gradient(180deg,transparent 0%,rgba(220,236,242,.2) 25%,rgba(220,239,246,.72) 100%);
+  filter:blur(.25px) drop-shadow(0 0 1px rgba(205,226,235,.22));
+}
+.weather-particle.rain-ripple{
+  border-color:rgba(220,235,239,.34);
+  filter:blur(.35px);
+}
+.weather-particle.snowflake{
+  box-shadow:0 0 3px rgba(255,255,255,.3);
+}
+.weather-particle.fog-bank{
+  background:linear-gradient(90deg,transparent,rgba(222,233,233,.24) 24%,rgba(230,238,237,.38) 52%,rgba(218,230,230,.2) 78%,transparent);
+  filter:blur(30px);
+}
+@media(prefers-reduced-motion:reduce){
+  .scene-cloud-bank span,.weather-particle{animation:none!important}
+}
