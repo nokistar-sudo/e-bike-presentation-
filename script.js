@@ -168,29 +168,51 @@ cockpitReset?.addEventListener("click", cockpitResetAll);
 cockpitRender();
 
 
-// LIVE SCENE STUDIO – Umgebung, Wetter und Tageszeit
+// LIVE SCENE STUDIO — photo switching and layered weather animation
 (() => {
   const stage = document.querySelector("#scene-stage");
   const weatherLayer = document.querySelector("#scene-weather-layer");
   const caption = document.querySelector("#scene-caption");
   if (!stage || !weatherLayer || !caption) return;
+
   const sceneNames = {village:"DORFSTRASSE",forest:"WALDWEG",urban:"STADTVIERTEL",winter:"WINTERLANDSCHAFT",lake:"AM SEE",night:"STADT BEI NACHT"};
   const weatherNames = {clear:"KLAR",cloudy:"WOLKIG",rain:"REGEN",snow:"SCHNEE",fog:"NEBEL"};
   const timeNames = {day:"TAG",sunset:"ABEND",night:"NACHT"};
+  const photos = [...document.querySelectorAll(".scene-photo")];
+
+  function renderPhoto() {
+    const scene = stage.dataset.scene;
+    const sky = stage.dataset.weather === "clear" ? "clear" : "cloudy";
+    photos.forEach(photo => photo.classList.toggle("active", photo.dataset.scenePhoto === scene && photo.dataset.sky === sky));
+  }
+  function renderCaption() {
+    caption.textContent = sceneNames[stage.dataset.scene] + " · " + weatherNames[stage.dataset.weather] + " · " + timeNames[stage.dataset.time];
+  }
   function select(group, value) {
     if (group === "scene") {
       stage.dataset.scene = value;
-      document.querySelectorAll("[data-scene]").forEach(b => b.classList.toggle("active", b.dataset.scene === value));
+      document.querySelectorAll(".scene-choice").forEach(button => button.classList.toggle("active", button.dataset.scene === value));
     } else {
       stage.dataset[group] = value;
-      document.querySelectorAll("#scene-" + group + " [data-" + group + "]").forEach(b => b.classList.toggle("active", b.dataset[group] === value));
+      document.querySelectorAll("#scene-" + group + " button").forEach(button => button.classList.toggle("active", button.dataset[group] === value));
     }
     if (group === "weather") {
-      weatherLayer.className = "scene-weather-layer" + (value === "clear" || value === "cloudy" ? "" : " " + value);
+      weatherLayer.className = "scene-weather-layer" + (["clear","cloudy"].includes(value) ? "" : " " + value);
+      renderPhoto();
     }
-    caption.textContent = sceneNames[stage.dataset.scene] + " · " + weatherNames[stage.dataset.weather] + " · " + timeNames[stage.dataset.time];
+    renderCaption();
   }
-  document.querySelectorAll(".scene-choice").forEach(b => b.addEventListener("click", () => select("scene", b.dataset.scene)));
-  document.querySelectorAll("#scene-weather button").forEach(b => b.addEventListener("click", () => select("weather", b.dataset.weather)));
-  document.querySelectorAll("#scene-time button").forEach(b => b.addEventListener("click", () => select("time", b.dataset.time)));
+
+  document.querySelectorAll(".scene-choice").forEach(button => button.addEventListener("click", () => select("scene", button.dataset.scene)));
+  document.querySelectorAll("#scene-weather button").forEach(button => button.addEventListener("click", () => select("weather", button.dataset.weather)));
+  document.querySelectorAll("#scene-time button").forEach(button => button.addEventListener("click", () => select("time", button.dataset.time)));
+
+  photos.forEach(photo => {
+    photo.addEventListener("error", () => {
+      photo.classList.add("photo-failed");
+      photo.style.display = "none";
+    }, {once:true});
+  });
+  renderPhoto();
+  renderCaption();
 })();
