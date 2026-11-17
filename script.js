@@ -88,5 +88,5 @@ function updateCockpit() {
   });
 }
 [cockpitBattery, cockpitMode, cockpitSpeed].forEach((el) => el?.addEventListener("input", updateCockpit));
-[cockpitMode]?.addEventListener("change", updateCockpit);
+cockpitMode?.addEventListener("change", updateCockpit);
 updateCockpit();
