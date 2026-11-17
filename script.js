@@ -168,7 +168,7 @@ cockpitReset?.addEventListener("click", cockpitResetAll);
 cockpitRender();
 
 
-// LIVE SCENE STUDIO — photo switching and layered weather animation
+// LIVE SCENE STUDIO — photo environments, animated weather and changing light
 (() => {
   const stage = document.querySelector("#scene-stage");
   const weatherLayer = document.querySelector("#scene-weather-layer");
@@ -179,48 +179,95 @@ cockpitRender();
   const weatherNames = {clear:"KLAR",cloudy:"WOLKIG",rain:"REGEN",snow:"SCHNEE",fog:"NEBEL"};
   const timeNames = {day:"TAG",sunset:"ABEND",night:"NACHT"};
   const photos = [...document.querySelectorAll(".scene-photo")];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function renderPhoto() {
     const scene = stage.dataset.scene;
     const sky = stage.dataset.weather === "clear" ? "clear" : "cloudy";
-    photos.forEach(photo => photo.classList.toggle("active", photo.dataset.scenePhoto === scene && photo.dataset.sky === sky));
+    photos.forEach(photo => {
+      const active = photo.dataset.scenePhoto === scene && photo.dataset.sky === sky;
+      photo.classList.toggle("active", active);
+      photo.setAttribute("aria-hidden", String(!active));
+    });
   }
+
   function renderCaption() {
     caption.textContent = sceneNames[stage.dataset.scene] + " · " + weatherNames[stage.dataset.weather] + " · " + timeNames[stage.dataset.time];
   }
+
+  function particle(className, properties) {
+    const node = document.createElement("span");
+    node.className = "weather-particle " + className;
+    Object.entries(properties).forEach(([key, value]) => node.style.setProperty(key, value));
+    weatherLayer.appendChild(node);
+  }
+
   function buildWeatherParticles(weather) {
-    weatherLayer.className = "scene-weather-layer" + (["clear","cloudy"].includes(weather) ? "" : " " + weather);
     weatherLayer.replaceChildren();
-    const count = weather === "rain" ? 100 : weather === "snow" ? 72 : 0;
-    for (let i = 0; i < count; i++) {
-      const particle = document.createElement("span");
-      particle.className = "weather-particle " + (weather === "rain" ? "rain-drop" : "snowflake");
-      particle.style.setProperty("--left", (Math.random() * 110 - 5) + "%");
-      particle.style.setProperty("--drift", (weather === "rain" ? (Math.random() * 90 + 35) : (Math.random() * 100 - 50)) + "px");
-      particle.style.setProperty("--delay", (-Math.random() * 16) + "s");
-      particle.style.setProperty("--opacity", (0.3 + Math.random() * 0.65).toFixed(2));
-      if (weather === "rain") {
-        particle.style.setProperty("--length", (10 + Math.random() * 18) + "px");
-        particle.style.setProperty("--duration", (0.55 + Math.random() * 0.65) + "s");
-      } else {
-        const size = 2 + Math.random() * 4.5;
-        particle.style.setProperty("--size", size + "px");
-        particle.style.setProperty("--duration", (7 + Math.random() * 11) + "s");
+    weatherLayer.className = "scene-weather-layer " + weather;
+    if (reduceMotion) return;
+
+    if (weather === "rain") {
+      for (let i = 0; i < 145; i++) {
+        const depth = Math.random();
+        particle("rain-drop", {
+          "--left": (Math.random() * 110 - 5) + "%",
+          "--length": (9 + depth * 20) + "px",
+          "--duration": (0.48 + depth * 0.62) + "s",
+          "--delay": (-Math.random() * 2) + "s",
+          "--drift": (32 + Math.random() * 58) + "px",
+          "--opacity": (0.18 + depth * 0.58).toFixed(2)
+        });
       }
-      weatherLayer.appendChild(particle);
+      for (let i = 0; i < 12; i++) {
+        particle("rain-ripple", {
+          "--left": (8 + Math.random() * 84) + "%",
+          "--delay": (-Math.random() * 4) + "s",
+          "--duration": (2.2 + Math.random() * 2.2) + "s"
+        });
+      }
+    }
+
+    if (weather === "snow") {
+      for (let i = 0; i < 105; i++) {
+        const depth = Math.random();
+        particle("snowflake", {
+          "--left": (Math.random() * 110 - 5) + "%",
+          "--size": (1.4 + depth * 4.2) + "px",
+          "--duration": (8 + depth * 12) + "s",
+          "--delay": (-Math.random() * 18) + "s",
+          "--drift": (Math.random() * 100 - 50) + "px",
+          "--opacity": (0.3 + depth * 0.65).toFixed(2),
+          "--blur": (depth < .25 ? "1px" : "0px")
+        });
+      }
+    }
+
+    if (weather === "fog") {
+      for (let i = 0; i < 5; i++) {
+        particle("fog-bank", {
+          "--fog-y": (48 + i * 9 + Math.random() * 7) + "%",
+          "--fog-height": (12 + Math.random() * 15) + "%",
+          "--duration": (18 + Math.random() * 18) + "s",
+          "--delay": (-Math.random() * 20) + "s",
+          "--opacity": (.16 + Math.random() * .2).toFixed(2)
+        });
+      }
     }
   }
+
   function select(group, value) {
     if (group === "scene") {
       stage.dataset.scene = value;
       document.querySelectorAll(".scene-choice").forEach(button => button.classList.toggle("active", button.dataset.scene === value));
+      renderPhoto();
     } else {
       stage.dataset[group] = value;
       document.querySelectorAll("#scene-" + group + " button").forEach(button => button.classList.toggle("active", button.dataset[group] === value));
-    }
-    if (group === "weather") {
-      buildWeatherParticles(value);
-      renderPhoto();
+      if (group === "weather") {
+        buildWeatherParticles(value);
+        renderPhoto();
+      }
     }
     renderCaption();
   }
@@ -228,7 +275,13 @@ cockpitRender();
   document.querySelectorAll(".scene-choice").forEach(button => button.addEventListener("click", () => select("scene", button.dataset.scene)));
   document.querySelectorAll("#scene-weather button").forEach(button => button.addEventListener("click", () => select("weather", button.dataset.weather)));
   document.querySelectorAll("#scene-time button").forEach(button => button.addEventListener("click", () => select("time", button.dataset.time)));
-  photos.forEach(photo => photo.addEventListener("error", () => { photo.classList.add("photo-failed"); photo.style.display = "none"; }, {once:true}));
+
+  photos.forEach(photo => photo.addEventListener("error", () => {
+    photo.classList.add("photo-failed");
+    photo.style.display = "none";
+    console.warn("Ein Szenenfoto konnte nicht geladen werden:", photo.src);
+  }, {once:true}));
+
   buildWeatherParticles(stage.dataset.weather);
   renderPhoto();
   renderCaption();
