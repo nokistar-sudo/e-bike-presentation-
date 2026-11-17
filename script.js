@@ -188,7 +188,7 @@ cockpitRender();
     // Jede Umgebungs-Schaltfläche behält ihren Ort. Nur dort, wo es
     // ein passendes Originalfoto gibt, wird auf die Wettervariante gewechselt.
     const photoMap = {
-      village: { clear: "village-clear", cloudy: "village-cloudy", rain: "village-rain" },
+      village: { clear: "village-cloudy", cloudy: "village-cloudy", rain: "village-rain" },
       forest:  { clear: "forest-clear", cloudy: "forest-cloudy", fog: "forest-fog" },
       urban:   { clear: "urban-clear", cloudy: "urban-cloudy" },
       lake:    { clear: "lake-clear", cloudy: "lake-cloudy" },
@@ -227,49 +227,49 @@ cockpitRender();
     if (reduceMotion) return;
 
     if (weather === "rain") {
-      for (let i = 0; i < 145; i++) {
+      for (let i = 0; i < 92; i++) {
         const depth = Math.random();
         particle("rain-drop", {
           "--left": (Math.random() * 110 - 5) + "%",
-          "--length": (9 + depth * 20) + "px",
-          "--duration": (0.48 + depth * 0.62) + "s",
-          "--delay": (-Math.random() * 2) + "s",
-          "--drift": (32 + Math.random() * 58) + "px",
-          "--opacity": (0.18 + depth * 0.58).toFixed(2)
+          "--length": (7 + depth * 13) + "px",
+          "--duration": (0.72 + depth * 0.72) + "s",
+          "--delay": (-Math.random() * 2.5) + "s",
+          "--drift": (14 + Math.random() * 28) + "px",
+          "--opacity": (0.12 + depth * 0.3).toFixed(2)
         });
       }
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 8; i++) {
         particle("rain-ripple", {
           "--left": (8 + Math.random() * 84) + "%",
           "--delay": (-Math.random() * 4) + "s",
-          "--duration": (2.2 + Math.random() * 2.2) + "s"
+          "--duration": (2.8 + Math.random() * 2.8) + "s"
         });
       }
     }
 
     if (weather === "snow") {
-      for (let i = 0; i < 105; i++) {
+      for (let i = 0; i < 64; i++) {
         const depth = Math.random();
         particle("snowflake", {
           "--left": (Math.random() * 110 - 5) + "%",
-          "--size": (1.4 + depth * 4.2) + "px",
-          "--duration": (8 + depth * 12) + "s",
+          "--size": (1.2 + depth * 2.8) + "px",
+          "--duration": (12 + depth * 14) + "s",
           "--delay": (-Math.random() * 18) + "s",
-          "--drift": (Math.random() * 100 - 50) + "px",
-          "--opacity": (0.3 + depth * 0.65).toFixed(2),
+          "--drift": (Math.random() * 70 - 35) + "px",
+          "--opacity": (0.22 + depth * 0.55).toFixed(2),
           "--blur": (depth < .25 ? "1px" : "0px")
         });
       }
     }
 
     if (weather === "fog") {
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         particle("fog-bank", {
-          "--fog-y": (48 + i * 9 + Math.random() * 7) + "%",
-          "--fog-height": (12 + Math.random() * 15) + "%",
-          "--duration": (18 + Math.random() * 18) + "s",
-          "--delay": (-Math.random() * 20) + "s",
-          "--opacity": (.16 + Math.random() * .2).toFixed(2)
+          "--fog-y": (58 + i * 8 + Math.random() * 5) + "%",
+          "--fog-height": (15 + Math.random() * 13) + "%",
+          "--duration": (28 + Math.random() * 22) + "s",
+          "--delay": (-Math.random() * 24) + "s",
+          "--opacity": (.08 + Math.random() * .12).toFixed(2)
         });
       }
     }
