@@ -909,3 +909,68 @@ button {
 @keyframes real-rain{to{transform:translate3d(var(--drift),125vh,0)}}
 .weather-particle.snowflake{width:var(--size);height:var(--size);border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 0 5px rgba(255,255,255,.48);animation:real-snow var(--duration) linear var(--delay) infinite;opacity:var(--opacity)}
 @keyframes real-snow{0%{transform:translate3d(0,-5vh,0)}35%{transform:translate3d(calc(var(--drift)*.55),38vh,0)}70%{transform:translate3d(calc(var(--drift)*-.3),82vh,0)}100%{transform:translate3d(var(--drift),125vh,0)}}
+
+
+/* SCENE STUDIO — ATMOSPHERE, NATURAL WEATHER AND LIGHT */
+.scene-stage{background:#182326}
+.scene-photo{object-position:center 58%;transition:opacity 1.35s ease,transform 13s cubic-bezier(.2,.65,.25,1),filter 1.2s ease}
+.scene-photo.active{transform:scale(1.065)}
+.scene-photo-grade{z-index:1;transition:background 1.2s ease}
+.scene-sunlight{position:absolute;z-index:2;inset:-15%;pointer-events:none;opacity:0;transition:opacity 1.2s;background:radial-gradient(ellipse at 76% 12%,rgba(255,239,192,.32),transparent 34%),linear-gradient(118deg,transparent 28%,rgba(255,242,207,.09) 46%,transparent 63%);mix-blend-mode:screen}
+.scene-stage[data-weather="clear"][data-time="day"] .scene-sunlight{opacity:.72}
+.scene-stage[data-time="sunset"] .scene-sunlight{opacity:.9;background:radial-gradient(ellipse at 78% 20%,rgba(255,157,91,.48),transparent 38%),linear-gradient(118deg,transparent 25%,rgba(255,169,106,.14) 48%,transparent 68%)}
+.scene-cloud-bank{z-index:2;opacity:0;filter:none}
+.scene-cloud-bank span{height:26%;top:1%;border-radius:48%;background:radial-gradient(ellipse at 50% 50%,rgba(239,243,243,.5),rgba(196,207,211,.22) 48%,transparent 74%);filter:blur(22px);animation:scene-cloud-drift 58s linear infinite}
+.scene-cloud-bank span:nth-child(2){top:8%;height:21%;filter:blur(30px);animation-duration:76s}
+.scene-cloud-bank span:nth-child(3){top:-2%;height:30%;filter:blur(38px);animation-duration:92s}
+.scene-stage[data-weather="cloudy"] .scene-cloud-bank{opacity:.78}
+.scene-stage[data-weather="rain"] .scene-cloud-bank,.scene-stage[data-weather="snow"] .scene-cloud-bank{opacity:.92}
+.scene-stage[data-weather="fog"] .scene-cloud-bank{opacity:.48}
+.scene-stage[data-weather="clear"] .scene-cloud-bank{opacity:0}
+.scene-stage[data-weather="cloudy"] .scene-photo-grade{background:linear-gradient(180deg,rgba(38,49,54,.18),rgba(31,42,47,.08) 45%,rgba(7,13,15,.6))}
+.scene-stage[data-weather="rain"] .scene-photo-grade{background:linear-gradient(180deg,rgba(15,28,38,.35),rgba(22,32,39,.22) 46%,rgba(5,12,16,.72))}
+.scene-stage[data-weather="snow"] .scene-photo-grade{background:linear-gradient(180deg,rgba(195,214,225,.18),rgba(174,194,207,.08) 48%,rgba(9,17,22,.56))}
+.scene-stage[data-weather="fog"] .scene-photo-grade{background:linear-gradient(180deg,rgba(194,208,211,.32),rgba(203,215,215,.28) 55%,rgba(22,31,33,.55))}
+.scene-stage[data-time="sunset"] .scene-photo-layer{filter:saturate(1.12) sepia(.12)}
+.scene-stage[data-time="sunset"] .scene-photo-grade{background:linear-gradient(180deg,rgba(245,143,88,.2),rgba(255,164,106,.1) 48%,rgba(25,16,19,.64))}
+.scene-stage[data-time="night"] .scene-photo-layer{filter:brightness(.43) saturate(.78) hue-rotate(7deg)}
+.scene-stage[data-time="night"] .scene-photo-grade{background:linear-gradient(180deg,rgba(5,15,36,.4),rgba(8,18,34,.22) 44%,rgba(3,8,15,.82))}
+.scene-stage[data-time="night"] .scene-sunlight{opacity:0}
+.scene-stage[data-time="night"] .scene-cloud-bank{opacity:.15}
+.scene-rain-reflections{height:30%;background:repeating-linear-gradient(176deg,transparent 0 13px,rgba(207,228,235,.09) 14px,transparent 17px 29px),linear-gradient(0deg,rgba(178,206,217,.27),transparent 86%);filter:blur(.4px)}
+.scene-weather-layer{z-index:3}
+.weather-particle{position:absolute;pointer-events:none;will-change:transform,opacity}
+.weather-particle.rain-drop{top:-15%;width:1px;height:var(--length);left:var(--left);border-radius:2px;background:linear-gradient(180deg,transparent,rgba(224,241,248,.82));filter:drop-shadow(0 0 1px rgba(210,232,241,.35));animation:scene-rain-fall-real var(--duration) linear var(--delay) infinite;opacity:var(--opacity)}
+@keyframes scene-rain-fall-real{to{transform:translate3d(var(--drift),125vh,0)}}
+.weather-particle.rain-ripple{top:82%;left:var(--left);width:20px;height:5px;border:1px solid rgba(222,239,244,.55);border-radius:50%;opacity:0;animation:scene-ripple var(--duration) ease-out var(--delay) infinite}
+@keyframes scene-ripple{0%{transform:scale(.25);opacity:0}25%{opacity:.42}100%{transform:scale(2.7);opacity:0}}
+.weather-particle.snowflake{top:-8%;left:var(--left);width:var(--size);height:var(--size);border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 0 5px rgba(255,255,255,.42);filter:blur(var(--blur));animation:scene-snow-fall-real var(--duration) linear var(--delay) infinite;opacity:var(--opacity)}
+@keyframes scene-snow-fall-real{0%{transform:translate3d(0,-8vh,0)}30%{transform:translate3d(calc(var(--drift)*.55),32vh,0)}65%{transform:translate3d(calc(var(--drift)*-.25),78vh,0)}100%{transform:translate3d(var(--drift),118vh,0)}}
+.weather-particle.fog-bank{left:-30%;top:var(--fog-y);width:160%;height:var(--fog-height);border-radius:50%;background:linear-gradient(90deg,transparent,rgba(226,235,235,.48) 22%,rgba(231,239,237,.62) 52%,rgba(218,231,231,.34) 78%,transparent);filter:blur(23px);opacity:var(--opacity);animation:scene-fog-flow var(--duration) ease-in-out var(--delay) infinite alternate}
+@keyframes scene-fog-flow{from{transform:translate3d(-12%,8px,0) scaleX(.9)}to{transform:translate3d(17%,-12px,0) scaleX(1.12)}}
+.scene-bike-illustration{z-index:4;left:51%;bottom:4%;width:min(78%,900px);filter:drop-shadow(0 24px 18px rgba(0,0,0,.58));transition:filter .8s ease,transform .8s ease}
+.scene-bike-illustration svg{overflow:visible}
+.levo-wheel circle:first-child{fill:url(#levoTyre);stroke:#080d10;stroke-width:18}
+.levo-wheel .levo-rim{fill:none;stroke:#aeb9b9;stroke-width:4}
+.levo-wheel .levo-spoke-ring{fill:none;stroke:rgba(216,226,225,.5);stroke-width:2}
+.levo-spokes path{fill:none;stroke:rgba(210,221,220,.55);stroke-width:1.8}
+.levo-brakes circle{fill:none;stroke:#9da9aa;stroke-width:3;stroke-dasharray:3 5}
+.levo-brakes circle:last-child,.levo-brakes circle:nth-child(4){fill:#aab3b3;stroke:#202a2d;stroke-width:3}
+.levo-frame{fill:none;stroke:url(#levoFrame);stroke-width:24;stroke-linecap:round;stroke-linejoin:round}
+.levo-fork{fill:none;stroke:url(#levoFork);stroke-width:19;stroke-linecap:round}
+.levo-seat,.levo-handle{fill:none;stroke:#171f23;stroke-width:17;stroke-linecap:round;stroke-linejoin:round}
+.levo-battery{fill:#303d42;stroke:#a2adae;stroke-width:3}
+.levo-motor{fill:#1b252a;stroke:#899596;stroke-width:4}
+.levo-crank,.levo-pedal{fill:none;stroke:#141b1e;stroke-width:9;stroke-linecap:round}
+.levo-chain{fill:none;stroke:#a4adae;stroke-width:3;opacity:.7}
+.levo-detail{fill:none;stroke:rgba(222,230,228,.6);stroke-width:3;stroke-linecap:round}
+.levo-decals{fill:none;stroke:#d5dfdc;stroke-width:4;stroke-linecap:round;opacity:.65}
+.scene-vignette{z-index:5}
+.scene-caption{z-index:6}
+.scene-stage[data-weather="rain"] .scene-bike-illustration{filter:drop-shadow(0 25px 20px rgba(0,0,0,.68)) saturate(.86)}
+.scene-stage[data-weather="snow"] .scene-bike-illustration{filter:drop-shadow(0 25px 20px rgba(0,0,0,.58)) brightness(1.04)}
+.scene-control-heading small{letter-spacing:.6px}
+.scene-choice:focus-visible,.scene-segment button:focus-visible{outline:2px solid #9de0d0;outline-offset:3px}
+@media(max-width:760px){.scene-bike-illustration{width:105%;bottom:8%}}
+@media(max-width:480px){.scene-bike-illustration{width:122%;bottom:8%}}
+@media(prefers-reduced-motion:reduce){.scene-cloud-bank span,.weather-particle{animation:none!important}.scene-photo{transition:none!important}}
