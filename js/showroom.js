@@ -186,8 +186,6 @@ async function startShowroom() {
   const resizeObserver=new ResizeObserver(resize); resizeObserver.observe(container); resize();
   function animate(){ requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
   animate();
-}
-
   } catch (error) {
     console.error('Der 3D-Showroom konnte nicht geladen werden:', error);
     container.innerHTML = '<div class="showroom-load-error"><strong>3D-Ansicht gerade nicht verfügbar</strong><span>Bitte lade die Seite neu. Falls das Problem bleibt, blockiert möglicherweise der Browser den externen 3D-Import.</span></div>';
