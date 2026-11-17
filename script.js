@@ -188,6 +188,28 @@ cockpitRender();
   function renderCaption() {
     caption.textContent = sceneNames[stage.dataset.scene] + " · " + weatherNames[stage.dataset.weather] + " · " + timeNames[stage.dataset.time];
   }
+  function buildWeatherParticles(weather) {
+    weatherLayer.className = "scene-weather-layer" + (["clear","cloudy"].includes(weather) ? "" : " " + weather);
+    weatherLayer.replaceChildren();
+    const count = weather === "rain" ? 100 : weather === "snow" ? 72 : 0;
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement("span");
+      particle.className = "weather-particle " + (weather === "rain" ? "rain-drop" : "snowflake");
+      particle.style.setProperty("--left", (Math.random() * 110 - 5) + "%");
+      particle.style.setProperty("--drift", (weather === "rain" ? (Math.random() * 90 + 35) : (Math.random() * 100 - 50)) + "px");
+      particle.style.setProperty("--delay", (-Math.random() * 16) + "s");
+      particle.style.setProperty("--opacity", (0.3 + Math.random() * 0.65).toFixed(2));
+      if (weather === "rain") {
+        particle.style.setProperty("--length", (10 + Math.random() * 18) + "px");
+        particle.style.setProperty("--duration", (0.55 + Math.random() * 0.65) + "s");
+      } else {
+        const size = 2 + Math.random() * 4.5;
+        particle.style.setProperty("--size", size + "px");
+        particle.style.setProperty("--duration", (7 + Math.random() * 11) + "s");
+      }
+      weatherLayer.appendChild(particle);
+    }
+  }
   function select(group, value) {
     if (group === "scene") {
       stage.dataset.scene = value;
@@ -197,7 +219,7 @@ cockpitRender();
       document.querySelectorAll("#scene-" + group + " button").forEach(button => button.classList.toggle("active", button.dataset[group] === value));
     }
     if (group === "weather") {
-      weatherLayer.className = "scene-weather-layer" + (["clear","cloudy"].includes(value) ? "" : " " + value);
+      buildWeatherParticles(value);
       renderPhoto();
     }
     renderCaption();
@@ -206,13 +228,8 @@ cockpitRender();
   document.querySelectorAll(".scene-choice").forEach(button => button.addEventListener("click", () => select("scene", button.dataset.scene)));
   document.querySelectorAll("#scene-weather button").forEach(button => button.addEventListener("click", () => select("weather", button.dataset.weather)));
   document.querySelectorAll("#scene-time button").forEach(button => button.addEventListener("click", () => select("time", button.dataset.time)));
-
-  photos.forEach(photo => {
-    photo.addEventListener("error", () => {
-      photo.classList.add("photo-failed");
-      photo.style.display = "none";
-    }, {once:true});
-  });
+  photos.forEach(photo => photo.addEventListener("error", () => { photo.classList.add("photo-failed"); photo.style.display = "none"; }, {once:true}));
+  buildWeatherParticles(stage.dataset.weather);
   renderPhoto();
   renderCaption();
 })();
