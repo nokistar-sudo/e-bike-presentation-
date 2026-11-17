@@ -3,8 +3,8 @@ const container = document.getElementById('bike-3d-view');
 async function startShowroom() {
   if (!container) return;
   try {
-    const THREE = await import('https://esm.sh/three@0.170.0');
-    const { OrbitControls } = await import('https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js');
+    const THREE = await import('three');
+    const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
   camera.position.set(3.35, 2.25, 5.8);
