@@ -49,7 +49,7 @@ function updateRangeEstimate() {
   const routeFactor = { flat: 0.86, mixed: 1, hills: 1.28 };
   const weightFactor = 1 + (weight - 65) * 0.004;
   const whPerKm = assistConsumption[assist] * routeFactor[route] * weightFactor;
-  const estimate = Math.round(500 / whPerKm);
+  const estimate = Math.round(700 / whPerKm);
   rangeOutput.textContent = estimate;
   weightValue.textContent = weight;
   rangeFill.style.width = Math.min(100, estimate / 100 * 100) + "%";
@@ -86,7 +86,7 @@ function cockpitFormatTime(seconds) {
 
 function cockpitRender() {
   const mode = cockpitModes[cockpitMode?.value || "trail"];
-  const remainingWh = Math.round(500 * cockpitBatteryLevel / 100);
+  const remainingWh = Math.round(700 * cockpitBatteryLevel / 100);
   const remainingRange = Math.max(0, Math.floor(remainingWh / mode.consumption));
   const values = {
     "#cockpit-speed-value": Math.round(cockpitSpeed),
