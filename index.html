@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#171b1d">
   <meta name="description" content="Eine Präsentation des Specialized Turbo Levo Comp – warum dieses E-Bike eine sinnvolle Anschaffung sein könnte.">
   <title>Mein Wunsch-E-Bike | Specialized Turbo Levo Comp</title>
-  <link rel="stylesheet" href="style.css?v=12">
-  <script src="script.js?v=8" defer></script>
+  <link rel="stylesheet" href="style.css?v=13">
+  <script src="script.js?v=9" defer></script>
 </head>
 
 <body>
@@ -17,8 +17,8 @@
     <nav aria-label="Hauptnavigation">
       <a href="#bike">Das Fahrrad</a>
       <a href="#details">Ausstattung</a>
-      <a href="#range">Reichweite</a>
-      <a href="#cockpit">Cockpit</a>
+      <a href="#angebot">Aktuelles Angebot</a>
+      <a href="#zustand">Zustand</a>
       <a href="#kauf">Der Kauf</a>
       <a href="#fazit">Mein Fazit</a>
     </nav>
@@ -82,68 +82,25 @@
 
 
 
-    <section class="interactive-tools section" id="range">
+    <section class="offer-status section" id="angebot">
       <div class="section-heading">
-        <p class="eyebrow">RANGE SIMULATOR</p>
-        <h2>Wie weit komme ich mit einer Akkuladung?</h2>
-        <p class="section-subtitle">Passe die Bedingungen an und erhalte eine grobe Orientierung. Die tatsächliche Reichweite hängt unter anderem von Temperatur, Strecke, Reifendruck, Fahrstil und Akkuzustand ab.</p>
+        <p class="eyebrow">AKTUELLES UPWAY-ANGEBOT</p>
+        <h2>Die Angaben zu genau diesem Fahrrad.</h2>
+        <p class="section-subtitle">
+          Diese Werte wurden am 21. November 2026 direkt im verlinkten Upway-Angebot geprüft.
+          Preis und Verfügbarkeit können sich jederzeit ändern.
+        </p>
       </div>
-      <div class="range-layout">
-        <div class="tool-panel range-controls">
-          <label class="range-field" for="rider-weight"><span>Fahrergewicht</span><strong><output id="weight-value">65</output> kg</strong></label>
-          <input id="rider-weight" type="range" min="40" max="120" value="65" step="1">
-          <div class="range-scale"><span>40 kg</span><span>120 kg</span></div>
-          <label class="range-field" for="assist-level"><span>Unterstützung</span></label>
-          <select id="assist-level"><option value="eco">Eco – sparsam</option><option value="trail" selected>Trail – ausgewogen</option><option value="turbo">Turbo – kräftig</option></select>
-          <label class="range-field" for="route-type"><span>Strecke</span></label>
-          <select id="route-type"><option value="flat">Überwiegend flach</option><option value="mixed" selected>Gemischt</option><option value="hills">Viele Steigungen</option></select>
-        </div>
-        <div class="range-result">
-          <p class="eyebrow">GESCHÄTZTE REICHWEITE</p>
-          <div class="range-number"><strong id="range-output">—</strong><span>km</span></div>
-          <div class="range-meter"><span id="range-meter-fill"></span></div>
-          <p id="range-explanation">Wähle deine Bedingungen aus, um die Schätzung zu sehen.</p>
-          <div class="range-battery"><span>Akku</span><strong>700 Wh</strong></div>
-          <small>Unverbindliche Modellrechnung, keine Herstellerangabe und keine Garantie für eine bestimmte Reichweite.</small>
-        </div>
+      <div class="spec-grid">
+        <article class="spec-card"><div class="spec-icon">€</div><h3>Aktueller Preis</h3><p>1.749 €</p><span>49 € Versand · zusammen 1.798 €</span></article>
+        <article class="spec-card"><div class="spec-icon">◉</div><h3>Kilometerstand</h3><p>3.514 km</p><span>Angabe im Upway-Inserat</span></article>
+        <article class="spec-card"><div class="spec-icon">🔋</div><h3>Akku-Zustand</h3><p>Exzellent</p><span>700 Wh · laut Upway</span></article>
+        <article class="spec-card"><div class="spec-icon">✓</div><h3>Aufbereitung</h3><p>Nov. 2026</p><span>50-Punkte-Inspektion in Stuttgart</span></article>
       </div>
-    </section>
-
-    <section class="interactive-tools section" id="cockpit">
-      <div class="section-heading">
-        <p class="eyebrow">DIGITAL COCKPIT</p>
-        <h2>Starte eine virtuelle Probefahrt.</h2>
-        <p class="section-subtitle">Bediene das Demo-Cockpit wie ein kleines Borddisplay: Starte die Simulation, wechsle den Fahrmodus und beobachte, wie Akku, Strecke und Restreichweite reagieren.</p>
-      </div>
-      <div class="cockpit-shell">
-        <div class="cockpit-top"><span><i id="cockpit-status-light"></i> SPECIALIZED · TURBO LEVO</span><span id="cockpit-status">BEREIT</span></div>
-        <div class="cockpit-screen">
-          <div class="cockpit-main">
-            <div class="cockpit-speed"><strong id="cockpit-speed-value">0</strong><span>km/h</span></div>
-            <div class="cockpit-mode"><small>FAHRMODUS</small><strong id="cockpit-mode-value">TRAIL</strong></div>
-          </div>
-          <div class="cockpit-stats">
-            <div><small>AKKUSTAND</small><strong id="cockpit-battery-value">78%</strong><div class="battery-bars"><i></i><i></i><i></i><i></i><i></i></div></div>
-            <div><small>RESTKAPAZITÄT</small><strong id="cockpit-wh-value">390 Wh</strong></div>
-            <div><small>RESTREICHWEITE</small><strong id="cockpit-range-value">— km</strong></div>
-            <div><small>GEFAHRENE STRECKE</small><strong id="cockpit-distance-value">0,0 km</strong></div>
-            <div><small>FAHRZEIT</small><strong id="cockpit-time-value">00:00</strong></div>
-            <div><small>MOTORUNTERSTÜTZUNG</small><strong id="cockpit-support-value">Mittel</strong></div>
-          </div>
-          <div class="cockpit-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-        </div>
-        <div class="cockpit-controls">
-          <label for="cockpit-battery">Start-Akkustand <output id="cockpit-battery-control-value">78%</output></label>
-          <input id="cockpit-battery" type="range" min="5" max="100" value="78">
-          <label for="cockpit-mode">Fahrmodus</label>
-          <select id="cockpit-mode"><option value="eco">Eco</option><option value="trail" selected>Trail</option><option value="turbo">Turbo</option></select>
-          <div class="cockpit-actions">
-            <button class="cockpit-action primary" id="cockpit-start" type="button">▶ Probefahrt starten</button>
-            <button class="cockpit-action" id="cockpit-reset" type="button">↺ Zurücksetzen</button>
-          </div>
-        </div>
-      </div>
-      <p class="cockpit-note">Interaktive Simulation zu Demonstrationszwecken. Die Werte sind modelliert und stammen nicht von einem echten Fahrrad oder Sensor.</p>
+      <p class="section-subtitle">
+        Laut Angebot: ein Jahr gesetzliche Garantie und 14 Tage Rückgaberecht.
+        Upway zeigte beim Abruf ein Exemplar als verfügbar an.
+      </p>
     </section>
 
     <section class="gallery-section section">
@@ -225,6 +182,12 @@
           <p>L</p>
           <span>Upway-Angabe: 1,74–1,88 m</span>
         </article>
+        <article class="spec-card">
+          <div class="spec-icon">◷</div>
+          <h3>Kilometerstand</h3>
+          <p>3.514 km</p>
+          <span>Angabe im aktuellen Inserat</span>
+        </article>
       </div>
     </section>
 
@@ -269,16 +232,15 @@
 
         <article class="detail-card">
           <button class="detail-image" type="button"
-                  data-full="bilder/bremse.jpeg"
-                  aria-label="Bremse vergrößern">
-            <img src="bilder/bremse.jpeg" alt="Bremse des E-Bikes">
+                  data-full="bilder/schaltung.jpeg"
+                  aria-label="Schaltung vergrößern">
+            <img src="bilder/schaltung.jpeg" alt="Schaltung und Kassette des E-Bikes">
           </button>
           <div class="detail-copy">
-            <p class="eyebrow">SICHERHEIT</p>
-            <h3>Die Bremsen</h3>
+            <p class="eyebrow">ANTRIEB</p>
+            <h3>Schaltung &amp; Kassette</h3>
             <p>
-              Zuverlässige Bremsen sind wichtig, um das Fahrrad
-              kontrolliert und sicher abbremsen zu können.
+              Das Foto zeigt die Kassette und das Schaltwerk der SRAM-GX-Schaltung.
             </p>
           </div>
         </article>
@@ -337,6 +299,20 @@
       </div>
     </section>
 
+    <section class="responsibility-section section" id="zustand">
+      <div class="section-heading">
+        <p class="eyebrow">ZUSTAND &amp; PRÜFUNG</p>
+        <h2>Was im aktuellen Inspektionsbericht steht.</h2>
+      </div>
+      <div class="responsibility-grid">
+        <div><span class="responsibility-icon">✓</span><h3>Technische Prüfung</h3><p>Upway gibt an, Akku, Motor, Display, Rahmen, Antrieb, Bremsen, Räder und Federung geprüft zu haben.</p></div>
+        <div><span class="responsibility-icon">🔋</span><h3>Akku &amp; Motor</h3><p>Laut Inspektionsbericht wurden Akku, Motor und Display diagnostiziert und als einwandfrei beschrieben.</p></div>
+        <div><span class="responsibility-icon">ℹ</span><h3>Optische Spuren</h3><p>Der Mechaniker nennt äußerliche Beschädigungen an einigen Stellen, aber keine tiefen Abschürfungen.</p></div>
+        <div><span class="responsibility-icon">ℹ</span><h3>Sattelstütze</h3><p>Die Teleskopsattelstütze hat laut Bericht wenige Millimeter seitliches Spiel; Upway bezeichnet dies als normal.</p></div>
+      </div>
+      <p class="section-subtitle">Den vollständigen Inspektionsbericht bitte vor einer Kaufentscheidung selbst lesen.</p>
+    </section>
+
     <section class="purchase-section section" id="kauf">
       <div class="purchase-content">
         <div class="section-heading">
@@ -351,10 +327,10 @@
         </p>
 
         <p>
-          Laut den allgemeinen Angaben von Upway werden Fahrräder
-          geprüft und aufbereitet. Für das konkrete Fahrrad sollten
-          wir vor dem Kauf den Zustandsbericht, die Garantiebedingungen
-          und die Rückgabebedingungen genau lesen.
+          Dieses Exemplar wurde laut Inserat im November 2026 in Stuttgart aufbereitet
+          und durchlief eine 50-Punkte-Inspektion. Der Akku wird als exzellent
+          angegeben. Die konkreten Hinweise des Mechanikers zum optischen Zustand
+          und zur Sattelstütze stehen im Abschnitt „Zustand & Prüfung“.
         </p>
 
         <div class="trust-points">
@@ -392,8 +368,8 @@
           <strong>1.798 €</strong>
         </div>
         <p class="price-note">
-          Bitte vor dem Kauf den aktuellen Preis und die Versandkosten
-          direkt im Upway-Angebot kontrollieren.
+          Abgerufen am 21. November 2026. Preis und Versandkosten können sich ändern;
+          maßgeblich ist immer der Betrag direkt im Upway-Angebot.
         </p>
       </div>
 
