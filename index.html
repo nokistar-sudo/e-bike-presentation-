@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#171b1d">
   <meta name="description" content="Eine Präsentation des Specialized Turbo Levo Comp – warum dieses E-Bike eine sinnvolle Anschaffung sein könnte.">
   <title>Mein Wunsch-E-Bike | Specialized Turbo Levo Comp</title>
-  <link rel="stylesheet" href="style.css?v=15">
+  <link rel="stylesheet" href="style.css?v=16">
   <script src="script.js?v=11" defer></script>
 </head>
 
@@ -84,6 +84,38 @@
     </section>
 
 
+
+    <section class="funding-section section" id="unterstuetzung">
+      <div class="funding-heading">
+        <p class="eyebrow">GEMEINSAM ZUM TRAUM-BIKE</p>
+        <h3>Jeder Beitrag bringt mich näher ans Ziel.</h3>
+        <p>Wenn Familie oder Freunde etwas dazugeben möchten, wächst der Fortschritt Schritt für Schritt.</p>
+      </div>
+      <div class="funding-card">
+        <div class="funding-topline">
+          <span>UNSER GEMEINSAMES ZIEL</span>
+          <span class="funding-live"><i></i> LIVE-ÜBERSICHT</span>
+        </div>
+        <div class="funding-amounts">
+          <div><span>Bisher gesammelt</span><strong id="funding-raised">0 €</strong></div>
+          <div class="funding-remaining"><span>Noch benötigt</span><strong id="funding-remaining">1.748 €</strong></div>
+        </div>
+        <div class="funding-track" role="progressbar" aria-label="Fortschritt zum Fahrrad" aria-valuemin="0" aria-valuemax="1748" aria-valuenow="0" id="funding-progress">
+          <span id="funding-progress-fill"></span>
+        </div>
+        <div class="funding-foot"><strong id="funding-percent">0 %</strong><span>von 1.748 € erreicht</span></div>
+        <div class="funding-entry">
+          <label for="funding-input">Neuen Beitrag eintragen</label>
+          <div class="funding-entry-row">
+            <div class="funding-input-wrap"><input id="funding-input" type="number" min="1" max="1748" step="1" inputmode="decimal" placeholder="Betrag in Euro"><span>€</span></div>
+            <button class="funding-add" id="funding-add" type="button">Beitrag hinzufügen <span>＋</span></button>
+          </div>
+          <p class="funding-feedback" id="funding-feedback" role="status" aria-live="polite">Hier kannst du jeden neuen Beitrag eintragen.</p>
+          <button class="funding-reset" id="funding-reset" type="button">Beträge zurücksetzen</button>
+        </div>
+        <p class="funding-storage-note">Die Einträge werden auf diesem Gerät und in diesem Browser gespeichert.</p>
+      </div>
+    </section>
 
     <section class="offer-status section" id="angebot">
       <div class="section-heading">
@@ -378,74 +410,6 @@
            target="_blank" rel="noopener noreferrer">
           Originalangebot bei Upway ansehen ↗
         </a>
-      </div>
-    </section>
-
-    <section class="price-section section">
-      <div class="section-heading">
-        <p class="eyebrow">DIE KOSTEN</p>
-        <h2>Was kostet das Fahrrad?</h2>
-      </div>
-
-      <div class="price-card">
-        <div class="price-row">
-          <span>Preis des E-Bikes</span>
-          <strong>1.699 €</strong>
-        </div>
-        <div class="price-row">
-          <span>Versandkosten</span>
-          <strong>49 €</strong>
-        </div>
-        <div class="price-total">
-          <span>Gesamtpreis</span>
-          <strong>1.748 €</strong>
-        </div>
-        <p class="price-note">
-          Abgerufen am 21. November 2026. Preis und Versandkosten können sich ändern;
-          maßgeblich ist immer der Betrag direkt im Upway-Angebot.
-        </p>
-      </div>
-
-      <section class="funding-section" id="unterstuetzung">
-        <div class="funding-heading">
-          <p class="eyebrow">GEMEINSAM ZUM TRAUM-BIKE</p>
-          <h3>Jeder Beitrag bringt mich näher ans Ziel.</h3>
-          <p>Wenn Familie oder Freunde etwas dazugeben möchten, wächst der Fortschritt Schritt für Schritt.</p>
-        </div>
-        <div class="funding-card">
-          <div class="funding-topline">
-            <span>UNSER GEMEINSAMES ZIEL</span>
-            <span class="funding-live"><i></i> LIVE-ÜBERSICHT</span>
-          </div>
-          <div class="funding-amounts">
-            <div><span>Bisher gesammelt</span><strong id="funding-raised">0 €</strong></div>
-            <div class="funding-remaining"><span>Noch benötigt</span><strong id="funding-remaining">1.748 €</strong></div>
-          </div>
-          <div class="funding-track" role="progressbar" aria-label="Fortschritt zum Fahrrad" aria-valuemin="0" aria-valuemax="1748" aria-valuenow="0" id="funding-progress">
-            <span id="funding-progress-fill"></span>
-          </div>
-          <div class="funding-foot"><strong id="funding-percent">0 %</strong><span>von 1.748 € erreicht</span></div>
-          <div class="funding-entry">
-            <label for="funding-input">Neuen Beitrag eintragen</label>
-            <div class="funding-entry-row">
-              <div class="funding-input-wrap"><input id="funding-input" type="number" min="1" max="1748" step="1" inputmode="decimal" placeholder="Betrag in Euro"><span>€</span></div>
-              <button class="funding-add" id="funding-add" type="button">Beitrag hinzufügen <span>＋</span></button>
-            </div>
-            <p class="funding-feedback" id="funding-feedback" role="status" aria-live="polite">Hier kannst du jeden neuen Beitrag eintragen.</p>
-            <button class="funding-reset" id="funding-reset" type="button">Beträge zurücksetzen</button>
-          </div>
-          <p class="funding-storage-note">Die Einträge werden auf diesem Gerät und in diesem Browser gespeichert.</p>
-        </div>
-      </section>
-      <div class="contribution">
-        <p class="eyebrow">MEIN EIGENER BEITRAG</p>
-        <h3>Ich möchte selbst Verantwortung übernehmen.</h3>
-        <p>
-          Ich bin bereit, mein aktuell verfügbares Geld sowie mein
-          Weihnachts- und Geburtstagsgeld dafür einzusetzen.
-          Mir ist wichtig, selbst etwas zu dieser Anschaffung beizutragen
-          und nicht einfach alles bezahlen zu lassen.
-        </p>
       </div>
     </section>
 
