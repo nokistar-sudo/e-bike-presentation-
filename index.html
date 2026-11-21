@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#171b1d">
   <meta name="description" content="Eine Präsentation des Specialized Turbo Levo Comp – warum dieses E-Bike eine sinnvolle Anschaffung sein könnte.">
   <title>Mein Wunsch-E-Bike | Specialized Turbo Levo Comp</title>
-  <link rel="stylesheet" href="style.css?v=14">
-  <script src="script.js?v=10" defer></script>
+  <link rel="stylesheet" href="style.css?v=15">
+  <script src="script.js?v=11" defer></script>
 </head>
 
 <body>
@@ -17,6 +17,8 @@
     <nav aria-label="Hauptnavigation">
       <a href="#bike">Das Fahrrad</a>
       <a href="#details">Ausstattung</a>
+      <a href="#range">Reichweite</a>
+      <a href="#cockpit">Cockpit</a>
       <a href="#angebot">Aktuelles Angebot</a>
       <a href="#unterstuetzung">Unterstützung</a>
       <a href="#zustand">Zustand</a>
@@ -105,6 +107,70 @@
       <p class="section-subtitle">
         <a href="https://upway.de/products/specialized-turbo-levo-comp-rk7dg2" target="_blank" rel="noopener noreferrer">Originalangebot bei Upway ansehen</a>
       </p>
+    </section>
+
+    <section class="interactive-tools section" id="range">
+      <div class="section-heading">
+        <p class="eyebrow">RANGE SIMULATOR</p>
+        <h2>Wie weit komme ich mit einer Akkuladung?</h2>
+        <p class="section-subtitle">Passe die Bedingungen an und erhalte eine grobe Orientierung. Die tatsächliche Reichweite hängt unter anderem von Temperatur, Strecke, Reifendruck, Fahrstil und Akkuzustand ab.</p>
+      </div>
+      <div class="range-layout">
+        <div class="tool-panel range-controls">
+          <label class="range-field" for="rider-weight"><span>Fahrergewicht</span><strong><output id="weight-value">65</output> kg</strong></label>
+          <input id="rider-weight" type="range" min="40" max="120" value="65" step="1">
+          <div class="range-scale"><span>40 kg</span><span>120 kg</span></div>
+          <label class="range-field" for="assist-level"><span>Unterstützung</span></label>
+          <select id="assist-level"><option value="eco">Eco – sparsam</option><option value="trail" selected>Trail – ausgewogen</option><option value="turbo">Turbo – kräftig</option></select>
+          <label class="range-field" for="route-type"><span>Strecke</span></label>
+          <select id="route-type"><option value="flat">Überwiegend flach</option><option value="mixed" selected>Gemischt</option><option value="hills">Viele Steigungen</option></select>
+        </div>
+        <div class="range-result">
+          <p class="eyebrow">GESCHÄTZTE REICHWEITE</p>
+          <div class="range-number"><strong id="range-output">—</strong><span>km</span></div>
+          <div class="range-meter"><span id="range-meter-fill"></span></div>
+          <p id="range-explanation">Wähle deine Bedingungen aus, um die Schätzung zu sehen.</p>
+          <div class="range-battery"><span>Akku</span><strong>700 Wh</strong></div>
+          <small>Unverbindliche Modellrechnung, keine Herstellerangabe und keine Garantie für eine bestimmte Reichweite.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="interactive-tools section" id="cockpit">
+      <div class="section-heading">
+        <p class="eyebrow">DIGITAL COCKPIT</p>
+        <h2>Starte eine virtuelle Probefahrt.</h2>
+        <p class="section-subtitle">Bediene das Demo-Cockpit wie ein kleines Borddisplay: Starte die Simulation, wechsle den Fahrmodus und beobachte, wie Akku, Strecke und Restreichweite reagieren.</p>
+      </div>
+      <div class="cockpit-shell">
+        <div class="cockpit-top"><span><i id="cockpit-status-light"></i> SPECIALIZED · TURBO LEVO</span><span id="cockpit-status">BEREIT</span></div>
+        <div class="cockpit-screen">
+          <div class="cockpit-main">
+            <div class="cockpit-speed"><strong id="cockpit-speed-value">0</strong><span>km/h</span></div>
+            <div class="cockpit-mode"><small>FAHRMODUS</small><strong id="cockpit-mode-value">TRAIL</strong></div>
+          </div>
+          <div class="cockpit-stats">
+            <div><small>AKKUSTAND</small><strong id="cockpit-battery-value">78%</strong><div class="battery-bars"><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div><small>RESTKAPAZITÄT</small><strong id="cockpit-wh-value">390 Wh</strong></div>
+            <div><small>RESTREICHWEITE</small><strong id="cockpit-range-value">— km</strong></div>
+            <div><small>GEFAHRENE STRECKE</small><strong id="cockpit-distance-value">0,0 km</strong></div>
+            <div><small>FAHRZEIT</small><strong id="cockpit-time-value">00:00</strong></div>
+            <div><small>MOTORUNTERSTÜTZUNG</small><strong id="cockpit-support-value">Mittel</strong></div>
+          </div>
+          <div class="cockpit-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="cockpit-controls">
+          <label for="cockpit-battery">Start-Akkustand <output id="cockpit-battery-control-value">78%</output></label>
+          <input id="cockpit-battery" type="range" min="5" max="100" value="78">
+          <label for="cockpit-mode">Fahrmodus</label>
+          <select id="cockpit-mode"><option value="eco">Eco</option><option value="trail" selected>Trail</option><option value="turbo">Turbo</option></select>
+          <div class="cockpit-actions">
+            <button class="cockpit-action primary" id="cockpit-start" type="button">▶ Probefahrt starten</button>
+            <button class="cockpit-action" id="cockpit-reset" type="button">↺ Zurücksetzen</button>
+          </div>
+        </div>
+      </div>
+      <p class="cockpit-note">Interaktive Simulation zu Demonstrationszwecken. Die Werte sind modelliert und stammen nicht von einem echten Fahrrad oder Sensor.</p>
     </section>
 
     <section class="gallery-section section">
