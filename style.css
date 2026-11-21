@@ -879,3 +879,33 @@ button {
  .funding-amounts { gap:10px; }
  .funding-amounts span { font-size:.75rem; }
 }
+
+
+/* MORE VISIBLE FUNDING SECTION — placed after the bike introduction */
+.funding-section.section {
+  width: min(94%, var(--max-width));
+  margin: 12px auto 68px;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid rgba(117,184,174,.36);
+  background: radial-gradient(ellipse at 88% 0%,rgba(117,184,174,.19),transparent 52%),linear-gradient(145deg,#222c2d,#171e20);
+}
+.funding-heading { max-width: 760px; margin-bottom: 24px; }
+.funding-heading h3 { font-size: clamp(1.8rem,3.4vw,2.55rem); }
+.funding-card { max-width: 920px; padding: clamp(22px,3.5vw,36px); }
+.funding-amounts { margin: 24px 0 22px; }
+.funding-track { height: 20px; }
+.funding-foot { margin-top: 13px; }
+.funding-costs {
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+  gap:9px; margin:17px 0 0; padding:12px 14px;
+  border-top:1px solid rgba(117,184,174,.16);
+  color:#9aa9a5; font-size:.78rem;
+}
+.funding-costs i { color:#647571; font-style:normal; }
+.funding-costs strong { color:#c9d8d3; font-size:.82rem; }
+@media(max-width:560px) {
+  .funding-section.section { width:94%; margin:0 auto 48px; padding:22px 15px; }
+  .funding-track { height:17px; }
+  .funding-costs { gap:6px; font-size:.7rem; }
+  .funding-costs strong { font-size:.74rem; }
+}
