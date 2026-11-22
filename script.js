@@ -22,10 +22,11 @@ lightbox?.addEventListener("close", () => {
 });
 
 
-// VERIFIED CONTRIBUTION TOTAL — read-only public endpoint
+// MANUAL CONTRIBUTION TOTAL — update this value after a contribution is received.
+// Amount is in cents: 0 = 0.00 EUR, 2500 = 25.00 EUR.
 (() => {
   const goalCents = 174800;
-  const endpoint = "https://gmbvgdoebvqsdmmucyob.supabase.co/functions/v1/public-contribution-total";
+  const manuallyCollectedCents = 0;
   const raisedOutput = document.querySelector("#funding-raised");
   const remainingOutput = document.querySelector("#funding-remaining");
   const percentOutput = document.querySelector("#funding-percent");
@@ -35,44 +36,19 @@ lightbox?.addEventListener("close", () => {
   if (!raisedOutput || !remainingOutput || !percentOutput || !progress || !progressFill || !feedback) return;
 
   const euro = cents => new Intl.NumberFormat("de-DE", {
-    style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2
+    style:"currency", currency:"EUR", minimumFractionDigits:2, maximumFractionDigits:2
   }).format(cents / 100);
 
-  function render(totalCents) {
-    const safeTotal = Math.max(0, Math.min(goalCents, Math.round(totalCents)));
-    const remaining = Math.max(0, goalCents - safeTotal);
-    const percent = Math.min(100, Math.round((safeTotal / goalCents) * 100));
-    raisedOutput.textContent = euro(safeTotal);
-    remainingOutput.textContent = euro(remaining);
-    percentOutput.textContent = percent + " %";
-    progressFill.style.width = percent + "%";
-    progress.setAttribute("aria-valuenow", String(safeTotal / 100));
-    progress.setAttribute("aria-valuemax", String(goalCents / 100));
-  }
-
-  async function loadTotal() {
-    try {
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: { "Accept": "application/json" },
-        cache: "no-store"
-      });
-      if (!response.ok) throw new Error("Contribution total unavailable");
-      const data = await response.json();
-      const cents = Number(data.total_cents);
-      if (!Number.isSafeInteger(cents) || cents < 0 || data.currency !== "EUR") {
-        throw new Error("Invalid contribution total");
-      }
-      render(cents);
-      feedback.textContent = "Live-Stand: nur serverseitig bestätigte Beiträge werden berücksichtigt.";
-    } catch (_) {
-      feedback.textContent = "Der Beitragsstand kann gerade nicht geladen werden. Bitte später erneut versuchen.";
-    }
-  }
-
-  render(0);
-  loadTotal();
-  window.setInterval(loadTotal, 60000);
+  const total = Math.max(0, Math.min(goalCents, Math.round(manuallyCollectedCents)));
+  const remaining = Math.max(0, goalCents - total);
+  const percent = Math.min(100, Math.round((total / goalCents) * 100));
+  raisedOutput.textContent = euro(total);
+  remainingOutput.textContent = euro(remaining);
+  percentOutput.textContent = percent + " %";
+  progressFill.style.width = percent + "%";
+  progress.setAttribute("aria-valuenow", String(total / 100));
+  progress.setAttribute("aria-valuemax", String(goalCents / 100));
+  feedback.textContent = "Der Beitragsstand wird nach Eingang von Bargeld oder separat vereinbarten Beiträgen manuell aktualisiert.";
 })();
 
 
