@@ -909,3 +909,39 @@ button {
   .funding-costs { gap:6px; font-size:.7rem; }
   .funding-costs strong { font-size:.74rem; }
 }
+
+
+/* MULTI-PAGE PRESENTATION NAVIGATION */
+.page-panel { display:none; animation:pageFadeIn .38s ease both; }
+.page-panel.is-active { display:block; }
+@keyframes pageFadeIn { from { opacity:0; transform:translateY(9px); } to { opacity:1; transform:translateY(0); } }
+.page-intro { width:min(90%,var(--max-width)); margin:0 auto; padding:76px 0 10px; }
+.page-intro .eyebrow { margin-bottom:12px; }
+.page-intro h2 { font-size:clamp(2.1rem,5vw,3.8rem); line-height:1.08; letter-spacing:-1.5px; margin-bottom:14px; }
+.page-intro > p:last-child { color:var(--muted); max-width:680px; }
+.site-header .logo { white-space:nowrap; }
+.site-header nav { gap:clamp(12px,2vw,26px); }
+.site-header nav a { white-space:nowrap; font-size:.78rem; font-weight:800; letter-spacing:.7px; }
+.site-header nav a[aria-current="page"] { color:var(--accent); position:relative; }
+.site-header nav a[aria-current="page"]::after { content:""; position:absolute; left:0; right:0; bottom:-10px; height:2px; background:var(--accent); }
+.home-destinations { padding-top:35px; }
+.destination-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.destination-card { min-height:165px; display:flex; flex-direction:column; justify-content:flex-end; gap:9px; padding:25px; border:1px solid var(--border); border-radius:10px; background:linear-gradient(145deg,#263031,#1b2224); transition:transform .2s ease,border-color .2s ease,background .2s ease; }
+.destination-card:hover { transform:translateY(-4px); border-color:var(--accent); background:linear-gradient(145deg,#2b3a39,#1b2224); }
+.destination-card span { color:var(--accent); font-size:.7rem; font-weight:850; letter-spacing:1.8px; }
+.destination-card strong { font-size:1.35rem; line-height:1.2; }
+.destination-card small { color:var(--muted); font-size:.85rem; }
+.destination-card-featured { border-color:rgba(117,184,174,.45); background:radial-gradient(ellipse at 90% 10%,rgba(117,184,174,.17),transparent 55%),#202a2b; }
+.footer { flex-wrap:wrap; }
+@media(max-width:850px) {
+ .site-header { align-items:center; }
+ .site-header nav { justify-content:flex-start; gap:19px; }
+ .site-header nav a[aria-current="page"]::after { bottom:-6px; }
+}
+@media(max-width:560px) {
+ .page-intro { padding:54px 0 0; }
+ .destination-grid { grid-template-columns:1fr; }
+ .destination-card { min-height:135px; padding:21px; }
+ .site-header nav { gap:17px; }
+ .site-header nav a { font-size:.72rem; }
+}
