@@ -1081,3 +1081,17 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
 @media (hover:none), (pointer:coarse) {
   .cursor-aura,.cursor-core { display:none !important; }
 }
+
+
+/* Flowing comet cursor trail */
+.cursor-comet {
+  position:fixed;
+  inset:0;
+  z-index:1001;
+  pointer-events:none;
+  display:block;
+  overflow:hidden;
+}
+@media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) {
+  .cursor-comet { display:none !important; }
+}
