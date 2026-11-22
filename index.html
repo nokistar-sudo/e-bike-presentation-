@@ -393,12 +393,105 @@
           <span>Fahrrad 1.699 €</span><i>+</i><span>Versand 49 €</span><i>=</i><strong>Gesamt 1.748 €</strong>
         </div>
         <div class="funding-entry">
-          <p class="eyebrow">SICHERER BEITRAGSSTAND</p>
-          <p class="funding-feedback" id="funding-feedback" role="status" aria-live="polite">Der gemeinsame Beitragsstand wird geladen …</p>
-          <p class="funding-storage-note">Angezeigt werden ausschließlich erfolgreich bestätigte Zahlungen. Einzelne Zahlungsdaten sind nicht öffentlich sichtbar.</p>
+          <p class="eyebrow">DEIN PLATZ AUF DER SUPPORT WALL</p>
+          <p class="funding-feedback" id="funding-feedback" role="status" aria-live="polite">Unterstütze das Projekt und gestalte dein eigenes kleines Profilbild.</p>
+          <button class="button support-open-button" id="support-open" type="button">Beitrag &amp; Profil gestalten <span>↗</span></button>
+          <p class="funding-storage-note">Dein Profil wird erst nach Prüfung und Bestätigung deines Beitrags veröffentlicht. Bitte verwende nur einen Vornamen oder Spitznamen.</p>
         </div>
       </div>
     </section>
+
+    <section class="support-wall-section section" id="support-wall">
+      <div class="section-heading">
+        <p class="eyebrow">THE PEOPLE BEHIND THE PROJECT</p>
+        <h2>The Support Wall.</h2>
+        <p class="section-subtitle">Jeder Supporter hinterlässt seinen eigenen kleinen kreativen Abdruck. Danke, dass ihr Teil davon seid.</p>
+      </div>
+      <div class="support-wall-grid" id="support-wall-grid" aria-live="polite">
+        <p class="support-wall-loading">Die Support Wall wird geladen …</p>
+      </div>
+      <p class="support-wall-note">Angezeigt werden nur freigegebene Profile. Es werden keine Beitragshöhen oder Zahlungsdaten veröffentlicht.</p>
+      <button class="admin-entry-button" id="admin-open" type="button">Admin-Bereich</button>
+    </section>
+
+    <dialog class="support-dialog admin-dialog" id="admin-dialog" aria-labelledby="admin-dialog-title">
+      <div class="support-dialog-shell">
+        <button class="support-dialog-close" id="admin-close" type="button" aria-label="Schließen">×</button>
+        <p class="eyebrow">PRIVATE PROJECT MANAGEMENT</p>
+        <h2 id="admin-dialog-title">Supporter verwalten.</h2>
+        <form id="admin-login-form" class="admin-login-form">
+          <label class="support-name-label" for="admin-email">Admin-E-Mail</label>
+          <input id="admin-email" type="email" autocomplete="username" required placeholder="E-Mail-Adresse">
+          <label class="support-name-label" for="admin-password">Passwort</label>
+          <input id="admin-password" type="password" autocomplete="current-password" required placeholder="Passwort">
+          <button class="button support-submit" id="admin-login-button" type="submit">Einloggen</button>
+        </form>
+        <p class="support-form-feedback" id="admin-feedback" role="status" aria-live="polite"></p>
+        <div id="admin-panel" class="admin-panel" hidden>
+          <div class="admin-panel-heading">
+            <h3>Offene Beitragsmeldungen</h3>
+            <button type="button" class="paint-tool" id="admin-logout">Abmelden</button>
+          </div>
+          <p class="admin-help">Prüfe zuerst, ob das Geld wirklich angekommen ist. Erst danach kannst du das Profil freigeben.</p>
+          <div id="admin-queue" class="admin-queue">
+            <p class="support-wall-loading">Meldungen werden geladen …</p>
+          </div>
+          <div class="admin-funding-box">
+            <h3>Fortschritt manuell aktualisieren</h3>
+            <p class="admin-help">Trage hier den tatsächlich erhaltenen Gesamtbetrag aus Bargeld und separat vereinbarten PayPal-Beiträgen ein. Die Profilfreigabe ändert diesen Betrag nicht automatisch.</p>
+            <label class="support-name-label" for="admin-total">Bisher gesammelt (€)</label>
+            <div class="admin-total-row">
+              <input id="admin-total" type="number" min="0" max="1748" step="0.01" inputmode="decimal" value="0.00">
+              <button class="button" id="admin-save-total" type="button">Speichern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="support-dialog" id="support-dialog" aria-labelledby="support-dialog-title">
+      <form class="support-dialog-shell" id="support-form">
+        <button class="support-dialog-close" id="support-close" type="button" aria-label="Schließen">×</button>
+        <p class="eyebrow">BECOME PART OF THE PROJECT</p>
+        <h2 id="support-dialog-title">Gestalte deinen Supporter.</h2>
+        <p class="support-dialog-intro">Wähle einen Namen und male ein kleines Bild, das dich auf der Support Wall repräsentiert.</p>
+        <label class="support-name-label" for="support-name">Dein Vorname oder Spitzname</label>
+        <input id="support-name" name="display_name" type="text" maxlength="18" minlength="1" autocomplete="nickname" placeholder="z. B. Alex" required>
+        <label class="support-name-label" for="support-amount">Dein Beitrag in Euro</label>
+        <input id="support-amount" name="amount" type="number" min="1" max="1748" step="0.01" inputmode="decimal" placeholder="z. B. 20,00" required>
+        <label class="support-name-label" for="support-method">Wie hast du beigetragen?</label>
+        <select id="support-method" name="contribution_method" required>
+          <option value="cash">Bar gegeben</option>
+          <option value="paypal">PayPal – separat vereinbart</option>
+        </select>
+        <p class="support-payment-note">Bitte trage nur einen Beitrag ein, den du bereits gegeben oder separat überwiesen hast. Der Beitrag wird vor der Veröffentlichung geprüft.</p>
+        <div class="paint-toolbar" role="group" aria-label="Malwerkzeuge">
+          <label class="paint-color-label" for="paint-color">Farbe</label>
+          <input id="paint-color" type="color" value="#20c5bd" aria-label="Stiftfarbe">
+          <label for="paint-size">Stiftgröße</label>
+          <input id="paint-size" type="range" min="2" max="24" value="7">
+          <button type="button" class="paint-tool is-active" id="paint-pen" aria-pressed="true">✎ Stift</button>
+          <button type="button" class="paint-tool" id="paint-eraser" aria-pressed="false">⌫ Radierer</button>
+          <button type="button" class="paint-tool paint-clear" id="paint-clear">Neu anfangen</button>
+        </div>
+        <div class="paint-canvas-wrap">
+          <canvas id="support-paint-canvas" width="320" height="320" aria-label="Zeichenfläche für dein Supporter-Profilbild"></canvas>
+        </div>
+        <p class="paint-hint">Tipp: Du kannst mit Maus, Finger oder Stift zeichnen.</p>
+        <div class="support-preview">
+          <span class="eyebrow">DEINE VORSCHAU</span>
+          <div class="support-preview-card">
+            <img id="support-preview-image" alt="Vorschau deines gemalten Profilbilds">
+            <strong id="support-preview-name">Dein Name</strong>
+            <span>SUPPORTER</span>
+          </div>
+        </div>
+        <p class="support-consent">Mit dem Absenden erlaubst du, dass dein gewählter Name und dein gemaltes Bild nach Freigabe öffentlich auf dieser Website erscheinen. Bitte keine Kontaktdaten oder anderen privaten Informationen eintragen.</p>
+        <button class="button support-submit" id="support-submit" type="submit">Profil zur Prüfung senden <span>↗</span></button>
+        <p class="support-form-feedback" id="support-form-feedback" role="status" aria-live="polite"></p>
+      </form>
+    </dialog>
+
 <section class="benefits-section section">
       <div class="section-heading">
         <p class="eyebrow">WARUM ICH ES MÖCHTE</p>
