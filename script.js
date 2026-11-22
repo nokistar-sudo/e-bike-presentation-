@@ -231,3 +231,45 @@ cockpitMode?.addEventListener("change", cockpitRender);
 cockpitStart?.addEventListener("click", cockpitToggle);
 cockpitReset?.addEventListener("click", cockpitResetAll);
 cockpitRender();
+
+
+// MULTI-PAGE NAVIGATION
+(() => {
+  const panels = [...document.querySelectorAll(".page-panel")];
+  const links = [...document.querySelectorAll("[data-page-link]")];
+  if (!panels.length || !links.length) return;
+
+  const validPages = new Set(panels.map(panel => panel.dataset.page));
+  function showPage(page, updateAddress = true) {
+    if (!validPages.has(page)) page = "home";
+    panels.forEach(panel => {
+      const active = panel.dataset.page === page;
+      panel.classList.toggle("is-active", active);
+      panel.setAttribute("aria-hidden", String(!active));
+    });
+    links.forEach(link => {
+      if (link.dataset.pageLink === page) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+    if (updateAddress && window.location.hash !== "#page-" + page) {
+      window.history.pushState({ page }, "", "#page-" + page);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  links.forEach(link => link.addEventListener("click", event => {
+    event.preventDefault();
+    showPage(link.dataset.pageLink);
+  }));
+
+  const initial = window.location.hash.startsWith("#page-")
+    ? window.location.hash.slice(6)
+    : "home";
+  showPage(initial, false);
+  window.addEventListener("popstate", () => {
+    const page = window.location.hash.startsWith("#page-")
+      ? window.location.hash.slice(6)
+      : "home";
+    showPage(page, false);
+  });
+})();
