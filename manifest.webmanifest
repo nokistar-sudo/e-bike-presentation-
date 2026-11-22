@@ -1,0 +1,17 @@
+{
+  "name": "Mein Wunsch-E-Bike – Specialized Turbo Levo Comp",
+  "short_name": "Wunsch-E-Bike",
+  "start_url": "/e-bike-presentation-/",
+  "scope": "/e-bike-presentation-/",
+  "display": "standalone",
+  "background_color": "#171b1d",
+  "theme_color": "#171b1d",
+  "icons": [
+    {
+      "src": "/e-bike-presentation-/bilder/bike-titel.jpeg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
