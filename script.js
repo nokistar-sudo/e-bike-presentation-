@@ -310,40 +310,91 @@ cockpitRender();
     });
   }
 
-  // A restrained pointer halo on mouse/trackpad devices; the normal cursor
-  // stays visible and touch devices do not receive extra elements.
+  // Smooth comet trail for mouse and trackpad users.
   if (window.matchMedia("(hover:hover) and (pointer:fine)").matches && !reducedMotion) {
-    const aura = document.createElement("span");
-    const core = document.createElement("span");
-    aura.className = "cursor-aura";
-    core.className = "cursor-core";
-    aura.setAttribute("aria-hidden", "true");
-    core.setAttribute("aria-hidden", "true");
-    document.body.append(aura, core);
+    const canvas = document.createElement("canvas");
+    canvas.className = "cursor-comet";
+    canvas.setAttribute("aria-hidden", "true");
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d", { alpha:true });
+    let width = 0, height = 0, dpr = 1, animationFrame = 0;
+    let points = [];
+    let pointerInside = false;
 
-    let pointerX = -100;
-    let pointerY = -100;
-    let frame = 0;
+    function resizeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas, { passive:true });
+
+    function addPoint(x, y) {
+      const now = performance.now();
+      const last = points[points.length - 1];
+      if (!last || Math.hypot(x - last.x, y - last.y) > 1.5) {
+        points.push({ x, y, time:now });
+      }
+      if (points.length > 34) points.shift();
+      if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
+    }
+
+    function drawTrail(now) {
+      animationFrame = 0;
+      ctx.clearRect(0, 0, width, height);
+      points = points.filter(point => now - point.time < 520);
+      if (points.length > 1) {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        for (let i = 1; i < points.length; i++) {
+          const a = points[i - 1], b = points[i];
+          const age = now - b.time;
+          const life = Math.max(0, 1 - age / 520);
+          const progress = i / (points.length - 1);
+          const thickness = (1.2 + progress * 4.2) * life;
+          if (thickness <= .15) continue;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(117, 224, 207, ${.7 * life})`;
+          ctx.lineWidth = thickness;
+          ctx.shadowColor = "rgba(87, 220, 199, .9)";
+          ctx.shadowBlur = 13 * life;
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+
+        // A small bright comet head and a few fading sparks.
+        const head = points[points.length - 1];
+        const headLife = Math.max(0, 1 - (now - head.time) / 520);
+        if (headLife > 0) {
+          const glow = ctx.createRadialGradient(head.x,head.y,0,head.x,head.y,13);
+          glow.addColorStop(0,"rgba(225,255,249,.95)");
+          glow.addColorStop(.22,"rgba(117,224,207,.72)");
+          glow.addColorStop(1,"rgba(117,224,207,0)");
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(head.x,head.y,13,0,Math.PI*2);
+          ctx.fill();
+        }
+      }
+      if (points.length > 1) animationFrame = requestAnimationFrame(drawTrail);
+    }
+
     document.addEventListener("pointermove", event => {
-      pointerX = event.clientX;
-      pointerY = event.clientY;
-      aura.classList.add("is-visible");
-      core.classList.add("is-visible");
-      if (frame) cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        aura.style.transform = `translate3d(${pointerX - 17}px,${pointerY - 17}px,0)`;
-        core.style.transform = `translate3d(${pointerX - 2.5}px,${pointerY - 2.5}px,0)`;
-        frame = 0;
-      });
+      pointerInside = true;
+      addPoint(event.clientX, event.clientY);
     }, { passive:true });
     document.addEventListener("pointerleave", () => {
-      aura.classList.remove("is-visible");
-      core.classList.remove("is-visible");
+      pointerInside = false;
+      if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
     });
-    document.addEventListener("pointerover", event => {
-      if (event.target.closest("a,button,[role='button'],input,select")) aura.classList.add("is-hovering");
-      else aura.classList.remove("is-hovering");
-    });
+    document.addEventListener("pointerenter", () => { pointerInside = true; });
   }
 
   // A brief, understated glow confirms a successfully entered contribution.
