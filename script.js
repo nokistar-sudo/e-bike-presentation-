@@ -273,3 +273,90 @@ cockpitRender();
     showPage(page, false);
   });
 })();
+
+
+// PREMIUM MICRO-INTERACTIONS
+(() => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Soft reveal for meaningful content blocks. The observer also catches
+  // elements inside pages that become visible after navigation.
+  const revealTargets = [
+    ".section-heading", ".page-intro", ".destination-card", ".spec-card",
+    ".detail-card", ".benefit", ".responsibility-grid > div",
+    ".purchase-content", ".range-layout", ".cockpit-shell", ".funding-card",
+    ".closing-section"
+  ];
+  const revealElements = [...new Set(revealTargets.flatMap(selector =>
+    [...document.querySelectorAll(selector)]
+  ))];
+  if (reducedMotion || !("IntersectionObserver" in window)) {
+    revealElements.forEach(element => element.classList.add("is-visible"));
+  } else {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+
+    revealElements.forEach((element, index) => {
+      element.classList.add("reveal-on-scroll");
+      if (element.classList.contains("spec-card") || element.classList.contains("destination-card")) {
+        element.style.setProperty("--reveal-delay", (index % 4) * 65 + "ms");
+      }
+      revealObserver.observe(element);
+    });
+  }
+
+  // A restrained pointer halo on mouse/trackpad devices; the normal cursor
+  // stays visible and touch devices do not receive extra elements.
+  if (window.matchMedia("(hover:hover) and (pointer:fine)").matches && !reducedMotion) {
+    const aura = document.createElement("span");
+    const core = document.createElement("span");
+    aura.className = "cursor-aura";
+    core.className = "cursor-core";
+    aura.setAttribute("aria-hidden", "true");
+    core.setAttribute("aria-hidden", "true");
+    document.body.append(aura, core);
+
+    let pointerX = -100;
+    let pointerY = -100;
+    let frame = 0;
+    document.addEventListener("pointermove", event => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      aura.classList.add("is-visible");
+      core.classList.add("is-visible");
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        aura.style.transform = `translate3d(${pointerX - 17}px,${pointerY - 17}px,0)`;
+        core.style.transform = `translate3d(${pointerX - 2.5}px,${pointerY - 2.5}px,0)`;
+        frame = 0;
+      });
+    }, { passive:true });
+    document.addEventListener("pointerleave", () => {
+      aura.classList.remove("is-visible");
+      core.classList.remove("is-visible");
+    });
+    document.addEventListener("pointerover", event => {
+      if (event.target.closest("a,button,[role='button'],input,select")) aura.classList.add("is-hovering");
+      else aura.classList.remove("is-hovering");
+    });
+  }
+
+  // A brief, understated glow confirms a successfully entered contribution.
+  const fundingCard = document.querySelector(".funding-card");
+  const fundingButton = document.querySelector("#funding-add");
+  if (fundingCard && fundingButton) {
+    fundingButton.addEventListener("click", () => {
+      if (!reducedMotion) {
+        fundingCard.classList.remove("is-celebrating");
+        void fundingCard.offsetWidth;
+        fundingCard.classList.add("is-celebrating");
+        window.setTimeout(() => fundingCard.classList.remove("is-celebrating"), 900);
+      }
+    });
+  }
+})();
