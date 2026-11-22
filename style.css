@@ -53,12 +53,20 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 25px;
-  background: rgba(23, 27, 29, 0.96);
-  border-bottom: 1px solid var(--border);
+  /* Restrained glass treatment: dark enough for legibility, translucent enough
+     to let the page subtly show through while scrolling. */
+  background: linear-gradient(110deg,
+    rgba(25, 32, 33, 0.82),
+    rgba(23, 29, 30, 0.72) 55%,
+    rgba(25, 33, 33, 0.80));
+  border-bottom: 1px solid rgba(117, 184, 174, 0.17);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
   position: sticky;
   top: 0;
   z-index: 20;
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(18px) saturate(128%);
+  backdrop-filter: blur(18px) saturate(128%);
+  isolation: isolate;
 }
 
 .logo {
@@ -1115,4 +1123,24 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
 }
 @media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) {
   .cursor-comet { display:none !important; }
+}
+
+
+/* Subtle glass navigation: restrained contrast and a fine upper highlight. */
+.site-header::before {
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(165,238,225,.22),transparent);
+}
+.site-header > * {
+  position:relative;
+  z-index:1;
+}
+@supports not ((backdrop-filter: blur(1px))) {
+  .site-header {
+    background:rgba(23,27,29,.94);
+  }
 }
