@@ -1275,13 +1275,6 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
 }
 
 
-/* Keep the custom cursor above page stacking contexts without blocking clicks. */
-.cursor-comet {
-  pointer-events: none !important;
-  z-index: 2147483647 !important;
-}
-
-
 /* Private iPhone-only push controls in the admin area */
 .admin-push-box { display:flex; flex-direction:column; gap:10px; padding:16px; border:1px solid rgba(126,199,190,.28); border-radius:14px; background:linear-gradient(145deg,rgba(30,52,52,.8),rgba(19,27,29,.9)); }
 .admin-push-box[hidden] { display:none!important; }
