@@ -351,12 +351,12 @@ cockpitRender();
   const fundingButton = document.querySelector("#funding-add");
   if (fundingCard && fundingButton) {
     fundingButton.addEventListener("click", () => {
-      if (!reducedMotion) {
-        fundingCard.classList.remove("is-celebrating");
-        void fundingCard.offsetWidth;
-        fundingCard.classList.add("is-celebrating");
-        window.setTimeout(() => fundingCard.classList.remove("is-celebrating"), 900);
-      }
+      const feedback = document.querySelector("#funding-feedback");
+      if (!feedback?.textContent.includes("eingetragen – danke") || reducedMotion) return;
+      fundingCard.classList.remove("is-celebrating");
+      void fundingCard.offsetWidth;
+      fundingCard.classList.add("is-celebrating");
+      window.setTimeout(() => fundingCard.classList.remove("is-celebrating"), 900);
     });
   }
 })();
