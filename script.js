@@ -374,3 +374,222 @@ cockpitRender();
     });
   }
 })();
+
+
+// SUPPORT WALL + DRAW-YOUR-OWN AVATAR
+(() => {
+  const SUPABASE_URL = "https://gmbvgdoebvqsdmmucyob.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_k6cIKJfu-OUiQwgvN7XKzA_EwWNFpxs";
+  const REST_URL = SUPABASE_URL + "/rest/v1/supporter_submissions";
+  const dialog = document.querySelector("#support-dialog");
+  const openButton = document.querySelector("#support-open");
+  const closeButton = document.querySelector("#support-close");
+  const form = document.querySelector("#support-form");
+  const canvas = document.querySelector("#support-paint-canvas");
+  const nameInput = document.querySelector("#support-name");
+  const colorInput = document.querySelector("#paint-color");
+  const sizeInput = document.querySelector("#paint-size");
+  const penButton = document.querySelector("#paint-pen");
+  const eraserButton = document.querySelector("#paint-eraser");
+  const clearButton = document.querySelector("#paint-clear");
+  const submitButton = document.querySelector("#support-submit");
+  const formFeedback = document.querySelector("#support-form-feedback");
+  const previewImage = document.querySelector("#support-preview-image");
+  const previewName = document.querySelector("#support-preview-name");
+  const wall = document.querySelector("#support-wall-grid");
+  if (!dialog || !canvas || !form || !wall) return;
+
+  const ctx = canvas.getContext("2d", { willReadFrequently:false });
+  const background = "#f4f2e9";
+  let drawing = false;
+  let erasing = false;
+  let hasDrawn = false;
+  let lastPoint = null;
+
+  function resetCanvas() {
+    ctx.save();
+    ctx.fillStyle = background;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+    hasDrawn = false;
+    updatePreview();
+  }
+  function updatePreview() {
+    previewImage.src = canvas.toDataURL("image/png");
+    previewName.textContent = nameInput.value.trim() || "Dein Name";
+  }
+  function setTool(useEraser) {
+    erasing = useEraser;
+    penButton.classList.toggle("is-active", !erasing);
+    eraserButton.classList.toggle("is-active", erasing);
+    penButton.setAttribute("aria-pressed", String(!erasing));
+    eraserButton.setAttribute("aria-pressed", String(erasing));
+  }
+  function pointFromEvent(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x:(event.clientX - rect.left) * canvas.width / rect.width,
+      y:(event.clientY - rect.top) * canvas.height / rect.height
+    };
+  }
+  function startDraw(event) {
+    if (event.button !== undefined && event.button !== 0) return;
+    drawing = true;
+    lastPoint = pointFromEvent(event);
+    canvas.setPointerCapture?.(event.pointerId);
+    ctx.beginPath();
+    ctx.arc(lastPoint.x,lastPoint.y,Math.max(1,Number(sizeInput.value)/2),0,Math.PI*2);
+    ctx.fillStyle = erasing ? background : colorInput.value;
+    ctx.fill();
+    hasDrawn = true;
+    updatePreview();
+    event.preventDefault();
+  }
+  function draw(event) {
+    if (!drawing) return;
+    const point = pointFromEvent(event);
+    ctx.beginPath();
+    ctx.moveTo(lastPoint.x,lastPoint.y);
+    ctx.lineTo(point.x,point.y);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = Number(sizeInput.value);
+    ctx.strokeStyle = erasing ? background : colorInput.value;
+    ctx.stroke();
+    lastPoint = point;
+    hasDrawn = true;
+    updatePreview();
+    event.preventDefault();
+  }
+  function stopDraw() {
+    if (!drawing) return;
+    drawing = false;
+    lastPoint = null;
+    updatePreview();
+  }
+  canvas.addEventListener("pointerdown",startDraw);
+  canvas.addEventListener("pointermove",draw);
+  canvas.addEventListener("pointerup",stopDraw);
+  canvas.addEventListener("pointercancel",stopDraw);
+  canvas.addEventListener("lostpointercapture",stopDraw);
+  nameInput.addEventListener("input",updatePreview);
+  colorInput.addEventListener("input",() => setTool(false));
+  penButton.addEventListener("click",() => setTool(false));
+  eraserButton.addEventListener("click",() => setTool(true));
+  clearButton.addEventListener("click",resetCanvas);
+
+  openButton?.addEventListener("click",() => {
+    form.reset();
+    nameInput.value = "";
+    colorInput.value = "#20c5bd";
+    sizeInput.value = "7";
+    setTool(false);
+    resetCanvas();
+    formFeedback.textContent = "";
+    if (typeof dialog.showModal === "function") dialog.showModal();
+  });
+  closeButton?.addEventListener("click",() => dialog.close());
+  dialog.addEventListener("click",event => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  function safeText(value) {
+    return String(value ?? "").replace(/[&<>"']/g,char => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    })[char]);
+  }
+  async function loadSupporters() {
+    try {
+      const response = await fetch(REST_URL + "?select=id,display_name,avatar_data,created_at&status=eq.approved&order=created_at.desc&limit=60", {
+        headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Accept":"application/json"},
+        cache:"no-store"
+      });
+      if (!response.ok) throw new Error("Support Wall unavailable");
+      const supporters = await response.json();
+      wall.replaceChildren();
+      if (!Array.isArray(supporters) || supporters.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "support-wall-empty";
+        empty.textContent = "Hier ist noch Platz für die ersten Supporter. Vielleicht für dich?";
+        wall.appendChild(empty);
+        return;
+      }
+      supporters.forEach(person => {
+        const card = document.createElement("article");
+        card.className = "supporter-card";
+        const image = document.createElement("img");
+        image.alt = "Gemaltes Profilbild von " + person.display_name;
+        image.loading = "lazy";
+        image.src = person.avatar_data;
+        const name = document.createElement("strong");
+        name.textContent = person.display_name;
+        const tag = document.createElement("span");
+        tag.textContent = "SUPPORTER";
+        card.append(image,name,tag);
+        wall.appendChild(card);
+      });
+    } catch (_) {
+      wall.replaceChildren();
+      const error = document.createElement("p");
+      error.className = "support-wall-empty";
+      error.textContent = "Die Support Wall kann gerade nicht geladen werden.";
+      wall.appendChild(error);
+    }
+  }
+
+  form.addEventListener("submit",async event => {
+    event.preventDefault();
+    const displayName = nameInput.value.trim();
+    if (!displayName || displayName.length > 18) {
+      formFeedback.textContent = "Bitte gib einen Namen mit 1 bis 18 Zeichen ein.";
+      return;
+    }
+    if (!hasDrawn) {
+      formFeedback.textContent = "Male zuerst ein kleines Profilbild für dich.";
+      return;
+    }
+    const avatarData = canvas.toDataURL("image/png");
+    if (avatarData.length > 300000) {
+      formFeedback.textContent = "Das Bild ist zu groß. Bitte male mit weniger Details oder einer kleineren Stiftgröße.";
+      return;
+    }
+    submitButton.disabled = true;
+    submitButton.textContent = "Wird gesendet …";
+    formFeedback.textContent = "";
+    try {
+      const response = await fetch(REST_URL, {
+        method:"POST",
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer "+SUPABASE_KEY,
+          "Content-Type":"application/json",
+          "Prefer":"return=minimal"
+        },
+        body:JSON.stringify({
+          display_name:displayName,
+          avatar_data:avatarData,
+          status:"pending"
+        })
+      });
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "Submission failed");
+      }
+      formFeedback.textContent = "Danke! Dein Profil wurde zur Prüfung gesendet. Nach Freigabe erscheint es auf der Support Wall.";
+      submitButton.textContent = "Erfolgreich gesendet ✓";
+      window.setTimeout(() => {
+        dialog.close();
+        loadSupporters();
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Profil zur Prüfung senden <span>↗</span>';
+      },2200);
+    } catch (_) {
+      formFeedback.textContent = "Das Senden hat gerade nicht geklappt. Bitte versuche es später erneut.";
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Profil zur Prüfung senden <span>↗</span>';
+    }
+  });
+
+  resetCanvas();
+  loadSupporters();
+})();
