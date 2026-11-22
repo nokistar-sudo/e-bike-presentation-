@@ -1144,3 +1144,54 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
     background:rgba(23,27,29,.94);
   }
 }
+
+
+/* Clear, visible glass navigation — compact floating panel, not a full-width strip. */
+.site-header {
+  width:min(94%, 1240px);
+  min-height:72px;
+  margin:12px auto;
+  padding:0 clamp(18px, 3.2vw, 38px);
+  border:1px solid rgba(133,218,207,.25);
+  border-radius:15px;
+  background:rgba(23,31,32,.84);
+  box-shadow:
+    0 12px 34px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(226,255,250,.09),
+    0 0 22px rgba(91,190,177,.055);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+  backdrop-filter:blur(24px) saturate(145%);
+  isolation:isolate;
+}
+.site-header::before {
+  content:"";
+  position:absolute;
+  inset:0 12% auto;
+  height:1px;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(177,255,243,.42),transparent);
+}
+@media(max-width:850px) {
+  .site-header { width:96%; padding:12px 18px; margin:8px auto; }
+}
+@media(max-width:560px) {
+  .site-header { border-radius:12px; }
+}
+
+/* The comet canvas now draws only the black/turquoise glowing pointer. */
+.cursor-comet {
+  position:fixed;
+  inset:0;
+  z-index:1001;
+  width:100vw;
+  height:100vh;
+  display:block;
+  pointer-events:none;
+  background:transparent;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  html, body, a, button, input, select, textarea, [role="button"] { cursor:none !important; }
+}
+@media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) {
+  .cursor-comet { display:none !important; }
+}
