@@ -310,7 +310,8 @@ cockpitRender();
     });
   }
 
-  // Smooth comet trail for mouse and trackpad users.
+  // Smooth, transparent turquoise comet cursor.
+  // The canvas is fully transparent: only the glowing trail and pointer are drawn.
   if (window.matchMedia("(hover:hover) and (pointer:fine)").matches && !reducedMotion) {
     const canvas = document.createElement("canvas");
     canvas.className = "cursor-comet";
@@ -319,6 +320,7 @@ cockpitRender();
     const ctx = canvas.getContext("2d", { alpha:true });
     let width = 0, height = 0, dpr = 1, animationFrame = 0;
     let points = [];
+    let pointer = { x:-100, y:-100 };
     let pointerInside = false;
 
     function resizeCanvas() {
@@ -337,64 +339,110 @@ cockpitRender();
     function addPoint(x, y) {
       const now = performance.now();
       const last = points[points.length - 1];
-      if (!last || Math.hypot(x - last.x, y - last.y) > 1.5) {
+      if (!last || Math.hypot(x - last.x, y - last.y) > 1.2) {
         points.push({ x, y, time:now });
       }
-      if (points.length > 34) points.shift();
+      if (points.length > 48) points.shift();
       if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
+    }
+
+    function drawSmoothTrail(now) {
+      if (points.length < 2) return;
+      const livePoints = points;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      // Several softly layered strokes create a flowing ribbon rather than a hard line.
+      for (const layer of [
+        { width:19, color:"87,235,220", alpha:.075, blur:25 },
+        { width:10, color:"87,235,220", alpha:.14, blur:15 },
+        { width:4.2, color:"130,255,239", alpha:.55, blur:8 },
+        { width:1.45, color:"225,255,250", alpha:.88, blur:4 }
+      ]) {
+        ctx.beginPath();
+        ctx.moveTo(livePoints[0].x, livePoints[0].y);
+        for (let i = 1; i < livePoints.length - 1; i++) {
+          const midX = (livePoints[i].x + livePoints[i + 1].x) / 2;
+          const midY = (livePoints[i].y + livePoints[i + 1].y) / 2;
+          ctx.quadraticCurveTo(livePoints[i].x, livePoints[i].y, midX, midY);
+        }
+        const last = livePoints[livePoints.length - 1];
+        ctx.lineTo(last.x, last.y);
+        const age = now - last.time;
+        const fade = Math.max(0, 1 - age / 680);
+        ctx.strokeStyle = `rgba(${layer.color},${layer.alpha * fade})`;
+        ctx.lineWidth = layer.width;
+        ctx.shadowColor = "rgba(80,245,224,.95)";
+        ctx.shadowBlur = layer.blur;
+        ctx.stroke();
+      }
+      ctx.shadowBlur = 0;
+
+      // Fine glowing particles drift along the fading trail.
+      for (let i = 2; i < livePoints.length; i += 3) {
+        const p = livePoints[i];
+        const life = Math.max(0, 1 - (now - p.time) / 700);
+        if (life <= 0) continue;
+        const radius = (i % 2 ? 1.15 : 1.8) * life;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(119,255,239,${.78 * life})`;
+        ctx.shadowColor = "rgba(75,245,225,.95)";
+        ctx.shadowBlur = 8;
+        ctx.arc(p.x + Math.sin(i * 2.1) * 4, p.y + Math.cos(i * 1.7) * 4, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+    }
+
+    function drawPointer() {
+      if (!pointerInside) return;
+      const x = pointer.x, y = pointer.y;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.shadowColor = "rgba(74,255,232,.95)";
+      ctx.shadowBlur = 16;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(1, 25);
+      ctx.lineTo(7, 18);
+      ctx.lineTo(13, 29);
+      ctx.lineTo(17, 27);
+      ctx.lineTo(11, 15);
+      ctx.lineTo(23, 14);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(221,255,250,.98)";
+      ctx.fill();
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = "rgba(65,231,215,.98)";
+      ctx.stroke();
+      ctx.restore();
     }
 
     function drawTrail(now) {
       animationFrame = 0;
       ctx.clearRect(0, 0, width, height);
-      points = points.filter(point => now - point.time < 520);
-      if (points.length > 1) {
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        for (let i = 1; i < points.length; i++) {
-          const a = points[i - 1], b = points[i];
-          const age = now - b.time;
-          const life = Math.max(0, 1 - age / 520);
-          const progress = i / (points.length - 1);
-          const thickness = (1.2 + progress * 4.2) * life;
-          if (thickness <= .15) continue;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(117, 224, 207, ${.7 * life})`;
-          ctx.lineWidth = thickness;
-          ctx.shadowColor = "rgba(87, 220, 199, .9)";
-          ctx.shadowBlur = 13 * life;
-          ctx.stroke();
-        }
-        ctx.shadowBlur = 0;
+      points = points.filter(point => now - point.time < 700);
+      drawSmoothTrail(now);
+      drawPointer();
 
-        // A small bright comet head and a few fading sparks.
-        const head = points[points.length - 1];
-        const headLife = Math.max(0, 1 - (now - head.time) / 520);
-        if (headLife > 0) {
-          const glow = ctx.createRadialGradient(head.x,head.y,0,head.x,head.y,13);
-          glow.addColorStop(0,"rgba(225,255,249,.95)");
-          glow.addColorStop(.22,"rgba(117,224,207,.72)");
-          glow.addColorStop(1,"rgba(117,224,207,0)");
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(head.x,head.y,13,0,Math.PI*2);
-          ctx.fill();
-        }
+      if (pointerInside || points.length > 1) {
+        animationFrame = requestAnimationFrame(drawTrail);
       }
-      if (points.length > 1) animationFrame = requestAnimationFrame(drawTrail);
     }
 
     document.addEventListener("pointermove", event => {
       pointerInside = true;
+      pointer = { x:event.clientX, y:event.clientY };
       addPoint(event.clientX, event.clientY);
     }, { passive:true });
     document.addEventListener("pointerleave", () => {
       pointerInside = false;
       if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
     });
-    document.addEventListener("pointerenter", () => { pointerInside = true; });
+    document.addEventListener("pointerenter", () => {
+      pointerInside = true;
+      if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
+    });
   }
 
   // A brief, understated glow confirms a successfully entered contribution.
