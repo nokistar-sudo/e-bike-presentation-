@@ -310,20 +310,17 @@ cockpitRender();
     });
   }
 
-  // Smooth, transparent turquoise comet cursor.
-  // The canvas is fully transparent: only the glowing trail and pointer are drawn.
+  // Custom black cursor with a turquoise edge glow — no comet trail.
   if (window.matchMedia("(hover:hover) and (pointer:fine)").matches && !reducedMotion) {
     const canvas = document.createElement("canvas");
     canvas.className = "cursor-comet";
     canvas.setAttribute("aria-hidden", "true");
     document.body.appendChild(canvas);
     const ctx = canvas.getContext("2d", { alpha:true });
-    let width = 0, height = 0, dpr = 1, animationFrame = 0;
-    let points = [];
-    let pointer = { x:-100, y:-100 };
-    let pointerInside = false;
+    let dpr = 1, width = 0, height = 0;
+    let x = -100, y = -100, visible = false, frame = 0;
 
-    function resizeCanvas() {
+    function resizeCursor() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
@@ -332,116 +329,54 @@ cockpitRender();
       canvas.style.width = width + "px";
       canvas.style.height = height + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas, { passive:true });
-
-    function addPoint(x, y) {
-      const now = performance.now();
-      const last = points[points.length - 1];
-      if (!last || Math.hypot(x - last.x, y - last.y) > 1.2) {
-        points.push({ x, y, time:now });
-      }
-      if (points.length > 48) points.shift();
-      if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
+      paintCursor();
     }
 
-    function drawSmoothTrail(now) {
-      if (points.length < 2) return;
-      const livePoints = points;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      // Several softly layered strokes create a flowing ribbon rather than a hard line.
-      for (const layer of [
-        { width:19, color:"87,235,220", alpha:.075, blur:25 },
-        { width:10, color:"87,235,220", alpha:.14, blur:15 },
-        { width:4.2, color:"130,255,239", alpha:.55, blur:8 },
-        { width:1.45, color:"225,255,250", alpha:.88, blur:4 }
-      ]) {
-        ctx.beginPath();
-        ctx.moveTo(livePoints[0].x, livePoints[0].y);
-        for (let i = 1; i < livePoints.length - 1; i++) {
-          const midX = (livePoints[i].x + livePoints[i + 1].x) / 2;
-          const midY = (livePoints[i].y + livePoints[i + 1].y) / 2;
-          ctx.quadraticCurveTo(livePoints[i].x, livePoints[i].y, midX, midY);
-        }
-        const last = livePoints[livePoints.length - 1];
-        ctx.lineTo(last.x, last.y);
-        const age = now - last.time;
-        const fade = Math.max(0, 1 - age / 680);
-        ctx.strokeStyle = `rgba(${layer.color},${layer.alpha * fade})`;
-        ctx.lineWidth = layer.width;
-        ctx.shadowColor = "rgba(80,245,224,.95)";
-        ctx.shadowBlur = layer.blur;
-        ctx.stroke();
-      }
-      ctx.shadowBlur = 0;
-
-      // Fine glowing particles drift along the fading trail.
-      for (let i = 2; i < livePoints.length; i += 3) {
-        const p = livePoints[i];
-        const life = Math.max(0, 1 - (now - p.time) / 700);
-        if (life <= 0) continue;
-        const radius = (i % 2 ? 1.15 : 1.8) * life;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(119,255,239,${.78 * life})`;
-        ctx.shadowColor = "rgba(75,245,225,.95)";
-        ctx.shadowBlur = 8;
-        ctx.arc(p.x + Math.sin(i * 2.1) * 4, p.y + Math.cos(i * 1.7) * 4, radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.shadowBlur = 0;
-    }
-
-    function drawPointer() {
-      if (!pointerInside) return;
-      const x = pointer.x, y = pointer.y;
+    function paintCursor() {
+      frame = 0;
+      ctx.clearRect(0, 0, width, height);
+      if (!visible) return;
       ctx.save();
       ctx.translate(x, y);
-      ctx.shadowColor = "rgba(74,255,232,.95)";
-      ctx.shadowBlur = 16;
+      ctx.shadowColor = "rgba(70,245,225,.95)";
+      ctx.shadowBlur = 17;
       ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(1, 25);
-      ctx.lineTo(7, 18);
-      ctx.lineTo(13, 29);
-      ctx.lineTo(17, 27);
-      ctx.lineTo(11, 15);
-      ctx.lineTo(23, 14);
+      ctx.moveTo(1, 1);
+      ctx.lineTo(2, 27);
+      ctx.lineTo(9, 20);
+      ctx.lineTo(16, 31);
+      ctx.lineTo(21, 28);
+      ctx.lineTo(14, 17);
+      ctx.lineTo(27, 16);
       ctx.closePath();
-      ctx.fillStyle = "rgba(221,255,250,.98)";
+      ctx.fillStyle = "rgba(8,16,17,.98)";
       ctx.fill();
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = "rgba(65,231,215,.98)";
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(91,255,235,1)";
       ctx.stroke();
+      ctx.shadowBlur = 0;
       ctx.restore();
     }
 
-    function drawTrail(now) {
-      animationFrame = 0;
-      ctx.clearRect(0, 0, width, height);
-      points = points.filter(point => now - point.time < 700);
-      drawSmoothTrail(now);
-      drawPointer();
-
-      if (pointerInside || points.length > 1) {
-        animationFrame = requestAnimationFrame(drawTrail);
-      }
+    function schedulePaint() {
+      if (!frame) frame = requestAnimationFrame(paintCursor);
     }
 
+    resizeCursor();
+    window.addEventListener("resize", resizeCursor, { passive:true });
     document.addEventListener("pointermove", event => {
-      pointerInside = true;
-      pointer = { x:event.clientX, y:event.clientY };
-      addPoint(event.clientX, event.clientY);
+      x = event.clientX;
+      y = event.clientY;
+      visible = true;
+      schedulePaint();
     }, { passive:true });
     document.addEventListener("pointerleave", () => {
-      pointerInside = false;
-      if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
+      visible = false;
+      schedulePaint();
     });
     document.addEventListener("pointerenter", () => {
-      pointerInside = true;
-      if (!animationFrame) animationFrame = requestAnimationFrame(drawTrail);
+      visible = true;
+      schedulePaint();
     });
   }
 
