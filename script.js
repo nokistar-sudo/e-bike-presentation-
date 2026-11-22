@@ -22,11 +22,11 @@ lightbox?.addEventListener("close", () => {
 });
 
 
-// MANUAL CONTRIBUTION TOTAL — update this value after a contribution is received.
-// Amount is in cents: 0 = 0.00 EUR, 2500 = 25.00 EUR.
+// PUBLIC FUNDING TOTAL — read-only for visitors, editable only by approved admins.
 (() => {
   const goalCents = 174800;
-  const manuallyCollectedCents = 0;
+  const endpoint = "https://gmbvgdoebvqsdmmucyob.supabase.co/rest/v1/funding_progress";
+  const apiKey = "sb_publishable_k6cIKJfu-OUiQwgvN7XKzA_EwWNFpxs";
   const raisedOutput = document.querySelector("#funding-raised");
   const remainingOutput = document.querySelector("#funding-remaining");
   const percentOutput = document.querySelector("#funding-percent");
@@ -36,22 +36,39 @@ lightbox?.addEventListener("close", () => {
   if (!raisedOutput || !remainingOutput || !percentOutput || !progress || !progressFill || !feedback) return;
 
   const euro = cents => new Intl.NumberFormat("de-DE", {
-    style:"currency", currency:"EUR", minimumFractionDigits:2, maximumFractionDigits:2
+    style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2
   }).format(cents / 100);
-
-  const total = Math.max(0, Math.min(goalCents, Math.round(manuallyCollectedCents)));
-  const remaining = Math.max(0, goalCents - total);
-  const percent = Math.min(100, Math.round((total / goalCents) * 100));
-  raisedOutput.textContent = euro(total);
-  remainingOutput.textContent = euro(remaining);
-  percentOutput.textContent = percent + " %";
-  progressFill.style.width = percent + "%";
-  progress.setAttribute("aria-valuenow", String(total / 100));
-  progress.setAttribute("aria-valuemax", String(goalCents / 100));
-  feedback.textContent = "Der Beitragsstand wird nach Eingang von Bargeld oder separat vereinbarten Beiträgen manuell aktualisiert.";
+  function render(totalCents) {
+    const total = Math.max(0,Math.min(goalCents,Math.round(totalCents)));
+    const remaining = Math.max(0,goalCents-total);
+    const percent = Math.min(100,Math.round(total/goalCents*100));
+    raisedOutput.textContent=euro(total);
+    remainingOutput.textContent=euro(remaining);
+    percentOutput.textContent=percent+" %";
+    progressFill.style.width=percent+"%";
+    progress.setAttribute("aria-valuenow",String(total/100));
+    progress.setAttribute("aria-valuemax",String(goalCents/100));
+  }
+  async function loadTotal() {
+    try {
+      const response=await fetch(endpoint+"?select=total_cents&singleton=eq.true&limit=1",{
+        headers:{apikey:apiKey,Authorization:"Bearer "+apiKey,Accept:"application/json"},
+        cache:"no-store"
+      });
+      if(!response.ok) throw new Error("Could not load funding total");
+      const rows=await response.json();
+      const cents=Number(rows?.[0]?.total_cents ?? 0);
+      if(!Number.isSafeInteger(cents)||cents<0) throw new Error("Invalid funding total");
+      render(cents);
+      feedback.textContent="Gemeinsamer Beitragsstand – manuell nach Zahlungseingang aktualisiert.";
+    } catch (_) {
+      feedback.textContent="Der Beitragsstand kann gerade nicht geladen werden.";
+    }
+  }
+  window.loadFundingTotal=loadTotal;
+  render(0);
+  loadTotal();
 })();
-
-
 // REICHWEITEN-SIMULATOR
 const weightInput = document.querySelector("#rider-weight");
 const assistInput = document.querySelector("#assist-level");
@@ -352,214 +369,258 @@ cockpitRender();
 })();
 
 
-// SUPPORT WALL + DRAW-YOUR-OWN AVATAR
+// SUPPORT WALL, DRAWING EDITOR, CONTRIBUTION SUBMISSIONS AND ADMIN REVIEW
 (() => {
-  const SUPABASE_URL = "https://gmbvgdoebvqsdmmucyob.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_k6cIKJfu-OUiQwgvN7XKzA_EwWNFpxs";
-  const REST_URL = SUPABASE_URL + "/rest/v1/supporter_submissions";
-  const dialog = document.querySelector("#support-dialog");
-  const openButton = document.querySelector("#support-open");
-  const closeButton = document.querySelector("#support-close");
-  const form = document.querySelector("#support-form");
-  const canvas = document.querySelector("#support-paint-canvas");
-  const nameInput = document.querySelector("#support-name");
-  const colorInput = document.querySelector("#paint-color");
-  const sizeInput = document.querySelector("#paint-size");
-  const penButton = document.querySelector("#paint-pen");
-  const eraserButton = document.querySelector("#paint-eraser");
-  const clearButton = document.querySelector("#paint-clear");
-  const submitButton = document.querySelector("#support-submit");
-  const formFeedback = document.querySelector("#support-form-feedback");
-  const previewImage = document.querySelector("#support-preview-image");
-  const previewName = document.querySelector("#support-preview-name");
-  const wall = document.querySelector("#support-wall-grid");
-  if (!dialog || !canvas || !form || !wall) return;
+  const SUPABASE_URL="https://gmbvgdoebvqsdmmucyob.supabase.co";
+  const SUPABASE_KEY="sb_publishable_k6cIKJfu-OUiQwgvN7XKzA_EwWNFpxs";
+  const REST_URL=SUPABASE_URL+"/rest/v1";
+  const AUTH_URL=SUPABASE_URL+"/auth/v1";
+  const submissionsUrl=REST_URL+"/supporter_submissions";
+  const dialog=document.querySelector("#support-dialog");
+  const openButton=document.querySelector("#support-open");
+  const closeButton=document.querySelector("#support-close");
+  const form=document.querySelector("#support-form");
+  const canvas=document.querySelector("#support-paint-canvas");
+  const nameInput=document.querySelector("#support-name");
+  const amountInput=document.querySelector("#support-amount");
+  const methodInput=document.querySelector("#support-method");
+  const colorInput=document.querySelector("#paint-color");
+  const sizeInput=document.querySelector("#paint-size");
+  const penButton=document.querySelector("#paint-pen");
+  const eraserButton=document.querySelector("#paint-eraser");
+  const clearButton=document.querySelector("#paint-clear");
+  const submitButton=document.querySelector("#support-submit");
+  const formFeedback=document.querySelector("#support-form-feedback");
+  const previewImage=document.querySelector("#support-preview-image");
+  const previewName=document.querySelector("#support-preview-name");
+  const wall=document.querySelector("#support-wall-grid");
+  const adminDialog=document.querySelector("#admin-dialog");
+  const adminOpen=document.querySelector("#admin-open");
+  const adminClose=document.querySelector("#admin-close");
+  const adminLoginForm=document.querySelector("#admin-login-form");
+  const adminEmail=document.querySelector("#admin-email");
+  const adminPassword=document.querySelector("#admin-password");
+  const adminFeedback=document.querySelector("#admin-feedback");
+  const adminPanel=document.querySelector("#admin-panel");
+  const adminQueue=document.querySelector("#admin-queue");
+  const adminLogout=document.querySelector("#admin-logout");
+  const adminTotal=document.querySelector("#admin-total");
+  const adminSaveTotal=document.querySelector("#admin-save-total");
+  let adminToken=null;
+  let adminUserId=null;
+  if(!dialog||!canvas||!form||!wall) return;
 
-  const ctx = canvas.getContext("2d", { willReadFrequently:false });
-  const background = "#f4f2e9";
-  let drawing = false;
-  let erasing = false;
-  let hasDrawn = false;
-  let lastPoint = null;
+  const ctx=canvas.getContext("2d");
+  const background="#f4f2e9";
+  let drawing=false,erasing=false,hasDrawn=false,lastPoint=null;
+  const euro=cents=>new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"}).format(cents/100);
 
-  function resetCanvas() {
-    ctx.save();
-    ctx.fillStyle = background;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-    hasDrawn = false;
-    updatePreview();
+  function resetCanvas(){
+    ctx.save();ctx.fillStyle=background;ctx.fillRect(0,0,canvas.width,canvas.height);ctx.restore();
+    hasDrawn=false;updatePreview();
   }
-  function updatePreview() {
-    previewImage.src = canvas.toDataURL("image/png");
-    previewName.textContent = nameInput.value.trim() || "Dein Name";
+  function updatePreview(){
+    previewImage.src=canvas.toDataURL("image/png");
+    previewName.textContent=nameInput.value.trim()||"Dein Name";
   }
-  function setTool(useEraser) {
-    erasing = useEraser;
-    penButton.classList.toggle("is-active", !erasing);
-    eraserButton.classList.toggle("is-active", erasing);
-    penButton.setAttribute("aria-pressed", String(!erasing));
-    eraserButton.setAttribute("aria-pressed", String(erasing));
+  function setTool(useEraser){
+    erasing=useEraser;
+    penButton.classList.toggle("is-active",!erasing);
+    eraserButton.classList.toggle("is-active",erasing);
+    penButton.setAttribute("aria-pressed",String(!erasing));
+    eraserButton.setAttribute("aria-pressed",String(erasing));
   }
-  function pointFromEvent(event) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x:(event.clientX - rect.left) * canvas.width / rect.width,
-      y:(event.clientY - rect.top) * canvas.height / rect.height
-    };
+  function pointFromEvent(event){
+    const rect=canvas.getBoundingClientRect();
+    return {x:(event.clientX-rect.left)*canvas.width/rect.width,y:(event.clientY-rect.top)*canvas.height/rect.height};
   }
-  function startDraw(event) {
-    if (event.button !== undefined && event.button !== 0) return;
-    drawing = true;
-    lastPoint = pointFromEvent(event);
-    canvas.setPointerCapture?.(event.pointerId);
-    ctx.beginPath();
-    ctx.arc(lastPoint.x,lastPoint.y,Math.max(1,Number(sizeInput.value)/2),0,Math.PI*2);
-    ctx.fillStyle = erasing ? background : colorInput.value;
-    ctx.fill();
-    hasDrawn = true;
-    updatePreview();
-    event.preventDefault();
+  function startDraw(event){
+    if(event.button!==undefined&&event.button!==0)return;
+    drawing=true;lastPoint=pointFromEvent(event);canvas.setPointerCapture?.(event.pointerId);
+    ctx.beginPath();ctx.arc(lastPoint.x,lastPoint.y,Math.max(1,Number(sizeInput.value)/2),0,Math.PI*2);
+    ctx.fillStyle=erasing?background:colorInput.value;ctx.fill();hasDrawn=true;updatePreview();event.preventDefault();
   }
-  function draw(event) {
-    if (!drawing) return;
-    const point = pointFromEvent(event);
-    ctx.beginPath();
-    ctx.moveTo(lastPoint.x,lastPoint.y);
-    ctx.lineTo(point.x,point.y);
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.lineWidth = Number(sizeInput.value);
-    ctx.strokeStyle = erasing ? background : colorInput.value;
-    ctx.stroke();
-    lastPoint = point;
-    hasDrawn = true;
-    updatePreview();
-    event.preventDefault();
+  function draw(event){
+    if(!drawing)return;
+    const point=pointFromEvent(event);ctx.beginPath();ctx.moveTo(lastPoint.x,lastPoint.y);ctx.lineTo(point.x,point.y);
+    ctx.lineCap="round";ctx.lineJoin="round";ctx.lineWidth=Number(sizeInput.value);
+    ctx.strokeStyle=erasing?background:colorInput.value;ctx.stroke();lastPoint=point;hasDrawn=true;updatePreview();event.preventDefault();
   }
-  function stopDraw() {
-    if (!drawing) return;
-    drawing = false;
-    lastPoint = null;
-    updatePreview();
-  }
+  function stopDraw(){if(!drawing)return;drawing=false;lastPoint=null;updatePreview();}
   canvas.addEventListener("pointerdown",startDraw);
   canvas.addEventListener("pointermove",draw);
   canvas.addEventListener("pointerup",stopDraw);
   canvas.addEventListener("pointercancel",stopDraw);
   canvas.addEventListener("lostpointercapture",stopDraw);
   nameInput.addEventListener("input",updatePreview);
-  colorInput.addEventListener("input",() => setTool(false));
-  penButton.addEventListener("click",() => setTool(false));
-  eraserButton.addEventListener("click",() => setTool(true));
+  colorInput.addEventListener("input",()=>setTool(false));
+  penButton.addEventListener("click",()=>setTool(false));
+  eraserButton.addEventListener("click",()=>setTool(true));
   clearButton.addEventListener("click",resetCanvas);
 
-  openButton?.addEventListener("click",() => {
-    form.reset();
-    nameInput.value = "";
-    colorInput.value = "#20c5bd";
-    sizeInput.value = "7";
-    setTool(false);
-    resetCanvas();
-    formFeedback.textContent = "";
-    if (typeof dialog.showModal === "function") dialog.showModal();
+  openButton?.addEventListener("click",()=>{
+    form.reset();nameInput.value="";amountInput.value="";methodInput.value="cash";
+    colorInput.value="#20c5bd";sizeInput.value="7";setTool(false);resetCanvas();
+    formFeedback.textContent="";
+    if(typeof dialog.showModal==="function")dialog.showModal();
   });
-  closeButton?.addEventListener("click",() => dialog.close());
-  dialog.addEventListener("click",event => {
-    if (event.target === dialog) dialog.close();
-  });
+  closeButton?.addEventListener("click",()=>dialog.close());
+  dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close();});
 
-  async function loadSupporters() {
-    try {
-      const response = await fetch(REST_URL + "?select=id,display_name,avatar_data,created_at&status=eq.approved&order=created_at.desc&limit=60", {
-        headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Accept":"application/json"},
-        cache:"no-store"
+  function setWallMessage(message){
+    wall.replaceChildren();const p=document.createElement("p");p.className="support-wall-empty";p.textContent=message;wall.appendChild(p);
+  }
+  async function loadSupporters(){
+    try{
+      const response=await fetch(submissionsUrl+"?select=id,display_name,avatar_data,created_at&status=eq.approved&order=created_at.desc&limit=60",{
+        headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY,Accept:"application/json"},cache:"no-store"
       });
-      if (!response.ok) throw new Error("Support Wall unavailable");
-      const supporters = await response.json();
-      wall.replaceChildren();
-      if (!Array.isArray(supporters) || supporters.length === 0) {
-        const empty = document.createElement("p");
-        empty.className = "support-wall-empty";
-        empty.textContent = "Hier ist noch Platz für die ersten Supporter. Vielleicht für dich?";
-        wall.appendChild(empty);
-        return;
-      }
-      supporters.forEach(person => {
-        const card = document.createElement("article");
-        card.className = "supporter-card";
-        const image = document.createElement("img");
-        image.alt = "Gemaltes Profilbild von " + person.display_name;
-        image.loading = "lazy";
-        image.src = person.avatar_data;
-        const name = document.createElement("strong");
-        name.textContent = person.display_name;
-        const tag = document.createElement("span");
-        tag.textContent = "SUPPORTER";
-        card.append(image,name,tag);
-        wall.appendChild(card);
+      if(!response.ok)throw new Error("Wall load failed");
+      const supporters=await response.json();wall.replaceChildren();
+      if(!Array.isArray(supporters)||supporters.length===0){setWallMessage("Hier ist noch Platz für die ersten Supporter. Vielleicht für dich?");return;}
+      supporters.forEach(person=>{
+        const card=document.createElement("article");card.className="supporter-card";
+        const image=document.createElement("img");image.alt="Gemaltes Profilbild von "+person.display_name;image.loading="lazy";image.src=person.avatar_data;
+        const name=document.createElement("strong");name.textContent=person.display_name;
+        const tag=document.createElement("span");tag.textContent="SUPPORTER";
+        card.append(image,name,tag);wall.appendChild(card);
       });
-    } catch (_) {
-      wall.replaceChildren();
-      const error = document.createElement("p");
-      error.className = "support-wall-empty";
-      error.textContent = "Die Support Wall kann gerade nicht geladen werden.";
-      wall.appendChild(error);
-    }
+    }catch(_){setWallMessage("Die Support Wall kann gerade nicht geladen werden.");}
   }
 
-  form.addEventListener("submit",async event => {
+  form.addEventListener("submit",async event=>{
     event.preventDefault();
-    const displayName = nameInput.value.trim();
-    if (!displayName || displayName.length > 18) {
-      formFeedback.textContent = "Bitte gib einen Namen mit 1 bis 18 Zeichen ein.";
-      return;
-    }
-    if (!hasDrawn) {
-      formFeedback.textContent = "Male zuerst ein kleines Profilbild für dich.";
-      return;
-    }
-    const avatarData = canvas.toDataURL("image/png");
-    if (avatarData.length > 300000) {
-      formFeedback.textContent = "Das Bild ist zu groß. Bitte male mit weniger Details oder einer kleineren Stiftgröße.";
-      return;
-    }
-    submitButton.disabled = true;
-    submitButton.textContent = "Wird gesendet …";
-    formFeedback.textContent = "";
-    try {
-      const response = await fetch(REST_URL, {
+    const displayName=nameInput.value.trim();
+    const amountNumber=Number(String(amountInput.value).replace(",","."));
+    const amountCents=Math.round(amountNumber*100);
+    if(!displayName||displayName.length>18){formFeedback.textContent="Bitte gib einen Namen mit 1 bis 18 Zeichen ein.";return;}
+    if(!Number.isSafeInteger(amountCents)||amountCents<100||amountCents>174800){formFeedback.textContent="Bitte gib einen Beitrag zwischen 1 € und 1.748 € ein.";return;}
+    if(!hasDrawn){formFeedback.textContent="Male zuerst ein kleines Profilbild für dich.";return;}
+    const avatarData=canvas.toDataURL("image/png");
+    if(avatarData.length>300000){formFeedback.textContent="Das Bild ist zu groß. Bitte male mit weniger Details.";return;}
+    submitButton.disabled=true;submitButton.textContent="Wird gesendet …";formFeedback.textContent="";
+    try{
+      const response=await fetch(submissionsUrl,{
         method:"POST",
-        headers:{
-          "apikey":SUPABASE_KEY,
-          "Authorization":"Bearer "+SUPABASE_KEY,
-          "Content-Type":"application/json",
-          "Prefer":"return=minimal"
-        },
-        body:JSON.stringify({
-          display_name:displayName,
-          avatar_data:avatarData
-        })
+        headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},
+        body:JSON.stringify({display_name:displayName,avatar_data:avatarData,amount_cents:amountCents,contribution_method:methodInput.value})
       });
-      if (!response.ok) {
-        const message = await response.text();
-        throw new Error(message || "Submission failed");
-      }
-      formFeedback.textContent = "Danke! Dein Profil wurde zur Prüfung gesendet. Nach Freigabe erscheint es auf der Support Wall.";
-      submitButton.textContent = "Erfolgreich gesendet ✓";
-      window.setTimeout(() => {
-        dialog.close();
-        loadSupporters();
-        submitButton.disabled = false;
-        submitButton.innerHTML = 'Profil zur Prüfung senden <span>↗</span>';
-      },2200);
-    } catch (_) {
-      formFeedback.textContent = "Das Senden hat gerade nicht geklappt. Bitte versuche es später erneut.";
-      submitButton.disabled = false;
-      submitButton.innerHTML = 'Profil zur Prüfung senden <span>↗</span>';
+      if(!response.ok)throw new Error(await response.text());
+      formFeedback.textContent="Danke! Deine Beitragsmeldung und dein Profil wurden zur Prüfung gesendet. Nach Bestätigung erscheint dein Profil auf der Support Wall.";
+      submitButton.textContent="Erfolgreich gesendet ✓";
+      window.setTimeout(()=>{dialog.close();submitButton.disabled=false;submitButton.innerHTML='Profil zur Prüfung senden <span>↗</span>';},2400);
+    }catch(_){
+      formFeedback.textContent="Das Senden hat gerade nicht geklappt. Bitte versuche es später erneut.";
+      submitButton.disabled=false;submitButton.innerHTML='Profil zur Prüfung senden <span>↗</span>';
     }
   });
 
-  resetCanvas();
-  loadSupporters();
+  // Admin login: only a separately allowlisted Supabase Auth user can review or edit data.
+  async function adminRequest(path,options={}){
+    const response=await fetch(REST_URL+path,{
+      ...options,
+      headers:{
+        apikey:SUPABASE_KEY,
+        Authorization:"Bearer "+(adminToken||SUPABASE_KEY),
+        Accept:"application/json",
+        ...(options.headers||{})
+      }
+    });
+    if(!response.ok)throw new Error(await response.text());
+    if(response.status===204)return null;
+    const text=await response.text();return text?JSON.parse(text):null;
+  }
+  function adminMessage(message){adminFeedback.textContent=message;}
+  function showAdminLoggedOut(){
+    adminToken=null;adminUserId=null;adminPanel.hidden=true;adminLoginForm.hidden=false;
+    adminPassword.value="";
+  }
+  async function loadAdminData(){
+    const queue=await adminRequest("/supporter_submissions?select=id,display_name,avatar_data,amount_cents,contribution_method,created_at&status=eq.pending&order=created_at.asc");
+    adminQueue.replaceChildren();
+    if(!Array.isArray(queue)||queue.length===0){
+      const p=document.createElement("p");p.className="support-wall-empty";p.textContent="Keine offenen Beitragsmeldungen.";adminQueue.appendChild(p);
+    }else{
+      queue.forEach(entry=>{
+        const card=document.createElement("article");card.className="admin-submission";
+        const image=document.createElement("img");image.src=entry.avatar_data;image.alt="Profilbild von "+entry.display_name;
+        const details=document.createElement("div");details.className="admin-submission-details";
+        const name=document.createElement("strong");name.textContent=entry.display_name;
+        const amount=document.createElement("span");amount.textContent=euro(entry.amount_cents)+" · "+(entry.contribution_method==="cash"?"Bar":"PayPal (separat)");
+        const date=document.createElement("small");date.textContent=new Date(entry.created_at).toLocaleString("de-DE");
+        details.append(name,amount,date);
+        const actions=document.createElement("div");actions.className="admin-submission-actions";
+        const approve=document.createElement("button");approve.type="button";approve.className="paint-tool admin-approve";approve.textContent="Beitrag bestätigt · Freigeben";
+        const reject=document.createElement("button");reject.type="button";reject.className="paint-tool admin-reject";reject.textContent="Ablehnen";
+        approve.addEventListener("click",()=>moderate(entry.id,"approved",approve));
+        reject.addEventListener("click",()=>moderate(entry.id,"rejected",reject));
+        actions.append(approve,reject);card.append(image,details,actions);adminQueue.appendChild(card);
+      });
+    }
+    const funding=await adminRequest("/funding_progress?select=total_cents&singleton=eq.true&limit=1");
+    adminTotal.value=((Number(funding?.[0]?.total_cents)||0)/100).toFixed(2);
+  }
+  async function moderate(id,status,button){
+    button.disabled=true;
+    try{
+      await adminRequest("/supporter_submissions?id=eq."+encodeURIComponent(id),{
+        method:"PATCH",headers:{"Content-Type":"application/json",Prefer:"return=minimal"},
+        body:JSON.stringify({status})
+      });
+      adminMessage(status==="approved"?"Beitrag bestätigt und Profil freigegeben.":"Beitragsmeldung abgelehnt.");
+      await loadAdminData();await loadSupporters();
+    }catch(_){adminMessage("Änderung fehlgeschlagen. Prüfe bitte deine Admin-Freigabe.");button.disabled=false;}
+  }
+  adminOpen?.addEventListener("click",()=>{
+    adminMessage("");showAdminLoggedOut();
+    if(typeof adminDialog.showModal==="function")adminDialog.showModal();
+  });
+  adminClose?.addEventListener("click",()=>adminDialog.close());
+  adminDialog?.addEventListener("click",event=>{if(event.target===adminDialog)adminDialog.close();});
+  adminLoginForm?.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const loginButton=document.querySelector("#admin-login-button");
+    loginButton.disabled=true;adminMessage("Anmeldung wird geprüft …");
+    try{
+      const response=await fetch(AUTH_URL+"/token?grant_type=password",{
+        method:"POST",headers:{apikey:SUPABASE_KEY,"Content-Type":"application/json"},
+        body:JSON.stringify({email:adminEmail.value.trim(),password:adminPassword.value})
+      });
+      const session=await response.json();
+      if(!response.ok||!session.access_token||!session.user?.id)throw new Error("Anmeldung fehlgeschlagen");
+      adminToken=session.access_token;adminUserId=session.user.id;
+      const allowlist=await adminRequest("/support_wall_admins?select=user_id&user_id=eq."+encodeURIComponent(adminUserId));
+      if(!Array.isArray(allowlist)||allowlist.length===0){
+        showAdminLoggedOut();
+        throw new Error("Dieses Konto ist noch nicht als Admin freigegeben.");
+      }
+      adminLoginForm.hidden=true;adminPanel.hidden=false;adminPassword.value="";
+      adminMessage("Angemeldet. Prüfe die offenen Beitragsmeldungen.");
+      await loadAdminData();
+    }catch(error){
+      adminMessage(error.message==="Dieses Konto ist noch nicht als Admin freigegeben."?error.message:"Anmeldung nicht möglich. Prüfe E-Mail, Passwort und Admin-Freigabe.");
+      adminToken=null;adminUserId=null;
+    }finally{loginButton.disabled=false;}
+  });
+  adminLogout?.addEventListener("click",async()=>{
+    try{
+      if(adminToken)await fetch(AUTH_URL+"/logout",{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+adminToken}});
+    }catch(_){}
+    showAdminLoggedOut();adminMessage("Du wurdest abgemeldet.");
+  });
+  adminSaveTotal?.addEventListener("click",async()=>{
+    const cents=Math.round(Number(String(adminTotal.value).replace(",", "."))*100);
+    if(!Number.isSafeInteger(cents)||cents<0||cents>174800){adminMessage("Bitte einen Betrag zwischen 0 € und 1.748 € eintragen.");return;}
+    adminSaveTotal.disabled=true;
+    try{
+      await adminRequest("/funding_progress?singleton=eq.true",{
+        method:"PATCH",headers:{"Content-Type":"application/json",Prefer:"return=minimal"},
+        body:JSON.stringify({total_cents:cents})
+      });
+      adminMessage("Fortschritt gespeichert.");window.loadFundingTotal?.();
+    }catch(_){adminMessage("Der Fortschritt konnte nicht gespeichert werden. Prüfe deine Admin-Freigabe.");}
+    finally{adminSaveTotal.disabled=false;}
+  });
+
+  resetCanvas();loadSupporters();showAdminLoggedOut();
 })();
