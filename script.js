@@ -395,6 +395,8 @@ cockpitRender();
   const previewImage=document.querySelector("#support-preview-image");
   const previewName=document.querySelector("#support-preview-name");
   const wall=document.querySelector("#support-wall-grid");
+  const wallCount=document.querySelector("#support-wall-count");
+  const wallThanks=document.querySelector("#support-wall-thanks");
   const adminDialog=document.querySelector("#admin-dialog");
   const adminOpen=document.querySelector("#admin-open");
   const adminClose=document.querySelector("#admin-close");
@@ -558,7 +560,7 @@ cockpitRender();
   dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close();});
 
   function setWallMessage(message){
-    wall.replaceChildren();const p=document.createElement("p");p.className="support-wall-empty";p.textContent=message;wall.appendChild(p);
+    wall.replaceChildren();if(wallCount)wallCount.textContent="0 Supporter";const p=document.createElement("p");p.className="support-wall-empty";p.textContent=message;wall.appendChild(p);
   }
   async function loadSupporters(){
     try{
@@ -568,8 +570,9 @@ cockpitRender();
       if(!response.ok)throw new Error("Wall load failed");
       const supporters=await response.json();wall.replaceChildren();
       if(!Array.isArray(supporters)||supporters.length===0){setWallMessage("Hier ist noch Platz für die ersten Supporter. Vielleicht für dich?");return;}
+      if(wallCount)wallCount.textContent=supporters.length+" "+(supporters.length===1?"Supporter":"Supporter");
       supporters.forEach(person=>{
-        const card=document.createElement("article");card.className="supporter-card";
+        const card=document.createElement("article");card.className="supporter-card";card.dataset.supporterId=person.id;
         const image=document.createElement("img");image.alt="Gemaltes Profilbild von "+person.display_name;image.loading="lazy";image.src=person.avatar_data;
         const name=document.createElement("strong");name.textContent=person.display_name;
         const tag=document.createElement("span");tag.textContent="SUPPORTER";
@@ -647,6 +650,13 @@ cockpitRender();
         actions.append(approve,reject);card.append(image,details,actions);adminQueue.appendChild(card);
       });
     }
+    const allEntries=await adminRequest("/supporter_submissions?select=status,amount_cents");
+    const pendingCount=(allEntries||[]).filter(item=>item.status==="pending").length;
+    const approvedEntries=(allEntries||[]).filter(item=>item.status==="approved");
+    const reportedCents=approvedEntries.reduce((sum,item)=>sum+(Number(item.amount_cents)||0),0);
+    document.querySelector("#admin-stat-pending").textContent=String(pendingCount);
+    document.querySelector("#admin-stat-approved").textContent=String(approvedEntries.length);
+    document.querySelector("#admin-stat-total").textContent=euro(reportedCents);
     const funding=await adminRequest("/funding_progress?select=total_cents&singleton=eq.true&limit=1");
     adminTotal.value=((Number(funding?.[0]?.total_cents)||0)/100).toFixed(2);
   }
@@ -657,8 +667,14 @@ cockpitRender();
         method:"PATCH",headers:{"Content-Type":"application/json",Prefer:"return=minimal"},
         body:JSON.stringify({status})
       });
-      adminMessage(status==="approved"?"Beitrag bestätigt und Profil freigegeben.":"Beitragsmeldung abgelehnt.");
+      adminMessage(status==="approved"?"Danke! Beitrag bestätigt, Profil freigegeben und Fortschritt aktualisiert.":"Beitragsmeldung abgelehnt.");
       await loadAdminData();await loadSupporters();
+      if(status==="approved"){
+        wall.classList.remove("support-wall-celebration");void wall.offsetWidth;wall.classList.add("support-wall-celebration");
+        if(wallThanks){wallThanks.hidden=false;window.setTimeout(()=>{wallThanks.hidden=true;},5500);}
+        const newCard=wall.querySelector('[data-supporter-id="'+CSS.escape(id)+'"]');
+        newCard?.classList.add("supporter-card-new");
+      }
     }catch(_){adminMessage("Änderung fehlgeschlagen. Prüfe bitte deine Admin-Freigabe.");button.disabled=false;}
   }
   adminOpen?.addEventListener("click",()=>{
