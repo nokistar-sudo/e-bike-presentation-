@@ -493,11 +493,6 @@ cockpitRender();
     if (event.target === dialog) dialog.close();
   });
 
-  function safeText(value) {
-    return String(value ?? "").replace(/[&<>"']/g,char => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    })[char]);
-  }
   async function loadSupporters() {
     try {
       const response = await fetch(REST_URL + "?select=id,display_name,avatar_data,created_at&status=eq.approved&order=created_at.desc&limit=60", {
@@ -567,8 +562,7 @@ cockpitRender();
         },
         body:JSON.stringify({
           display_name:displayName,
-          avatar_data:avatarData,
-          status:"pending"
+          avatar_data:avatarData
         })
       });
       if (!response.ok) {
