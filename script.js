@@ -407,6 +407,16 @@ cockpitRender();
   const adminLogout=document.querySelector("#admin-logout");
   const adminTotal=document.querySelector("#admin-total");
   const adminSaveTotal=document.querySelector("#admin-save-total");
+  function elevateCursorIntoDialog(dialogElement){
+    const cursorCanvas=document.querySelector(".cursor-comet");
+    if(cursorCanvas&&dialogElement)dialogElement.appendChild(cursorCanvas);
+  }
+  function restoreCursorToPage(){
+    const cursorCanvas=document.querySelector(".cursor-comet");
+    if(cursorCanvas)document.documentElement.appendChild(cursorCanvas);
+  }
+  dialog?.addEventListener("close",restoreCursorToPage);
+  adminDialog?.addEventListener("close",restoreCursorToPage);
   let adminToken=null;
   let adminUserId=null;
   if(!dialog||!canvas||!form||!wall) return;
@@ -463,7 +473,7 @@ cockpitRender();
     form.reset();nameInput.value="";amountInput.value="";methodInput.value="cash";
     colorInput.value="#20c5bd";sizeInput.value="7";setTool(false);resetCanvas();
     formFeedback.textContent="";
-    if(typeof dialog.showModal==="function")dialog.showModal();
+    if(typeof dialog.showModal==="function"){dialog.showModal();elevateCursorIntoDialog(dialog);}
   });
   closeButton?.addEventListener("click",()=>dialog.close());
   dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close();});
@@ -574,7 +584,7 @@ cockpitRender();
   }
   adminOpen?.addEventListener("click",()=>{
     adminMessage("");showAdminLoggedOut();
-    if(typeof adminDialog.showModal==="function")adminDialog.showModal();
+    if(typeof adminDialog.showModal==="function"){adminDialog.showModal();elevateCursorIntoDialog(adminDialog);}
   });
   adminClose?.addEventListener("click",()=>adminDialog.close());
   adminDialog?.addEventListener("click",event=>{if(event.target===adminDialog)adminDialog.close();});
