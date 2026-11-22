@@ -1355,3 +1355,10 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
   .admin-submission>img { width:52px;height:52px; }
   .admin-total-row { grid-template-columns:1fr; }
 }
+
+
+/* Keep the custom cursor above page stacking contexts without blocking clicks. */
+.cursor-comet {
+  pointer-events: none !important;
+  z-index: 2147483647 !important;
+}
