@@ -1034,29 +1034,6 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
   .cockpit-action:hover { filter:brightness(1.08); }
 }
 
-/* Tiny custom cursor accent on desktop; native cursor remains visible */
-.cursor-aura,
-.cursor-core {
-  position:fixed;
-  left:0;
-  top:0;
-  z-index:1000;
-  pointer-events:none;
-  border-radius:50%;
-  opacity:0;
-  transform:translate3d(-100px,-100px,0);
-  transition:opacity .2s ease, width .2s ease, height .2s ease, border-color .2s ease, background .2s ease;
-}
-.cursor-aura {
-  width:34px;
-  height:34px;
-  border:1px solid rgba(117,184,174,.48);
-  box-shadow:0 0 18px rgba(117,184,174,.12);
-}
-.cursor-core { width:5px; height:5px; background:var(--accent); }
-.cursor-aura.is-visible,.cursor-core.is-visible { opacity:1; }
-.cursor-aura.is-hovering { width:48px; height:48px; border-color:rgba(117,184,174,.85); background:rgba(117,184,174,.06); }
-
 .funding-card.is-celebrating {
   animation:fundingCelebrate .85s ease;
 }
@@ -1086,46 +1063,6 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
   .reveal-on-scroll { opacity:1; transform:none; }
   body::before,body::after { display:none; }
 }
-@media (hover:none), (pointer:coarse) {
-  .cursor-aura,.cursor-core { display:none !important; }
-}
-
-
-/* Flowing comet cursor trail */
-.cursor-comet {
-  position:fixed;
-  inset:0;
-  z-index:1001;
-  pointer-events:none;
-  display:block;
-  overflow:hidden;
-}
-@media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) {
-  .cursor-comet { display:none !important; }
-}
-
-
-/* Transparent turquoise comet cursor — desktop only */
-@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
-  html, body, a, button, input, select, textarea, [role="button"] {
-    cursor:none !important;
-  }
-}
-.cursor-comet {
-  position:fixed;
-  inset:0;
-  z-index:1001;
-  width:100vw;
-  height:100vh;
-  display:block;
-  pointer-events:none;
-  background:transparent;
-}
-@media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) {
-  .cursor-comet { display:none !important; }
-}
-
-
 /* Subtle glass navigation: restrained contrast and a fine upper highlight. */
 .site-header::before {
   content:"";
@@ -1177,25 +1114,6 @@ body::after { right:-24%; bottom:4%; animation-delay:-11s; animation-duration:29
 @media(max-width:560px) {
   .site-header { border-radius:12px; }
 }
-
-/* The comet canvas now draws only the black/turquoise glowing pointer. */
-.cursor-comet {
-  position:fixed;
-  inset:0;
-  z-index:1001;
-  width:100vw;
-  height:100vh;
-  display:block;
-  pointer-events:none;
-  background:transparent;
-}
-@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
-  html, body, a, button, input, select, textarea, [role="button"] { cursor:none !important; }
-}
-@media (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce) {
-  .cursor-comet { display:none !important; }
-}
-
 
 /* Community Support Wall and in-browser paint editor */
 .support-open-button { margin-top:18px; }
