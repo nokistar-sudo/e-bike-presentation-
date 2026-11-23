@@ -338,85 +338,6 @@ cockpitRender();
   const adminLogout=document.querySelector("#admin-logout");
   const adminTotal=document.querySelector("#admin-total");
   const adminSaveTotal=document.querySelector("#admin-save-total");
-  const adminPushBox=document.querySelector("#admin-push-box");
-  const adminPushEnable=document.querySelector("#admin-push-enable");
-  const adminPushDisable=document.querySelector("#admin-push-disable");
-  const adminPushStatus=document.querySelector("#admin-push-status");
-  const PUSH_FUNCTION=SUPABASE_URL+"/functions/v1/admin-push";
-  const PUSH_SCOPE="/e-bike-presentation-/";
-  let pushRegistration=null;
-  const isIPhone=/iPhone|iPod/i.test(navigator.userAgent);
-  const isInstalledPWA=window.navigator.standalone===true||window.matchMedia("(display-mode: standalone)").matches;
-  if("serviceWorker" in navigator){
-    navigator.serviceWorker.register(PUSH_SCOPE+"service-worker.js",{scope:PUSH_SCOPE})
-      .then(registration=>{pushRegistration=registration;})
-      .catch(()=>{});
-  }
-  function urlBase64ToUint8Array(base64String){
-    const padding="=".repeat((4-base64String.length%4)%4);
-    const raw=atob((base64String+padding).replace(/-/g,"+").replace(/_/g,"/"));
-    return Uint8Array.from(raw,char=>char.charCodeAt(0));
-  }
-  async function pushRequest(action,extra={}){
-    const response=await fetch(PUSH_FUNCTION,{
-      method:"POST",
-      headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+adminToken,"Content-Type":"application/json"},
-      body:JSON.stringify({action,...extra})
-    });
-    const result=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(result.error||"Push-Einrichtung fehlgeschlagen");
-    return result;
-  }
-  async function refreshPushControls(){
-    if(!adminPushBox)return;
-    adminPushBox.hidden=!isIPhone;
-    if(!isIPhone)return;
-    if(!isInstalledPWA){
-      adminPushStatus.textContent="Bitte füge diese Website zuerst über Safari → Teilen → Zum Home-Bildschirm hinzu. Öffne danach das neue App-Symbol.";
-      adminPushEnable.disabled=true;adminPushDisable.hidden=true;return;
-    }
-    if(!("PushManager" in window)||!("Notification" in window)||!pushRegistration){
-      try{pushRegistration=await navigator.serviceWorker.ready;}catch(_){}
-    }
-    if(!("PushManager" in window)||!("Notification" in window)||!pushRegistration){
-      adminPushStatus.textContent="Push-Benachrichtigungen werden von diesem Browser gerade nicht unterstützt.";
-      adminPushEnable.disabled=true;adminPushDisable.hidden=true;return;
-    }
-    const subscription=await pushRegistration.pushManager.getSubscription();
-    adminPushEnable.disabled=false;
-    adminPushDisable.hidden=!subscription;
-    adminPushStatus.textContent=subscription?"Benachrichtigungen sind auf diesem iPhone eingerichtet.":"Noch keine Push-Benachrichtigungen auf diesem iPhone eingerichtet.";
-  }
-  adminPushEnable?.addEventListener("click",async()=>{
-    adminPushEnable.disabled=true;adminPushStatus.textContent="Einrichtung läuft …";
-    try{
-      const permission=await Notification.requestPermission();
-      if(permission!=="granted")throw new Error("Die Mitteilungserlaubnis wurde nicht erteilt.");
-      pushRegistration=pushRegistration||await navigator.serviceWorker.ready;
-      const keyResponse=await fetch(PUSH_FUNCTION+"?action=public-key");
-      const keyData=await keyResponse.json();
-      if(!keyResponse.ok||!keyData.publicKey)throw new Error("Der Push-Schlüssel ist in Supabase noch nicht eingerichtet.");
-      let subscription=await pushRegistration.pushManager.getSubscription();
-      if(!subscription)subscription=await pushRegistration.pushManager.subscribe({
-        userVisibleOnly:true,
-        applicationServerKey:urlBase64ToUint8Array(keyData.publicKey)
-      });
-      await pushRequest("subscribe",{subscription:subscription.toJSON()});
-      adminPushStatus.textContent="Fertig! Neue Beitragsmeldungen erscheinen jetzt als Mitteilung auf diesem iPhone.";
-      await refreshPushControls();
-    }catch(error){adminPushStatus.textContent=error.message||"Einrichtung fehlgeschlagen.";adminPushEnable.disabled=false;}
-  });
-  adminPushDisable?.addEventListener("click",async()=>{
-    adminPushDisable.disabled=true;
-    try{
-      await pushRequest("unsubscribe");
-      const subscription=await pushRegistration?.pushManager.getSubscription();
-      if(subscription)await subscription.unsubscribe();
-      adminPushStatus.textContent="Push-Benachrichtigungen wurden ausgeschaltet.";
-      await refreshPushControls();
-    }catch(error){adminPushStatus.textContent=error.message||"Deaktivieren fehlgeschlagen.";}
-    finally{adminPushDisable.disabled=false;}
-  });
   function elevateCursorIntoDialog(dialogElement){
     const cursorCanvas=document.querySelector(".cursor-comet");
     if(cursorCanvas&&dialogElement)dialogElement.appendChild(cursorCanvas);
@@ -632,7 +553,6 @@ cockpitRender();
       adminLoginForm.hidden=true;adminPanel.hidden=false;adminPassword.value="";
       adminMessage("Angemeldet. Prüfe die offenen Beitragsmeldungen.");
       await loadAdminData();
-      await refreshPushControls();
     }catch(error){
       adminMessage(error.message==="Dieses Konto ist noch nicht als Admin freigegeben."?error.message:"Anmeldung nicht möglich. Prüfe E-Mail, Passwort und Admin-Freigabe.");
       adminToken=null;adminUserId=null;
